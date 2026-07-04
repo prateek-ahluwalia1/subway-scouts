@@ -26,7 +26,7 @@ class GuardReport extends Controller
                 'data' => $getData
             ]);
         }
-        $filename = time().'_guard_report.xlsx';
+        $filename = time().'_staff_report.xlsx';
         Excel::store(new GuardReportExport, 'excel/guard/'.$filename, 'excels');
         return response()->json(['success' =>  true, 'message' => 'Staff Report generated successfully.','path' => 'https://'.request()->getHttpHost().'/excel/guard/'.$filename]);
     }
@@ -111,7 +111,7 @@ class GuardReport extends Controller
         $query->where('created_at', '>=', $start)->where('created_at', '<=', $end);
     }
     
-    $guards = $query->with(['documents', 'empDetails'])->orderBy('first_name', 'asc')->where('guard_status', '!=', 'deleted')->get();
+    $guards = $query->with(['empDetails'])->orderBy('first_name', 'asc')->where('guard_status', '!=', 'deleted')->get();
 
     $currentDate = Carbon::now()->format('Y-m-d');
     $week_array = $this->calculateFutureMonthFourthnight($currentDate);
@@ -133,51 +133,51 @@ class GuardReport extends Controller
 
     foreach ($guards as $guard) {
 
-        if($guard->empDetails->guard_document_type == 'student_visa')
-        {
-            if($guard->empDetails->limit_exceed == 1)
-            {
-                $guardStart = new DateTime($guard->empDetails->start_time);
-                $guardEnd = new DateTime($guard->empDetails->end_time);
-                $interval = new DateInterval('P1D');
-                $dateRange = new DatePeriod($guardStart, $interval, $guardEnd->modify('+1 day'));
+        // if($guard->empDetails->guard_document_type == 'student_visa')
+        // {
+        //     if($guard->empDetails->limit_exceed == 1)
+        //     {
+        //         $guardStart = new DateTime($guard->empDetails->start_time);
+        //         $guardEnd = new DateTime($guard->empDetails->end_time);
+        //         $interval = new DateInterval('P1D');
+        //         $dateRange = new DatePeriod($guardStart, $interval, $guardEnd->modify('+1 day'));
 
-                $guardDates = [];
-                foreach ($dateRange as $date) {
-                    $guardDates[] = $date->format('Y-m-d');
-                }
-                $hasCompleteFortnight = false;
+        //         $guardDates = [];
+        //         foreach ($dateRange as $date) {
+        //             $guardDates[] = $date->format('Y-m-d');
+        //         }
+        //         $hasCompleteFortnight = false;
 
-                $guardDateCount = count($guardDates);
+        //         $guardDateCount = count($guardDates);
 
-                for ($i = 0; $i <= $guardDateCount - 14; $i++) {
-                    $fourteenDays = array_slice($guardDates, $i, 14);
+        //         for ($i = 0; $i <= $guardDateCount - 14; $i++) {
+        //             $fourteenDays = array_slice($guardDates, $i, 14);
                     
-                    $allExist = true;
-                    foreach ($fourteenDays as $day) {
-                        if (!in_array($day, $dates_periods)) {
-                            $allExist = false;
-                            break;
-                        }
-                    }
+        //             $allExist = true;
+        //             foreach ($fourteenDays as $day) {
+        //                 if (!in_array($day, $dates_periods)) {
+        //                     $allExist = false;
+        //                     break;
+        //                 }
+        //             }
                     
-                    if ($allExist) {
-                        $hasCompleteFortnight = true;
-                        break;
-                    }
-                }
+        //             if ($allExist) {
+        //                 $hasCompleteFortnight = true;
+        //                 break;
+        //             }
+        //         }
 
-                if ($hasCompleteFortnight) {
-                    $totalWorkingHours = 72;    
-                } else {
-                    $totalWorkingHours = 48;
-                }
-            }else{
-                    $totalWorkingHours = 48;
-            }
-        }else{
-                $totalWorkingHours = $guard->empDetails->weekly_work_hours_limitation ?? 72;
-        }
+        //         if ($hasCompleteFortnight) {
+        //             $totalWorkingHours = 72;    
+        //         } else {
+        //             $totalWorkingHours = 48;
+        //         }
+        //     }else{
+        //             $totalWorkingHours = 48;
+        //     }
+        // }else{
+        //         $totalWorkingHours = $guard->empDetails->weekly_work_hours_limitation ?? 72;
+        // }
         $guardInfo = [
             'id' => $guard->id,
             'first_name' => !empty($guard->first_name) ? $guard->first_name : 'N/A',
@@ -203,8 +203,8 @@ class GuardReport extends Controller
             'admin_approval_status' => $guard->admin_approval_status,
             'staff_type' => $guard->staff_type,
             'employment_type' => $guard->guard_type,
-            'work_limitation_status' => $guard->empDetails->work_hours_limitation_status,
-            'work_limitation_hours' => $totalWorkingHours,	
+            // 'work_limitation_status' => $guard->empDetails->work_hours_limitation_status,
+            // 'work_limitation_hours' => $totalWorkingHours,	
             // 'customers' =>  ($guard->customer_id != '' && $guard->customer_id != null) ?  
             //     implode(', ', Customer::whereIn('id', json_decode($guard->customer_id))->pluck('name')->toArray()) : 
             //     null,
@@ -216,65 +216,65 @@ class GuardReport extends Controller
             })->select('name')->get()) : '',
         ];
 
-        $guardInfo['superannutation_no'] = !empty($guard->empDetails->superannutation_no) ? $guard->empDetails->superannutation_no : 'N/A';
-        $guardInfo['superannuation_fund'] = !empty($guard->empDetails->superannuation_fund) ? $guard->empDetails->superannuation_fund : 'N/A';
-        $guardInfo['superannuation_fund_usi'] = !empty($guard->empDetails->superannuation_fund_usi) ? $guard->empDetails->superannuation_fund_usi : 'N/A';
-        $guardInfo['member_number'] = !empty($guard->empDetails->member_number) ? $guard->empDetails->member_number : 'N/A';
-        $guardInfo['tfn_no'] = !empty($guard->empDetails->tfn_file_no) ? $guard->empDetails->tfn_file_no : 'N/A';
-        $guardInfo['resident_status'] = !empty($guard->empDetails->guard_document_type) ? $guard->empDetails->guard_document_type : 'N/A';
-        $guardInfo['abn_name'] = !empty($guard->empDetails->abn_name) ? $guard->empDetails->abn_name : 'N/A';
-        $guardInfo['abn_no'] = !empty($guard->empDetails->abn_no) ?  $guard->empDetails->abn_no : 'N/A';
-        $guardInfo['bank_name'] = !empty($guard->empDetails->bank_name) ? $guard->empDetails->bank_name : 'N/A';
-        $guardInfo['bsb'] = !empty($guard->empDetails->bsb) ?  $guard->empDetails->bsb : 'N/A';
-        $guardInfo['bank_account_no'] = !empty($guard->empDetails->bank_account_no) ?   $guard->empDetails->bank_account_no : 'N/A';
+        // $guardInfo['superannutation_no'] = !empty($guard->empDetails->superannutation_no) ? $guard->empDetails->superannutation_no : 'N/A';
+        // $guardInfo['superannuation_fund'] = !empty($guard->empDetails->superannuation_fund) ? $guard->empDetails->superannuation_fund : 'N/A';
+        // $guardInfo['superannuation_fund_usi'] = !empty($guard->empDetails->superannuation_fund_usi) ? $guard->empDetails->superannuation_fund_usi : 'N/A';
+        // $guardInfo['member_number'] = !empty($guard->empDetails->member_number) ? $guard->empDetails->member_number : 'N/A';
+        // $guardInfo['tfn_no'] = !empty($guard->empDetails->tfn_file_no) ? $guard->empDetails->tfn_file_no : 'N/A';
+        // $guardInfo['resident_status'] = !empty($guard->empDetails->guard_document_type) ? $guard->empDetails->guard_document_type : 'N/A';
+        // $guardInfo['abn_name'] = !empty($guard->empDetails->abn_name) ? $guard->empDetails->abn_name : 'N/A';
+        // $guardInfo['abn_no'] = !empty($guard->empDetails->abn_no) ?  $guard->empDetails->abn_no : 'N/A';
+        // $guardInfo['bank_name'] = !empty($guard->empDetails->bank_name) ? $guard->empDetails->bank_name : 'N/A';
+        // $guardInfo['bsb'] = !empty($guard->empDetails->bsb) ?  $guard->empDetails->bsb : 'N/A';
+        // $guardInfo['bank_account_no'] = !empty($guard->empDetails->bank_account_no) ?   $guard->empDetails->bank_account_no : 'N/A';
 
-        $record = new \stdClass();
-        $record->id1 = 'N/A';
-        $record->id2 = 'N/A';
-        $record->guard_id = $guard->id;
+        // $record = new \stdClass();
+        // $record->id1 = 'N/A';
+        // $record->id2 = 'N/A';
+        // $record->guard_id = $guard->id;
 
-        $ids = DB::table('guard_external_ids')->where('guard_id', $record->guard_id)->get();
-        foreach ($ids as $id) {
-        if (preg_match('/AMG/i', $id->external_id)) {
-            $record->id1 = $id->external_id;
-        }
-        if (!preg_match('/AMG/i', $id->external_id) && $id->external_id > 0) {
-            $record->id2 = $id->external_id;
-        }
-        }
+        // $ids = DB::table('guard_external_ids')->where('guard_id', $record->guard_id)->get();
+        // foreach ($ids as $id) {
+        // if (preg_match('/AMG/i', $id->external_id)) {
+        //     $record->id1 = $id->external_id;
+        // }
+        // if (!preg_match('/AMG/i', $id->external_id) && $id->external_id > 0) {
+        //     $record->id2 = $id->external_id;
+        // }
+        // }
 
-        $guardInfo['wilson'] = $record->id1;
-        $guardInfo['certis'] = $record->id2;
+        // $guardInfo['wilson'] = $record->id1;
+        // $guardInfo['certis'] = $record->id2;
         
-        $documentTypes = [
-            'passport',
-            'security_license',
-            'visa',
-            'driver_license_front',
-            'medicare',
-            'vaccination',
-            'working_with_children',
-            'first_aid',
-            'cpr',
-        ];
+        // $documentTypes = [
+        //     'passport',
+        //     'security_license',
+        //     'visa',
+        //     'driver_license_front',
+        //     'medicare',
+        //     'vaccination',
+        //     'working_with_children',
+        //     'first_aid',
+        //     'cpr',
+        // ];
 
-        foreach ($documentTypes as $documentType) {
+        // foreach ($documentTypes as $documentType) {
            
-            $found = false;
-            foreach ($guard->documents as $document) {
-                if ($document->document_type === $documentType) {
-                    $guardInfo[$documentType . '_no'] = !empty($document->document_no) ? $document->document_no : 'N/A';
-                    $guardInfo[$documentType . '_exp'] = !empty($document->document_expire) ? $document->document_expire : 'N/A';
-                    $found = true;
-                    break;
-                }
-            }
+        //     $found = false;
+        //     foreach ($guard->documents as $document) {
+        //         if ($document->document_type === $documentType) {
+        //             $guardInfo[$documentType . '_no'] = !empty($document->document_no) ? $document->document_no : 'N/A';
+        //             $guardInfo[$documentType . '_exp'] = !empty($document->document_expire) ? $document->document_expire : 'N/A';
+        //             $found = true;
+        //             break;
+        //         }
+        //     }
         
-            if (!$found) {
-                $guardInfo[$documentType . '_no'] = 'N/A';
-                $guardInfo[$documentType . '_exp'] = 'N/A';
-            }
-        }
+        //     if (!$found) {
+        //         $guardInfo[$documentType . '_no'] = 'N/A';
+        //         $guardInfo[$documentType . '_exp'] = 'N/A';
+        //     }
+        // }
 
         // Process empDetails relationship
      

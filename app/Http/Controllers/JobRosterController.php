@@ -296,7 +296,7 @@ public function fetchCustomerSites(Request $request)
         }else{
             $query->join('job_rosters', 'job_rosters.site_id', '=', 'sites.id', 'left')->orderBy('job_rosters.start', 'asc')->orderBy('job_rosters.end', 'desc');
         }
-        $query->select('sites.id', 'sites.site_name', 'sites.site_description', 'sites.customer_id', DB::raw("COUNT(job_rosters.id) count"))
+        $query->select('sites.id', 'sites.site_name', 'sites.site_budget', 'sites.site_description', 'sites.customer_id', DB::raw("COUNT(job_rosters.id) count"))
         // ->where('job_rosters.deleted_at', null)
         ->groupBy('sites.id')
         ->groupBy('sites.site_description')
@@ -310,11 +310,7 @@ public function fetchCustomerSites(Request $request)
             return response()->json(['success' => false, 'data' => null, 'code' => 404]); 
         }
         // Get the charge rate
-        $chargeRate = Payrate::where('id', 1)->first();
-
-        // Get current month start and end dates
-        $currentMonthStart = now()->startOfMonth();
-        $currentMonthEnd = now()->endOfMonth();
+        $payrate = Payrate::where('id', 1)->first();
 
         $siteAmounts = [];
 
@@ -330,8 +326,8 @@ public function fetchCustomerSites(Request $request)
         }else{
             
             foreach ($sites as $key => $s) {
-                 $shifts = JobRoster::where('site_id', $s->id)
-                    ->whereBetween('start', [$currentMonthStart, $currentMonthEnd])
+                 $shifts = JobRoster::where('site_id', $s->id)->where('roster_id', $request->roster_id)->whereNotNull('guard_id')
+                    ->whereBetween('start', [$start, $end])
                     ->get();
                 
                 $hours = [
@@ -356,11 +352,11 @@ public function fetchCustomerSites(Request $request)
                     $hours['ph_night'] += $shift->ph_night_hours ?? 0;
                 }
                 
-                $jobAmount = ($chargeRate->def_metro_mon_to_fri_day_rate * $hours['morning']) +
-                            ($chargeRate->def_metro_mon_to_fri_night_rate * $hours['night']) +
-                            ($chargeRate->def_metro_sat_day_rate * ($hours['saturday_morning'] + $hours['saturday_night'])) +
-                            ($chargeRate->def_metro_sun_day_rate * ($hours['sunday_morning'] + $hours['sunday_night'])) +
-                            ($chargeRate->def_metro_pub_holi_day_rate * ($hours['ph_morning'] + $hours['ph_night']));
+                $jobAmount = ($payrate->def_metro_mon_to_fri_day_rate * $hours['morning']) +
+                            ($payrate->def_metro_mon_to_fri_night_rate * $hours['night']) +
+                            ($payrate->def_metro_sat_day_rate * ($hours['saturday_morning'] + $hours['saturday_night'])) +
+                            ($payrate->def_metro_sun_day_rate * ($hours['sunday_morning'] + $hours['sunday_night'])) +
+                            ($payrate->def_metro_pub_holi_day_rate * ($hours['ph_morning'] + $hours['ph_night']));
                 
                 // Store in the site object
                 $s->total_hours = $hours;

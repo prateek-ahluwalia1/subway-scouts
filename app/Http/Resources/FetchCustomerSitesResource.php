@@ -21,6 +21,7 @@ class FetchCustomerSitesResource extends JsonResource
             'site_name' => !empty($this->site_name) ? $this->site_name : '',
             'total_amount' => $this->total_amount,
             'total_hours' => $this->total_hours,
+            'site_budget' => !empty($this->site_budget) ? $this->site_budget : 0,
             'site_description' => !empty($this->site_description) ? $this->site_description : '',
             'customer_id' => $this->customer_id,
             'count' => $this->count,
