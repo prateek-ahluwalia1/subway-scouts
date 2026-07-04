@@ -1,0 +1,68 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+
+  <!-- Main -->
+  <div class="flex-auto p-6">
+    <!-- CONTENT GOES HERE -->
+    <div class="rounded-2xl">
+      <div class="site-page">
+        <div class="site-head p-6 d-flex justify-content-between"
+          style="background-color: var(--tw-ring-offset-color) !important; border-radius: 13px;">
+          <h4>Email Templates</h4>
+          <div class="site-header-item">
+            <button class="btn btn-border-3" *ngIf="tempPermissions.create" (click)="openXl()">Create New Template</button>
+            
+          </div>
+        </div>
+      </div>
+
+      <section *ngIf="isEditorShow">
+        <div class="create-new-site">
+          <mat-form-field class="w-100 p-3">
+            <mat-label>Email Template Name</mat-label>
+            <input matInput type="text" name="name" [(ngModel)]="name" required #nameInput="ngModel">
+            <mat-error *ngIf="nameInput.invalid && (nameInput.touched || submitted)">Email Template Name is required.</mat-error>
+          </mat-form-field>
+          
+          <email-editor (loaded)="editorLoaded($event)" (ready)="editorReady($event)" #editor></email-editor>
+
+          <div class="footer-btn d-flex justify-content-end m-3">
+            <button class="save_btn m-1" (click)="save()">Save</button>
+            <!-- <button class="btn btn-border-3 m-1" (click)="exportHtml()">Export</button> -->
+          </div>
+        </div>
+      </section>
+
+      <div class="main pt-3" *ngIf="tempPermissions.read">
+        <div class="main_inner">
+          <!-- searchbar -->
+          <div class="d-flex justify-content-end searchbar_main">
+            <input type="text" placeholder="Search here.." class="searchbar" name="searchTem" [(ngModel)]="searchTem">
+            <mat-icon>search</mat-icon>
+          </div>
+          <!-- guardslist -->
+          <table class="table w-100">
+            <thead class="bg-dark text-light">
+              <tr class="table-row">
+                <th scope="col">Title</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let email of emailTempList | filter:searchTem">
+                <td>{{ email.title }}</td>
+                <td>
+                  <mat-icon svgIcon="heroicons_outline:eye" style="cursor: pointer;"
+                    (click)="viewTemp(email)"></mat-icon>&nbsp;
+                  <mat-icon svgIcon="heroicons_solid:pencil-alt" style="cursor: pointer;"
+                    (click)="editTemp(email)" *ngIf="tempPermissions.update"></mat-icon>&nbsp;
+                  <mat-icon svgIcon="heroicons_outline:trash" style="cursor: pointer;"
+                    (click)="delDesign(email.id)" *ngIf="tempPermissions.delete"></mat-icon>&nbsp;
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

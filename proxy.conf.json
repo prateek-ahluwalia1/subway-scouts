@@ -1,0 +1,26 @@
+{
+  "/api": {
+    "target": "http://localhost:4200",
+    "secure": false
+  },
+  "/external-api": {
+    "target": "https://apis.thescouts.com.au",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/socket.io": {
+    "target": "http://localhost:4200",
+    "secure": false,
+    "ws": true
+  },
+  "/search": {
+    "target": "http://62.72.13.17",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/ipify-api": {
+    "target": "http://api.ipify.org",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

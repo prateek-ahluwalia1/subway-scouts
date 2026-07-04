@@ -1,0 +1,411 @@
+$primary-color: var(--primary_color, #01A37E);
+$color-secondary: var(--color-secondary, #1e293c);
+$color-light-button: var(--color-light-button, #01a37e2e);
+
+.loader {
+    display: inline-block;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.main {
+
+    .header {
+
+        width: 100%;
+
+        // container
+        .header-title-container {
+            color: #1e163c;
+
+            .back {
+                color: #3d1cba;
+                cursor: pointer;
+                text-transform: capitalize;
+                margin: 0px;
+                display: flex;
+                align-items: center;
+
+                .mat-icon {
+                    color: $primary-color;
+                }
+            }
+
+            .header-title {
+                color: #1e163c;
+
+            }
+        }
+
+
+        // subtitle
+        .header-subtitle {
+            padding-top: 8px;
+            font-size: 18px;
+            line-height: 24px;
+            color: #6c6a72;
+            font-weight: 500;
+
+            small {
+                font-size: 85%;
+            }
+        }
+
+        // header-action
+        .header-action {
+            display: block;
+            margin: auto;
+
+            .model-close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                z-index: 1;
+                padding: 5px 10px;
+                font-size: 24px;
+                color: #1e163c;
+                cursor: pointer;
+                background: transparent;
+                border-radius: 50%;
+                transition: background .3s ease;
+            }
+        }
+
+    }
+
+    // tabs section 
+
+    .tabs {
+
+        position: sticky;
+        top: 0px;
+        background-color: #fff;
+
+        width: 100%;
+        margin: 0 auto;
+        max-width: 1023px;
+        margin-bottom: 28px;
+
+        ul {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding-left: 0px;
+            border-bottom: 1px solid #e4e7ed;
+
+            li {
+                cursor: pointer;
+                font-weight: 500;
+                margin-right: 30px;
+                color: #1e163c;
+                padding: 18px 0px 7px 0px;
+                transition: transform .3s cubic-bezier(0.645, 0.045, 0.355, 1);
+                list-style: none;
+
+                a {
+                    text-decoration: none;
+                    color: black;
+                }
+            }
+        }
+
+        .active {
+            border-bottom: 2px solid;
+            border-color: #1319cb;
+            color: #1319cb !important;
+        }
+    }
+
+    // body section 
+    .body {
+        flex: auto;
+        width: 100%;
+        height: 100%;
+        margin: 16px auto 0;
+        // overflow-y: auto;
+        overflow: hidden;
+        height: 50vh;
+        background-color: #fff;
+
+        .scrollable {
+            scroll-behavior: smooth;
+            flex: auto;
+            height: 100%;
+            overflow-y: auto;
+
+            .inner-body {
+                margin: 0 auto 20px auto;
+                max-width: 1023px;
+
+                .section {
+                    padding-top: 15px;
+                    margin-bottom: 26px !important;
+
+                    .section__title {
+                        margin-bottom: 24px;
+                        font-size: 24px;
+                        font-weight: 600;
+                        color: #1e163c;
+                    }
+
+                    .section_content {
+                        margin-top: 14px;
+
+                        .row {
+
+                            mat-datepicker-toggle {
+                                color: #64748b;
+                                position: absolute;
+                                right: 0;
+                                top: 0;
+                            }
+
+                            .training-button {
+                                padding: 15px;
+                                margin-top: 3px;
+                            }
+                        }
+
+                        p {
+                            margin: 0;
+                        }
+
+                        .tfn_section {
+                            display: flex;
+                            align-items: center;
+                            width: 100%;
+
+                            .header {
+                                position: relative;
+                                width: 40%;
+                                margin: 0;
+
+                                .image {
+                                    width: 150px;
+                                    height: 130px;
+                                    position: relative;
+                                    bottom: 10px;
+
+                                    img {
+                                        width: 120px;
+                                        height: 120px;
+                                        margin: auto;
+                                        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                                        border-radius: 7px;
+                                    }
+                                }
+
+
+                                .close-icons {
+                                    position: absolute;
+                                    bottom: 23%;
+                                    font-size: 15px;
+                                    right: 4%;
+                                }
+
+                                .edit-icons {
+                                    padding: 12px;
+                                    position: absolute;
+                                    background-color: $primary-color;
+                                    color: #ffffff;
+                                    border-radius: 50%;
+                                    font-size: 15px;
+                                    top: 15%;
+                                    right: 2%;
+                                }
+
+                                .preivew-icons {
+                                    position: absolute;
+                                    top: 16%;
+                                    left: 4px;
+                                    background-color: $primary-color;
+                                    border-radius: 50%;
+                                    font-size: 15px;
+                                    color: #ffffff !important;
+                                }
+                            }
+
+                            .tfn-field {
+                                width: 60%;
+                            }
+
+                            .file-head {
+                                text-align: center;
+                            }
+                        }
+
+                    }
+
+                }
+
+                // payroll_section
+                .payroll_section {
+                    padding-top: 62px !important;
+
+
+
+                }
+            }
+
+
+
+        }
+    }
+}
+
+input::file-selector-button {
+    padding: 0.5em;
+    border-radius: 3px;
+}
+
+.staff_induction {
+    .header {
+        position: relative;
+        text-align: center;
+
+        .image {
+            width: 150px;
+            height: 130px;
+            position: relative;
+            bottom: 10px;
+            margin: auto;
+
+            img {
+                width: 120px;
+                height: 120px;
+                margin: auto;
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                border-radius: 7px;
+            }
+        }
+
+
+        .close-icons {
+            position: absolute;
+            bottom: 23%;
+            right: 28%;
+        }
+
+        .edit-icons {
+            padding: 12px;
+            position: absolute;
+            background-color: $primary-color;
+            color: #ffffff;
+            border-radius: 50%;
+            font-size: 15px;
+            top: 14%;
+            right: 28%;
+        }
+
+        .preivew-icons {
+            position: absolute;
+            top: 16%;
+            left: 28%;
+            background-color: $primary-color;
+            border-radius: 50%;
+            font-size: 15px;
+            color: #ffffff !important;
+        }
+    }
+
+    .induction_row {
+        display: flex;
+        flex-direction: column;
+
+
+
+        .mat-width {
+            width: 100%;
+        }
+    }
+
+    .induction_border {
+        border-bottom: 1px solid $color-light-button;
+        align-items: center;
+    }
+
+    span {
+        text-align: end;
+        position: relative;
+        top: 20px;
+    }
+}
+
+.Educational-header {
+    position: relative;
+
+    .image {
+        width: 150px;
+        height: 130px;
+        position: relative;
+        bottom: 10px;
+
+        img {
+            width: 120px;
+            height: 120px;
+            margin: auto;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            border-radius: 7px;
+        }
+    }
+
+
+    .close-icons {
+        position: absolute;
+        bottom: 25%;
+        left: 12%;
+    }
+
+    .edit-icons {
+        padding: 12px;
+        position: absolute;
+        background-color: $primary-color;
+        color: #ffffff;
+        border-radius: 50%;
+        font-size: 15px;
+        top: 0%;
+        left: 12%;
+    }
+
+    .preivew-icons {
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        background-color: $primary-color;
+        border-radius: 50%;
+        font-size: 15px;
+        color: #ffffff !important;
+    }
+}
+
+.close-icons {
+    padding: 12px;
+    border-radius: 50%;
+    font-size: 15px;
+    background-color: red;
+    color: #ffffff;
+}
+
+
+a.file {
+    transition: color 0.3s ease;
+}
+
+a.file:hover {
+    color: #1319cb;
+    cursor: pointer;
+}

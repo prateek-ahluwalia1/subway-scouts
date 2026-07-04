@@ -1,0 +1,65 @@
+<div class="testbox main-body-watermark">
+    <form (ngSubmit)="submitForm()">
+        <div class="banner">
+            <h1>Third parties API's Key</h1>
+        </div>
+        <h3 class="text-divider text-muted heading-small"><span>API key Details</span></h3>
+        <div class="colums">
+            <div class="item">
+                <label for="click_send_username">Click Send User Name</label>
+                <input type="text" id="click_send_username" name="click_send_username"
+                    [(ngModel)]="formData.click_send_username">
+            </div>
+            <div class="item">
+                <label for="click_send_key">Click Send Key</label>
+                <input type="text" id="click_send_key" name="click_send_key" [(ngModel)]="formData.click_send_key">
+            </div>
+
+        </div>
+
+        <h3 class="text-divider text-muted heading-small"><span>Aircall Details</span></h3>
+
+        <div class="colums">
+            <div class="item">
+                <label for="air_call_app_id">Aircall APP Id</label>
+                <input type="text" id="air_call_app_id" name="air_call_app_id" [(ngModel)]="formData.air_call_app_id">
+            </div>
+            <div class="item">
+                <label for="air_call_token">Aircall Token</label>
+                <input type="text" id="air_call_token" name="air_call_token" [(ngModel)]="formData.air_call_token">
+            </div>
+
+        </div>
+
+        <h3 class="text-divider text-muted heading-small"><span>Pusher Details</span></h3>
+
+        <div class="colums">
+            <div class="item">
+                <label for="pusher_key">Pusher Key</label>
+                <input type="text" id="pusher_key" name="pusher_key" [(ngModel)]="formData.pusher_key">
+            </div>
+            <div class="item">
+                <label for="pusher_cluster">Pusher Cluster</label>
+                <input type="text" id="pusher_cluster" name="pusher_cluster" [(ngModel)]="formData.pusher_cluster">
+            </div>
+
+        </div>
+
+        <h3 class="text-divider text-muted heading-small"><span>Visa Credential</span></h3>
+
+        <div class="colums">
+            <div class="item">
+                <label for="visa_mail">Email</label>
+                <input type="text" id="visa_mail" name="visa_mail" [(ngModel)]="formData.visa_mail">
+            </div>
+            <div class="item">
+                <label for="visa_password">Password</label>
+                <input type="text" id="visa_password" name="visa_password" [(ngModel)]="formData.visa_password">
+            </div>
+
+        </div>
+        <div class="btn-block" *ngIf="adminPermissions && (adminPermissions.update || adminPermissions.create)">
+            <button type="submit">{{ formData?.id? 'UPDATE':'SUBMIT' }}</button>
+        </div>
+    </form>
+</div>

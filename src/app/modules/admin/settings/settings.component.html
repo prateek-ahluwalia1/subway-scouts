@@ -1,0 +1,66 @@
+<div class="flex flex-col w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-hidden">
+    <mat-drawer-container class="flex-auto sm:h-full">
+        <mat-drawer class="sm:w-60 dark:bg-gray-900" [autoFocus]="false" [mode]="drawerMode" [opened]="drawerOpened"
+            #drawer>
+            <div class="flex items-center justify-between m-3 mr-6 sm:my-10">
+                <div class="text-3xl font-extrabold tracking-tight leading-none">Support</div>
+                <div class="lg:hidden">
+                    <button mat-icon-button (click)="drawer.close()">
+                        <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="flex flex-col divide-y border-t border-b">
+                <ul id="accordion" class="accordion">
+                    <li *ngFor="let menu of menus; let i = index" [class.active]="menu.active">
+                        <div class="menu" (click)="toggle(i)">
+                            <i [class]="menu.iconClass"></i>
+                            {{ menu.name }}
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                        <ul class="submenu" #submenu [style.height.px]="menu.active ? submenu.scrollHeight : 0">
+                            <li (click)="goToPanel(submenu.name)" *ngFor="let submenu of menu.submenu">
+                                <a [class.actives]="submenu.name === selectedPanel">{{ submenu.name }}</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex-auto">
+                <!-- Load settings panel -->
+                <div>
+                    <ng-container [ngSwitch]="selectedPanel">
+                        <!-- Security -->
+                        <ng-container *ngSwitchCase="'Open'">
+                            <settings-security [ticketName]="selectedPanel"
+                                (chatObjet)="receiveDataFromSecurity($event)"></settings-security>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'Answered'">
+                            <settings-security [ticketName]="selectedPanel"
+                                (chatObjet)="receiveDataFromSecurity($event)"></settings-security>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'Closed'">
+                            <settings-security [ticketName]="selectedPanel"
+                                (chatObjet)="receiveDataFromSecurity($event)"></settings-security>
+                        </ng-container>
+
+                        <!-- Plan & Billing -->
+                        <ng-container *ngSwitchCase="'Open Ticket'">
+                            <settings-plan-billing (dataEvent)="receiveDataFromChild($event)"></settings-plan-billing>
+                        </ng-container>
+                        <!-- Notifications -->
+                        <ng-container *ngSwitchCase="'notifications'">
+                            <settings-notifications [chatObj]="chatObj"></settings-notifications>
+                        </ng-container>
+                        <!-- Team -->
+                        <ng-container *ngSwitchCase="'team'">
+                            <settings-team [data]="receivedData"></settings-team>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

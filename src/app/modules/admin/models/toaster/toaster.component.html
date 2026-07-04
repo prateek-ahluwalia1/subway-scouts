@@ -1,0 +1,15 @@
+<div class="toaster" [@slideIn]="'flyIn'">
+    <span class="close-btn" (click)="closeToast()">
+        <img class="icon white" src="assets/images/times-solid.svg" />
+    </span>
+    <div class="msg-wrapper">
+        <div class="toaster-icon-wrapper">
+            <span class="icon-wrapper">
+                <img class="icon white"  src="assets/images/Bell-solid.svg.png">
+            </span>
+        </div>
+        <div class="toaster-msg">
+        <h6>{{ title }}</h6>
+        <p>{{ message }}</p></div> 
+    </div>
+</div>

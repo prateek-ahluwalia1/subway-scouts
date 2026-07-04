@@ -1,0 +1,57 @@
+<div class="absolute inset-0 flex flex-col overflow-hidden main-body-watermark">
+    <div class="p-4 rounded-2xl overflow-auto common-admin-customer-contractor">
+        <div class="users-page">
+            <div class="user-main">
+                <div class="user-nav rounded-2xl">
+                    <h3 style="width: 35%;">Employee Training Matrix</h3>
+
+                    <mat-chip-list aria-label="Dog selection" class="dog_selection all-reports">
+        
+                        <app-select-multiple-customer signleDouble="yes" style="height: 43px; margin: 5px;"
+                            (selectedCustomer)="selectedCus($event)" class="select-job-tacker" [dataArray]="customers"
+                            [placeholderText]="'Select Customers'"></app-select-multiple-customer>
+                            
+                        <app-select-multiple-site style="height: 43px; margin: 5px;"
+                            (selectedSite)="receiveDataFromChildSi($event)" class="select-job-tacker"
+                            [dataArray]="singleSites" [placeholderText]="'Select Sites'"></app-select-multiple-site>
+
+                        <mat-chip style="padding: 20px 5px !important;" (click)="getReports()">
+                            <mat-icon svgIcon="mat_outline:file_upload"></mat-icon><span
+                            style="margin-right: 5px;">Get Reports</span>
+                        </mat-chip>
+
+                    </mat-chip-list>
+                </div>
+
+                <div class="card-body" style="margin-top: 25px;">
+                    <table id="example" class="table table-hover table-striped table-bordered table-responsive text-center" *ngIf="GuardData.length > 0">
+                        <thead class="bg-emerald-400 live-operation-head">
+                            <tr>
+                                <th>Guard Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Passport No</th>
+                                <th>Passport Expiry</th>
+                                <th>Visa No</th>
+                                <th>Visa Expiry</th>
+                            </tr>
+                        </thead>
+            
+                        <tbody>
+                            <tr *ngFor="let guard of GuardData">
+                                <td>{{ guard.first_name}} {{ guard.middle_name}} {{ guard.last_name}}</td>
+                                <td>{{ guard.email}}</td>
+                                <td>{{ guard.phone}}</td>
+                                <td>{{ guard.passport_no}}</td>
+                                <td>{{ guard.passport_exp | date: "dd-MM-yyyy"}}</td>
+                                <td>{{ guard.visa_no}}</td>
+                                <td>{{ guard.visa_exp === 'N/A' ? guard.visa_exp : (guard.visa_exp | date: "dd-MM-yyyy")}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+<section class="message-area">
+    <div class="row">
+        <div class="col-12">
+            <div class="chat-area ">
+                <div class="chatlist">
+                    <div class="modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="chat-header mb-2">
+                                <div class="msg-search">
+                                    <input type="text" class="form-control" id="inlineFormInputGroup"
+                                        placeholder="Search" [(ngModel)]="searchTerm" (ngModelChange)="search()">
+                                </div>
+                            </div>
+                            <div class="modal-body mt-2">
+                                <div class="chat-lists">
+                                    <div class="chat-list">
+                                        <div *ngFor="let user of filteredItems; let i = index"
+                                            [ngClass]="{'active': id == user.id}" (click)="setIndex(i,user)">
+                                            <a class="d-flex align-items-center cursor-pointer">
+                                                <div class="flex-shrink-0 custome-name-show">
+                                                    <p class="m-0 text-uppercase text-light">
+                                                        {{user.first_name.charAt(0)}}{{user.last_name.charAt(0)}}
+                                                    </p>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h3>{{mergeName(user)}}</h3>
+                                                    <p>{{user.to_number}}</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ng-container *ngIf="selectedContact && selectedContact?.first_name; else noItems">
+                    <div class="chatbox showbox main-body-watermark">
+                        <div class="modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="msg-head">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h3>{{ mergeName(selectedContact) }}</h3>
+                                                    <p>{{ selectedContact?.to_number }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="modal-body p-4" #chatContainer>
+                                    <div class="msg-body" *ngIf="messages.length>0">
+                                        <ul>
+                                            <li class="sender" *ngFor="let message of messages; let i = index"
+                                                [ngClass]="{'repaly': message?.direction === 'out', 'sender': message?.direction === 'in'}">
+                                                <p> {{message?.msg_body}} </p>
+                                                <span class="time">{{time(message?.datetime)}}</span>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="send-box">
+                                    <form action="">
+                                        <input type="text" class="form-control" aria-label="message…"
+                                            placeholder="Write message…" [(ngModel)]="message">
+
+                                        <button type="button" (click)="sendMessage()"
+                                            *ngIf="smshistPermissions.create"><i class="fa fa-paper-plane"></i>
+                                            Send</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #noItems>
+                    <div
+                        class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent h-100">
+                        <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:folder-open'"></mat-icon>
+                        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">There are no chat
+                            history!</div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</section>

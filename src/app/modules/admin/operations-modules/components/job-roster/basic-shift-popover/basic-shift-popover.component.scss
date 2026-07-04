@@ -1,0 +1,9 @@
+::ng-deep .center-modal {
+    z-index: 999999;
+
+    .modal-dialog {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+  }
+  

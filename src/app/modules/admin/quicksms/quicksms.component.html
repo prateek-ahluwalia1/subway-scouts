@@ -1,0 +1,190 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <div class="flex-auto p-6">
+        <div class="rounded-2xl">
+            <!-- h-400 min-h-400 max-h-400 -->
+            <div class="sms-main"
+                style="background-color: var(--tw-ring-offset-color) !important; border-radius: 10px;">
+                <div class="row p-4">
+                    <div class="col-8">
+                        <h5>Quick SMS</h5>
+                        <!-- <form [formGroup]="smsform" (ngSubmit)="onSendingMessage()"> -->
+                        <form #smsforms="ngForm">
+                            <div class="row mt-4" style="padding-left: 10px; margin-top: 35px;">
+                                <div class="col-md-2">
+                                    <div class="row">
+                                        <label for="inputFrom" class="col-form-label">Staff</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 pr-4">
+                                    <div class="row">
+
+                                        <app-select-multiple-guards (selectedUsers)="receiveDataFromChildGuards($event)"
+                                            class="select_job_roster" [dataArray]="guards"
+                                            [placeholderText]="'Select Staff'"
+                                            style="padding: 0;"></app-select-multiple-guards>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2 sms">
+                                    <button class="btn btn-border-3" type="button" [autoClose]="false"
+                                        #myPopover="ngbPopover" [ngbPopover]="popContent" [popoverTitle]="popTitle"
+                                        placement="bottom">Filters</button>
+
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left: 10px; margin-top: 20px;" *ngIf="isNewGuard">
+                                <div class="col-2">
+                                    <div class="row">
+                                        <label for="inputTo" class="col-form-label">New</label>
+                                    </div>
+                                </div>
+                                <div class="col-10 p-0 pr-4">
+                                    <div class="row">
+                                        <mat-form-field class="example-chip-list">
+                                            <mat-chip-list #chipList>
+                                                <mat-chip *ngFor="let newStaff of newStaff" [selectable]="selectable"
+                                                    [removable]="removable" (removed)="remove(newStaff)">
+                                                    {{newStaff.number}}
+                                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                </mat-chip>
+                                                <input placeholder="New Staff..." [matChipInputFor]="chipList"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    [matChipInputAddOnBlur]="addOnBlur"
+                                                    (matChipInputTokenEnd)="add($event)">
+                                            </mat-chip-list>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="padding-left: 10px; margin-top: 35px;">
+                                <div class="col-2">
+                                    <div class="row">
+                                        <label for="inputFrom" class="col-form-label">Message</label>
+                                    </div>
+                                </div>
+                                <div class="col-10 pr-4">
+                                    <div class="row">
+                                        <div class="textarea-container">
+                                            <div class="row" id="sms-border">
+                                                <div class="col-12 p-0">
+                                                    <button type="button" mat-button [matMenuTriggerFor]="menu">
+                                                        <mat-icon>bookmark_border</mat-icon>
+                                                        Template</button>
+
+                                                </div>
+                                            </div>
+                                            <textarea type="text" class="form-control" rows="5" name="body"
+                                                [(ngModel)]="message"></textarea>
+                                            <p>Approx.0 characters/1 SMS per recipient</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="float:right; margin-top: 50px;">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-border-3" (click)="accept(smsforms.value)"
+                                        *ngIf="smsPermissions.create">Send</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-4">
+                        <div class="smartphone">
+                            <div class="content">
+                                <div class="row phone_row">
+                                    <div class="col">
+                                        <img src="assets/images/logo/scouts.png"
+                                            style="height:25px; width: 25px; float: left; margin-bottom: 5px; margin-top: 3px; margin-left: 6px;">
+                                        <p class="company_name">The Scouts</p>
+                                    </div>
+                                </div>
+                                <div class="geek2" *ngIf="message!= '';">
+                                    <p name="message">{{message}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- templetes sms -->
+
+<mat-menu #menu="matMenu" class="templete_menu">
+    <p class="px-1 m-0" *ngIf="templetes.length==0">No Templete is Available</p>
+    <button mat-menu-item *ngFor="let item of templetes" (click)="templete(item.msg_body)">{{item.title}}</button>
+</mat-menu>
+
+
+
+
+<!-- popover -->
+
+<ng-template #popContent let-c="close">
+    <mat-icon class="close" (click)="closePopover()">close</mat-icon>
+    <div class="row">
+
+        <div class="col-12 mt-3 mb-3" style="text-align: center;">
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked>
+                <label class="form-check-label" for="inlineCheckbox1">Only System Staff</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" #value type="checkbox" id="inlineCheckbox2" value="option2"
+                    (click)="newGuard(value)">
+                <label class="form-check-label" for="inlineCheckbox2">New Staff</label>
+            </div>
+        </div>
+    </div>
+    <!-- [formGroup]="addsmsForm" -->
+    <form #addForm="ngForm">
+        <div class="row" style="margin-top: 30px; margin-left: 1px; margin-right: 1px;">
+            <div class="col-6">
+                <div class="textOnInput">
+                    <label for="inputText" class="label-color">Customer</label>
+                    <app-select-multiple-customer (selectedCustomer)="receiveDataFromChild($event)"
+                        class="select_job_roster" [dataArray]="customers"
+                        style="padding: 0;"></app-select-multiple-customer>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="textOnInput">
+                    <label for="inputText" class="label-color">Select Staff Status</label>
+                    <mat-form-field class="w-100 p-0 border-0">
+                        <mat-select class="ps-2 pe-5 single-selects" name="guard_status" [(ngModel)]="guard_status">
+                            <!-- matNativeControl -->
+                            <!-- required -->
+                            <mat-option class="w-100 ">Select status</mat-option>
+                            <mat-option value="active" class="w-100 ">Active</mat-option>
+                            <mat-option value="inactive" class="w-100 ">Inactive</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 30px; margin-left: 1px; margin-right: 1px;">
+            <div class="col-12">
+                <div class="textOnInput">
+                    <label for="inputText" class="label-color">Locations</label>
+                    <app-select-multiple-site (selectedSite)="receiveDataFromChildSite($event)"
+                        class="select_job_roster site-job-new-roster" [type]="type"
+                        [dataArray]="sitesList"></app-select-multiple-site>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 30px;">
+            <div class="col" style="text-align: center;">
+                <button type="submit" class="px-6 btn btn-border-3" (click)="applyFilters(addForm.value)">Apply</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<ng-template #popTitle>
+    <div class="popover-header-date">
+    </div>
+</ng-template>

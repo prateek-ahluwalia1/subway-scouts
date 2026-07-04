@@ -1,0 +1,76 @@
+<div class="main">
+    <div class="header d-flex justify-content-between align-content-center">
+        <h5>{{ rosterId ? 'Update ' + rosterId.name + ' Roster' : 'Create a New Runsheet Roster' }}</h5>
+        <mat-icon (click)="close('dismiss')">close</mat-icon>
+    </div>
+
+    <div class="body">
+        <form class="create-roster-field" [formGroup]="createRunsheetRoster" (ngSubmit)="Submit(createRunsheetRoster.value)">
+
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Roster Name</mat-label>
+                    <input matInput formControlName="name">
+                </mat-form-field>
+                <div *ngIf="submitted && f.name.errors" class="custom-error">
+                    <div *ngIf="f.name.errors.required">Roster Name is required*</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field color="accent" appearance="outline" class="w-100">
+                        <mat-label>Start Date</mat-label>
+                        <input matInput formControlName="start" [matDatepicker]="picker2" readonly
+                            (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2 color="primary"></mat-datepicker>
+                    </mat-form-field>
+                    <div *ngIf="submitted && f.start.errors" class="custom-error">
+                        <div *ngIf="f.start.errors.required">Start Date is required*</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field color="accent" appearance="outline" class="w-100">
+                        <mat-label>End Date</mat-label>
+                        <input matInput formControlName="end" [matDatepicker]="picker1" readonly
+                            (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1 color="primary"></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <app-select-multiple-customer signleDouble="no" (selectedCustomer)="receiveDataFromChild($event)" class="select_"
+                    [dataArray]="customers" [placeholderText]="'Select Customers'"></app-select-multiple-customer>
+            </div> -->
+
+            <div class="row">
+                <mat-form-field appearance="outline" class="selection">
+                    <mat-label>Select Customers</mat-label>
+                    <mat-select formControlName="customers" (selectionChange)="receiveDataFromChild($event)">
+                        <mat-option *ngFor="let cus of customers" [value]="cus.id">{{ cus.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="row">
+                <div class="row">
+                    <app-select-multiple-guards signleDouble="yes" style="position: relative;top: 10px;"
+                        class="select_job_roster" (selectedUsers)="receiveDataFromChildAdmins($event)"
+                        [placeholderText]="'Select Admins'" [dataArray]="adminList"></app-select-multiple-guards>
+                </div>
+            </div>
+
+            <div class="roster ">
+                <button type="submit" class="btn btn-border-3 mt-3" color="primary">Save Roster</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+    <p style="color: white">Please Wait...</p>
+</ngx-spinner>

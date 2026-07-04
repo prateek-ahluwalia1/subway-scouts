@@ -1,0 +1,63 @@
+<div class="card mb-3" [ngClass]="{ 'fullscreen': isFullscreen }">
+    <div class="flex p-4 justify-between font-size-lg text-capitalize font-weight-normal">
+        <span class="mr-2 opacity-7 fw-bold">
+            Live Operations ({{ filteredData.length }})
+        </span>
+        <div class="flex align-items-center">
+            <input class="live-operation-search" name="text" placeholder="Search..." type="search" [(ngModel)]="searchText">
+            <mat-icon svgIcon="mat_outline:open_in_full" class="icon-size-5" (click)="openFullscreen()"></mat-icon>
+        </div>
+    </div>
+    <div class="card-body" style="height: 400px;">
+        <table style="width: 100%;" id="example" class="table table-hover table-striped table-borderless">
+            <thead class="live-operation-head">
+                <tr>
+                    <th>Location</th>
+                    <th>Staff Name</th>
+                    <th>Status</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Verification</th>
+                </tr>
+            </thead>
+            <tbody [@stagger]="filteredData.length">
+                <ng-container *ngFor="let data of filteredData | siteFilter:searchText; trackBy: trackById">
+                    <tr scope="row" [@fadeIn]="''" [@stagger]="i">
+                        <td>{{ data.site_name }}</td>
+                        <td>{{ data.name }}</td>
+                        <td>
+                            <span (click)="signInOutDetail(data)" [ngClass]="getBadgeClass(data)"
+                                class="text-sm font-medium mr-2 px-4 py-1 rounded-full">
+                                {{ getFormattedName(data) }}
+                            </span>
+                        </td>
+
+                        <td>{{ data.start_time }}
+                            <span *ngIf="data.signinStatus" class="status-dot {{ data.signinStatus }}"></span> 
+                            <span class="text-xs">{{ data.signinDifference }}</span>
+                        </td>
+                        <td>{{ data.end_time }} 
+                            <span *ngIf="data.signoutStatus" class="status-dot {{ data.signoutStatus }}"></span>
+                            <span class="text-xs">{{ data.signoutDifference }}</span>
+                        </td>
+
+                        <td>
+                            <i class="fa fa-info-circle cursor-pointer" (click)="signInOutDetail(data)"></i>
+                            <!-- <i class="fa fa-phone cursor-pointer ml-2" (click)="loadPhone(data.phone)"></i> -->
+                            <i *ngIf="data.auto_signout=='1'" matTooltip="Auto Sign-Out" class="fa fa-exclamation-triangle ml-2"></i>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+
+    <div [class.hiddenMobile]="showMobile" id="phone-container-global" style="position: absolute;top: 10%;left: 50%;z-index: 20000;">
+        <button (click)="shideMobile()">
+            <mat-icon svgIcon="mat_outline:close"
+                style="position: absolute; top: 0; left: 48%;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+            </mat-icon>
+        </button>
+        <div id="phone"></div>
+    </div>
+</div>

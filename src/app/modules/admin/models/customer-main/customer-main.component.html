@@ -1,0 +1,543 @@
+<div class="people-form__dialog-body-container">
+    <!-- body -->
+    <div class="people-form__dialog-body">
+        <!-- left side -->
+        <div class="people-form__dialog-body-left">
+            <div class="people-form__dialog-body-profile  align-items-center flex-row">
+                <div class="image rounded-circle text-uppercase font-weight-bold" style="text-align: center; background-color: #e8e8e8; justify-content: center; 
+                    margin: 10px 80px; padding: 27px 2px; font-size: larger;">
+                    {{name.charAt(0)}}{{name.charAt(name.indexOf(' ') + 1)}}
+                </div>
+                <p class="name fw-bold text-center my-3 text-capitalize">{{ name }} &nbsp;<a id="icon-color"></a></p>
+            </div>
+            <div class="people-form-shift__start" (click)="updateCutomers('update')">
+                <button class="button text-capitalize">{{ name }} &nbsp;
+                    <i class="fa-solid fa-pen" id="icon"></i>
+                </button>
+            </div>
+            <div class="fw-bolder mb-3 text-center">Total Number of:</div>
+            <div class="d-flex justify-content-around flex-wrap px-5">
+                <div class="d-flex align-items-start mt-2 gap-3">
+                    <div class="border border-gray-400 rounded px-2 mb-3">
+                        <div class="fs-4 fw-bolder text-gray-500" style="text-align: center;">
+                            <span class="w-70px" id="customer_total_shifts">{{tot_sites}}</span>
+                        </div>
+                        <div class="fw-semi-bold text-gray-400" id="sites-size">Locations</div>
+                    </div>
+                    <div class="border border-gray-400 rounded px-2 mb-3">
+                        <div class="fs-4 fw-bolder text-gray-500">
+                            <span class="w-75px" id="customer_total_shifts">{{tot_shifts}}</span>
+                        </div>
+                        <div class="fw-semi-bold text-gray-400" id="sites-size">Shifts</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3 mx-2 mt-2">
+                <div class="card-body">
+                    <small class="text-muted text-uppercase">Details &nbsp;
+                        <a id="icon-color"><i class="fa-solid fa-pen" style="cursor:pointer" id="icon"
+                                (click)="updateCutomers('update')"></i></a>
+                    </small>
+                    <ul class="list-unstyled mb-2 mt-2">
+                        <li class="d-flex align-items-center mb-3"><i class="fa-solid fa-phone"></i><small><span
+                                    class="fw-semibold mx-2">Contact:</span> <span>{{ phone }}</span></small></li>
+                        <li class="d-flex align-items-center text-wrap mb-3"><i
+                                class="fa-regular fa-envelope"></i><small style="word-break: break-all;"><span
+                                    class="fw-semibold mx-2">Email:</span>
+                                <span>{{ email }}</span></small></li>
+                        <li class="d-flex align-items-center mb-3"><i class="fa-regular fa-flag"></i><small><span
+                                    class="fw-semibold mx-2">State:</span> <span>{{ state }}</span></small></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- right side -->
+        <!-- personal -->
+        <div class="people-form__dialog-body__right">
+            <div class="people-form-view people-form-tab-personal">
+                <button type="button" class="close" style="color: black;opacity: 1; padding-right: 15px;"
+                    data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <!--Edit button-->
+                <div class="people-form-view__header">
+                    <div class="cutomer-main-n">
+                        <div class="header-title">
+                            <h2>Personal Profile</h2>
+                        </div>
+                        <div class="people-form-tab-personal__actions">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <!-- <li class="nav-item" (click)="getTabType('Personal details',personal)">
+                                    <a class="nav-link" [ngClass]="{'active': tabType=='Personal details'}">Personal</a>
+                                </li> -->
+                                <li class="nav-item" (click)="getTabType('Documents',documents)">
+                                    <a class="nav-link" [ngClass]="{'active': tabType=='Documents'}">Documents</a>
+                                </li>
+                                <li class="nav-item" (click)="getTabType('Charge Rates',chargeRates)">
+                                    <a class="nav-link" [ngClass]="{'active': tabType=='Charge Rates'}">Charged
+                                        Rates</a>
+                                </li>
+                                <li class="nav-item" (click)="getTabType('Contacts',contacts)">
+                                    <a class="nav-link" [ngClass]="{'active': tabType=='Contacts'}">Contacts</a>
+                                </li>
+                                <li class="nav-item" (click)="getTabType('Profile Tracker',profileTracker)">
+                                    <a class="nav-link" [ngClass]="{'active': tabType=='Profile Tracker'}">Profile
+                                        Tracker</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="body">
+                        <div class="scrollable">
+                            <div class="inner-body">
+                                <div class="section" #documents>
+                                    <form [formGroup]="updateCutomer" (ngSubmit)="onFormSubmit(updateCutomer.value)">
+                                        <!-- <div class="tab-content profile-tab" id="myTabContent">
+                                            <h4>Personal Detail</h4>
+                                            <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                aria-labelledby="home-tab">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Name</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p>{{ name }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Email</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p>{{ email }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Phone</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p>{{ phone }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <div class="documents-container">
+                                            <div class="contact-header mt-2">
+                                                <h4>Documents</h4>
+                                            </div>
+                                            <div class="documents-body mt-2">
+                                                <div class="business-document">
+                                                    <div class="row">
+                                                        <div class="col-md-6" formGroupName="business">
+                                                            <div class="header" *ngIf="!bussinessuploaded">
+                                                                <h6 class="p-2">Bussiness</h6>
+                                                                <div class="image" (click)="uploadImage('business')">
+                                                                    <img onerror='this.src="https://via.placeholder.com/150"'
+                                                                        [src]="business_file" alt="">
+                                                                    <!-- ngbPopover="Change Avatar!" -->
+                                                                </div>
+                                                                <mat-icon class="close-icons" placement="top"
+                                                                    ngbTooltip="Remove Avatar!"
+                                                                    triggers="mouseenter:mouseleave"
+                                                                    (click)="removeImg('business')">close</mat-icon>
+                                                                <mat-icon class="edit-icons business" placement="right"
+                                                                    ngbTooltip="Change avatar!"
+                                                                    triggers="mouseenter:mouseleave"
+                                                                    (click)="uploadImage('business')">edit</mat-icon>
+                                                            </div>
+                                                            <div class="header align-item-center"
+                                                                *ngIf="bussinessuploaded">
+                                                                <div class="row pb-1 mt-1 d-flex align-item-center w-100"
+                                                                    style="height: 130px; align-items: center;">
+                                                                    <div class="col-8 d-flex"
+                                                                        (click)="viewFiles(business_file)">
+                                                                        <mat-icon
+                                                                            svgIcon="mat_outline:attach_file"></mat-icon>{{
+                                                                        businessFileName
+                                                                        }}
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <mat-icon (click)="uploadImage('business')"
+                                                                            style="width:25px;height:25px"
+                                                                            svgIcon="mat_outline:drive_file_rename_outline"></mat-icon>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="number-exp">
+                                                                <input type="hidden" class="form-control"
+                                                                    formControlName="document_name" value="business">
+                                                                <div class="form-group">
+                                                                    <label for="document_no">Business ABN/ACN</label>
+                                                                    <input type="number" class="form-control"
+                                                                        formControlName="document_no">
+
+                                                                </div>
+                                                                <div class="form-group py-1">
+                                                                    <label for="date">Business ABN/ACN
+                                                                        Expiration</label>
+                                                                    <input type="date" class="form-control"
+                                                                        formControlName="document_expire">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6" formGroupName="security">
+                                                            <div class="header" *ngIf="!secuploaded">
+                                                                <h6 class="p-2">Security</h6>
+                                                                <div class="image" (click)="uploadImage('security')">
+                                                                    <img onerror='this.src="https://via.placeholder.com/150"'
+                                                                        [src]="security_file" alt="">
+                                                                </div>
+                                                                <!-- ngbPopover="Change Avatar!" -->
+                                                                <mat-icon class="close-icons" placement="top"
+                                                                    ngbTooltip="Remove Avatar!"
+                                                                    triggers="mouseenter:mouseleave"
+                                                                    (click)="removeImg('security')">close</mat-icon>
+                                                                <mat-icon class="edit-icons" placement="right"
+                                                                    ngbTooltip="Change avatar!"
+                                                                    triggers="mouseenter:mouseleave"
+                                                                    (click)="uploadImage('security')">edit</mat-icon>
+                                                            </div>
+                                                            <div class="header" *ngIf="secuploaded">
+                                                                <div class="row pb-1 mt-1 d-flex align-item-center w-100"
+                                                                    style="height: 130px;align-items: center;">
+                                                                    <div class="col-8 d-flex"
+                                                                        (click)="viewFiles(security_file)">
+                                                                        <mat-icon
+                                                                            svgIcon="mat_outline:attach_file"></mat-icon>{{
+                                                                        scFileName
+                                                                        }}
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <mat-icon (click)="uploadImage('security')"
+                                                                            style="width:25px;height:25px"
+                                                                            svgIcon="mat_outline:drive_file_rename_outline"></mat-icon>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="number-exp">
+                                                                <input type="hidden" class="form-control"
+                                                                    formControlName="document_name" value="security">
+                                                                <div class="form-group">
+                                                                    <label for="number">Security license number</label>
+                                                                    <input type="text" class="form-control"
+                                                                        formControlName="document_no"
+                                                                        placeholder="license number">
+                                                                </div>
+                                                                <div class="form-group py-1">
+                                                                    <label for="date">Security license
+                                                                        expiration</label>
+                                                                    <input type="date" class="form-control"
+                                                                        formControlName="document_expire">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-6" formGroupName="public_liablity">
+                                                            <div class="header" *ngIf="!pluploaded">
+                                                                <h6 class="p-2 my-2">Public Liablity</h6>
+                                                                <div class="image"
+                                                                    (click)="uploadImage('Public Liablity')">
+                                                                    <img onerror='this.src="https://via.placeholder.com/150"'
+                                                                        [src]="public_health_file" alt="">
+                                                                </div>
+                                                                <mat-icon class="close-icons" placement="top"
+                                                                    ngbTooltip="Remove Avatar!"
+                                                                    triggers="mouseenter:mouseleave"
+                                                                    (click)="removeImg('Public Liablity')">close</mat-icon>
+                                                                <mat-icon class="edit-icons business" placement="right"
+                                                                    ngbTooltip="Change avatar!"
+                                                                    triggers="mouseenter:mouseleave"
+                                                                    (click)="uploadImage('Public Liablity')">edit</mat-icon>
+                                                            </div>
+                                                            <div class="header align-item-center" *ngIf="pluploaded">
+                                                                <div class="row pb-1 mt-1 d-flex align-item-center w-100"
+                                                                    style="height: 130px; align-items: center;">
+                                                                    <div class="col-8 d-flex"
+                                                                        (click)="viewFiles(public_health_file)">
+                                                                        <mat-icon
+                                                                            svgIcon="mat_outline:attach_file"></mat-icon>{{
+                                                                        plFileName
+                                                                        }}
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <mat-icon
+                                                                            (click)="uploadImage('Public Liablity')"
+                                                                            style="width:25px;height:25px"
+                                                                            svgIcon="mat_outline:drive_file_rename_outline"></mat-icon>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="number-exp">
+                                                                <input type="hidden" class="form-control"
+                                                                    formControlName="document_name"
+                                                                    value="public_liablity">
+                                                                <div class="form-group">
+                                                                    <label for="number">Public Liability Number</label>
+                                                                    <input type="text" class="form-control"
+                                                                        placeholder="Public Liability Number"
+                                                                        formControlName="document_no">
+                                                                </div>
+                                                                <div class="form-group py-1">
+                                                                    <label for="date">Public Liability
+                                                                        Expiration</label>
+                                                                    <input type="date" class="form-control"
+                                                                        formControlName="document_expire">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6" formGroupName="labour_hire">
+                                                            <div class="header" *ngIf="!lhuploaded">
+                                                                <h6 class="p-2">Labour Hire</h6>
+                                                                <div class="image" (click)="uploadImage('Labour Hire')">
+                                                                    <img onerror='this.src="https://via.placeholder.com/150"'
+                                                                        [src]="labour_hire_file" alt="">
+                                                                </div>
+                                                                <mat-icon class="close-icons" placement="top"
+                                                                    ngbTooltip="Remove Avatar!"
+                                                                    triggers="mouseenter:mouseleave"
+                                                                    (click)="removeImg('Labour Hire')">close</mat-icon>
+                                                                <mat-icon class="edit-icons" placement="right"
+                                                                    ngbTooltip="Change avatar!"
+                                                                    triggers="mouseenter:mouseleave"
+                                                                    (click)="uploadImage('Labour Hire')">edit</mat-icon>
+                                                            </div>
+                                                            <div class="header align-item-center" *ngIf="lhuploaded">
+                                                                <div class="row pb-1 mt-1 d-flex align-item-center w-100"
+                                                                    style="height: 130px; align-items: center;">
+                                                                    <div class="col-8 d-flex"
+                                                                        (click)="viewFiles(labour_hire_file)">
+                                                                        <mat-icon
+                                                                            svgIcon="mat_outline:attach_file"></mat-icon>{{
+                                                                        lhFileName
+                                                                        }}
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <mat-icon (click)="uploadImage('Labour Hire')"
+                                                                            style="width:25px;height:25px"
+                                                                            svgIcon="mat_outline:drive_file_rename_outline"></mat-icon>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="number-exp mt-2">
+                                                                <input type="hidden" class="form-control"
+                                                                    formControlName="document_name" value="labour_hire">
+                                                                <div class="form-group">
+                                                                    <label for="text">Labour Hire Number</label>
+                                                                    <input type="text" class="form-control"
+                                                                        placeholder="Labour Hire Number"
+                                                                        formControlName="document_no">
+                                                                </div>
+                                                                <div class="form-group py-1">
+                                                                    <label for="date">Labour Hire expiration</label>
+                                                                    <input type="date" class="form-control"
+                                                                        id="public_hire_exp"
+                                                                        formControlName="document_expire">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="charge-container mt-5" #chargeRates>
+                                            <div class="charge-header mt-2">
+                                                <h4>Charge Rates</h4>
+                                            </div>
+                                            <div class="contact-body mt-2">
+                                                <!--Charged Rates-->
+                                                <!-- <div class="header-title">
+                                                <h3>Charged Rates</h3>
+                                            </div><br> -->
+                                                <div class="tab-content profile-tab" id="myTabContent">
+
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+
+                                                            <mat-form-field appearance="outline" class="w-100">
+                                                                <mat-label>Job Level</mat-label>
+                                                                <mat-select formControlName="job_level">
+                                                                    <mat-option>None</mat-option>
+                                                                    <mat-option value="1">1</mat-option>
+                                                                    <mat-option value="2">2</mat-option>
+                                                                    <mat-option value="3">3</mat-option>
+                                                                    <mat-option value="4">4</mat-option>
+                                                                    <mat-option value="5">5</mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <mat-form-field appearance="outline" class="w-100">
+                                                                <mat-label>State</mat-label>
+                                                                <mat-select formControlName="state">
+                                                                    <mat-option>None</mat-option>
+                                                                    <mat-option *ngFor="let state of states"
+                                                                        [value]="state">{{state}}</mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-2">
+                                                        <div class="col-md-6">
+                                                            <mat-form-field appearance="outline" class="w-100">
+                                                                <mat-label>Chargerates</mat-label>
+                                                                <mat-select formControlName="chargerate">
+                                                                    <mat-option>None</mat-option>
+                                                                    <mat-option *ngFor="let chgrate of chargeRate"
+                                                                        [value]="chgrate.id">{{ chgrate.title
+                                                                        }}</mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <mat-form-field appearance="outline" class="w-100">
+                                                                <input matInput placeholder="Charge rate applying date"
+                                                                    [matDatepicker]="picker2"
+                                                                    formControlName="charge_rate_apply_date">
+                                                                <mat-datepicker-toggle matIconSuffix
+                                                                    [for]="picker2"></mat-datepicker-toggle>
+                                                                <mat-datepicker #picker2></mat-datepicker>
+                                                            </mat-form-field>
+                                                        </div>
+
+                                                    </div>
+                                                    <!--form-->
+                                                </div>
+                                                <!--Charged Rates-->
+
+                                            </div>
+                                        </div>
+                                        <div class="contact-container mt-5" #contacts>
+                                            <div class="contact-header mt-2">
+                                                <h4>Contact</h4>
+                                            </div>
+                                            <div class="contact-body mt-2">
+                                                <div class="shift-tasks-container">
+                                                    <div class="tasks-rows-container" formArrayName="more_contacts">
+                                                        <div *ngFor="let input of more_contacts?.controls; let i = index"
+                                                            [formGroupName]="i">
+                                                            <input type="hidden" formControlName="more_contact_id">
+                                                            <div class="form-group px-1">
+                                                                <label for="exampleInputEmail1">Email</label>
+                                                                <input type="email" class="form-control"
+                                                                    formControlName="more_email"
+                                                                    placeholder="Enter email">
+                                                            </div>
+                                                            <div class="form-group px-1">
+                                                                <label for="phone">Phone</label>
+                                                                <input type="phone" class="form-control"
+                                                                    formControlName="more_phone"
+                                                                    placeholder="Enter Phone">
+                                                            </div>
+                                                            <div class="form-group px-1">
+                                                                <label for="phone">Notes</label>
+                                                                <input type="text" class="form-control"
+                                                                    formControlName="more_notes"
+                                                                    placeholder="Type something" />
+                                                            </div>
+
+                                                            <span style="margin-top: 20px">
+                                                                <mat-icon style="color: #d75d5d; cursor: pointer;"
+                                                                    svgIcon="feather:trash-2"
+                                                                    (click)="removeTextArea(input.value,i)"></mat-icon>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div [ngClass]="more_contacts.controls? 'btn-90' : 'btn-40'"
+                                                        class="flex-row-centered flex-justify-content-center">
+                                                        <div class="no-shift-tasks-placeholder">
+                                                            <div
+                                                                class="flex-row-centered flex-justify-content-center py-5">
+                                                                <div class>
+                                                                    <div class="width-100-percent height-100-percent">
+                                                                        <div class="custom-cta-btn"
+                                                                            (click)="addTextarea()">
+                                                                            <span>+ Add Contact</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="contact-container mt-5" #profileTracker>
+                                            <div class="contact-header mt-2">
+                                                <h4>Profile Tracker</h4>
+                                            </div>
+                                            <div class="flex flex-col flex-auto min-w-0">
+                                                <div class="flex-auto p-6 sm:p-10">
+                                                    <div class="prose prose-sm max-w-5xl">
+                                                        <ng-container *ngFor="let item of profileTrackers">
+                                                            <div class="mb-12 p-8 rounded-2xl shadow bg-card">
+                                                                <div>
+                                                                    <h2 class="my-0">{{item.action_by}}</h2>
+                                                                    <div class="font-semibold text-md text-secondary">
+                                                                        {{item.date}}</div>
+                                                                    <span
+                                                                        class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">{{
+                                                                        item.action_type }}</span>
+                                                                </div>
+                                                                <hr class="mt-6">
+                                                                <ng-container *ngIf="item?.updated_data">
+                                                                    <span
+                                                                        class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Now</span>
+                                                                    <ng-container
+                                                                        *ngFor="let prop of filteredData(item?.updated_data) | keyvalue">
+                                                                        <div class="mt-8">
+                                                                            <ul>
+                                                                                <li>{{ prop.key.replace('_', ' ') |
+                                                                                    titlecase }}: {{prop.value }}</li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </ng-container>
+
+                                                                <ng-container *ngIf="item.before_update">
+                                                                    <span
+                                                                        class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Before</span>
+                                                                    <ng-container
+                                                                        *ngFor="let prop of item?.before_update | keyvalue">
+                                                                        <div class="mt-8">
+                                                                            <ul>
+                                                                                <li>{{ prop.key.replace('_', ' ') |
+                                                                                    titlecase }}: {{prop.value }}</li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </ng-container>
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </form>
+                                    <!-- <div class="col-12">
+                                        <button type="submit"
+                                            class="btn btn-warning text-center text-white d-block m-auto"
+                                            (click)="onFormSubmit(updateCutomer.value)">Submit</button>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer" style="position:absolute; bottom:0; right:0">
+    <button type="button" class="btn btn-light" (click)="dismiss('Cross click')">Close</button>
+    <button type="button" class="btn btn-warning text-white" *ngIf="Permissions && Permissions.update"
+        (click)="onFormSubmit(updateCutomer.value)">Submit</button>
+</div>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+    <p style="color: white">Please Wait...</p>
+</ngx-spinner>

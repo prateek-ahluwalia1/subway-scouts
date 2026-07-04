@@ -1,0 +1,465 @@
+<div class="app-main__outer p-3 w-100 main-body-watermark">
+    <div class="app-main__inner">
+        <div class="mb-3 card">
+
+            <div class="tabs-animation">
+                <div class="text-center mb-3">
+
+                    <div class="generateReport">
+                        <h5 class="menu-header-title text-capitalize mb-3 fsize-3">Leads Created</h5>
+                        <div class="position-absolute right-0 flex mr-2">
+                            <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedMonth"
+                                placeholder="Months" (ngModelChange)="onMonthChange($event)">
+                                <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+                            </select>
+                            <button (click)="generateReport()" class="btn btn-border-3">Report</button>
+                        </div>
+                    </div>
+                    <div role="group" class="mb-3 btn-group-lg btn-group">
+                        <button class="btn-shadow btn btn-alternate" [class.active]="status.active"
+                            *ngFor="let status of leadStatus" (click)="filterLeads(status.name)">{{ status.name
+                            }}</button>
+                    </div>
+                </div>
+
+                <div class="row" style="position: relative;">
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide w-100"
+                                    *ngFor="let item of filteredCrmCustomer; trackBy: trackById">
+                                    <div class="card-shadow-primary card-border mb-3 profile-responsive card">
+                                        <div class="dropdown-menu-header">
+                                            <div class="dropdown-menu-header-inner bg-alternate">
+                                                <div class="menu-header-image opacity-4">
+                                                </div>
+                                                <div class="menu-header-content btn-pane-right">
+                                                    <div
+                                                        class="avatar-icon-wrapper mr-3 avatar-icon-xl btn-hover-shine">
+                                                        <div class="avatar-icon rounded">
+                                                            <img src="https://png.pngitem.com/pimgs/s/130-1300257_user-icon-png-image-ios-user-icon-transparent.png"
+                                                                alt="Avatar 5">
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="menu-header-title">{{
+                                                            item.sub_company?item.sub_company: item.name }}</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="p-0 list-group-item">
+                                                <div class="row w-100 m-0">
+                                                    <div class="widget-content col-9">
+                                                        <span class="m-0 font-weight-bold">Name: </span> <span>{{
+                                                            item.name }}</span><br>
+                                                        <span class="m-0 font-weight-bold">Phone: </span> <span>{{
+                                                            item?.phone ?? 'N/A' }}</span><br>
+                                                        <span class="m-0 font-weight-bold">Lead Status: </span>
+                                                        <span>{{ item?.lead_status ?? 'N/A' }}</span><br>
+                                                    </div>
+                                                    <div class="widget-content col-3" *ngIf="item.priority">
+                                                        <div class="badge ml-2"
+                                                            [ngClass]="item.priority === 'High' ? 'badge-danger' : 'badge-info'">
+                                                            {{ item.priority }}
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <p class="text-end m-2 cursor-pointer">
+                                                    <span class="badge bg-success"
+                                                        (click)="item.toggleTable = !item.toggleTable">Show {{
+                                                        toggleTable?'less':'more' }}</span>
+                                                </p>
+                                            </li>
+
+                                            <div *ngIf="item.toggleTable"
+                                                class="relative overflow-x-auto shadow-md sm:rounded-lg transition ease-in-out delay-150 duration-300">
+                                                <li class="p-0 list-group-item">
+                                                    <div class="row w-100 m-0">
+                                                        <div class="widget-content col-12">
+                                                            <span class="m-0 font-weight-bold">Description: </span>
+                                                            <span>{{
+                                                                item?.description ?? 'N/A' }}</span><br>
+                                                        </div>
+                                                    </div>
+
+                                                </li>
+                                                <table
+                                                    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                                    <thead
+                                                        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                        <tr>
+                                                            <th scope="col" class="px-2 py-2">
+                                                                Lead Price
+                                                            </th>
+                                                            <th scope="col" class="px-2 py-2">
+                                                                Won Price
+                                                            </th>
+                                                            <th scope="col" class="px-2 py-2">
+                                                                Expense
+                                                            </th>
+                                                            <th scope="col" class="px-2 py-2">
+                                                                Profit
+                                                            </th>
+                                                            <th scope="col" class="px-2 py-2">
+                                                                Loss
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                            class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                                            <th scope="row"
+                                                                class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                                {{ item.annual_revenue }}
+                                                            </th>
+                                                            <td class="px-2 py-2">
+                                                                {{ item.actual_revenue }}
+                                                            </td>
+                                                            <td class="px-2 py-2">
+                                                                {{ item.booking_expense }}
+                                                            </td>
+                                                            <td class="px-2 py-2">
+                                                                {{ (item.actual_revenue - item.booking_expense) > 0 ?
+                                                                (item.actual_revenue - item.booking_expense) : 'N/A' }}
+                                                            </td>
+                                                            <td class="px-2 py-2">
+                                                                <ng-container
+                                                                    *ngIf="item.lead_status=='Lost Lead';else wonLead">
+                                                                    {{ item.annual_revenue }}
+                                                                </ng-container>
+                                                                <ng-template #wonLead>N/A</ng-template>
+                                                            </td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div class="row m-0 w-100">
+                                                <button [routerLink]="['/crm/customer-detail', item.id]"
+                                                    class="btn-sm flex justify-content-center hover-button btn-transition-text btn-transition btn-transition-alt btn btn-outline-focus">
+                                                    <mat-icon svgIcon="heroicons_outline:arrow-up-right"></mat-icon>
+                                                    <span class="m-2">View Profile</span>
+                                                </button>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="button-container" style="display: flex; justify-content: space-between;">
+                        <button class="custom-swiper-button-prev" (click)="navigateToPrev()"
+                            style="margin-left: 10px; background-color: #01A37E; border-radius: 45px; margin-bottom: 6px;"><mat-icon
+                                style="color: white; margin: 3px 3px;">keyboard_arrow_left</mat-icon></button>
+                        <button class="custom-swiper-button-next" (click)="navigateToNext()"
+                            style="margin-right: 10px; background-color: #01A37E; border-radius: 45px; margin-bottom: 6px;"><mat-icon
+                                style="color: white; margin: 2px 3px;">keyboard_arrow_right</mat-icon></button>
+                    </div>
+                </div>
+
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"
+                    *ngIf="filteredCrmCustomer.length==0 && !isLoading">
+                    <!-- Show the "Not Found" message only if data is loaded and no records are found -->
+                    <strong class="font-bold">Not Found! </strong>
+                    <span class="block sm:inline">Oops record not found.</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <app-crm-status-card title="Deals Created This Month" [value]="totalCountCurrentMonth"
+                            [percentage]="percentageChange" percentageClass="neg-value" routerLink="/crm/lead"
+                            (click)="activeTabs('leads')">
+                        </app-crm-status-card>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6">
+                        <app-crm-status-card title="Revenue This Month" [value]="monthlySale" routerLink="">
+                        </app-crm-status-card>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6">
+                        <app-crm-status-card title="Deals Closing This Month" [value]="dealClosed" routerLink="/crm/won"
+                            (click)="activeTabs('Won')">
+                        </app-crm-status-card>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6">
+                        <app-crm-status-card title="Contact In Future" [value]="contactInFuture"
+                            routerLink="/crm/contacted" (click)="activeTabs('contacts')">
+                        </app-crm-status-card>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-6">
+                <div class="special-card">
+                    <div class="special-bg">
+                        <h5 class="mb-2">Company Health</h5>
+                        <div class="row m-0">
+                            <div class="col-sm-12 col-md-6">
+                                <div style="height:116px"
+                                    class="card-shadow-primary mb-3 widget-chart widget-chart2 text-left card">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-content">
+                                            <h6 class="widget-subheading">Gross Profit Of Month</h6>
+                                            <div class="widget-chart-flex">
+                                                <div class="widget-numbers mb-0 w-100">
+                                                    <div class="widget-chart-flex">
+                                                        <div class="fsize-4">
+                                                            <small class="opacity-5 text-muted">$</small>
+                                                            {{ grossAmount }}
+                                                        </div>
+                                                        <div class="ml-auto">
+                                                            <div
+                                                                class="widget-title ml-auto font-size-lg font-weight-normal text-muted">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div style="height:116px"
+                                    class="card-shadow-primary mb-3 widget-chart widget-chart2 text-left card">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-content">
+                                            <h6 class="widget-subheading">Expected Loss Value Of Month</h6>
+                                            <div class="widget-chart-flex">
+                                                <div class="widget-numbers mb-0 w-100">
+                                                    <div class="widget-chart-flex">
+                                                        <div class="fsize-4">
+                                                            <small class="opacity-5 text-muted">$</small>
+                                                            {{ expectedLoss }}
+                                                        </div>
+                                                        <div class="ml-auto">
+                                                            <div
+                                                                class="widget-title ml-auto font-size-lg font-weight-normal text-muted">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <div class="card-shadow-info mb-3 widget-chart widget-chart2 text-left card" routerLink="/crm/lead"
+                    (click)="activeTabs('leads')">
+                    <div class="widget-content p-0 w-100">
+                        <div class="widget-content-outer">
+                            <div class="widget-content-wrapper">
+                                <div class="widget-content-left pr-2 fsize-1">
+                                    <div class="widget-numbers mt-0 fsize-3 text-info">{{ all_leads }}</div>
+                                </div>
+                                <div class="widget-content-right w-100">
+                                    <div class="progress-bar-xs progress">
+                                        <div class="progress-bar bg-info" role="progressbar"
+                                            aria-valuemax="100"
+                                            [style.width.%]="(all_leads / 100) * 100">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-content-left fsize-1">
+                                <div class="text-muted opacity-6">Leads</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card-shadow-alternate mb-3 widget-chart widget-chart2 text-left card"
+                    routerLink="/crm/contacted" (click)="activeTabs('contacts')">
+                    <div class="widget-content p-0 w-100">
+                        <div class="widget-content-outer">
+                            <div class="widget-content-wrapper">
+                                <div class="widget-content-left pr-2 fsize-1">
+                                    <div class="widget-numbers mt-0 fsize-3 text-warning">{{ contacted_leads }}</div>
+                                </div>
+                                <div class="widget-content-right w-100">
+                                    <div class="progress-bar-xs progress">
+                                        <div class="progress-bar bg-warning" role="progressbar"
+                                            [style.width.%]="(contacted_leads / 100) * 100">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-content-left fsize-1">
+                                <div class="text-muted opacity-6">Contacts</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card-shadow-success mb-3 widget-chart widget-chart2 text-left card" routerLink="/crm/won"
+                    (click)="activeTabs('Won')">
+                    <div class="widget-content p-0 w-100">
+                        <div class="widget-content-outer">
+                            <div class="widget-content-wrapper">
+                                <div class="widget-content-left pr-2 fsize-1">
+                                    <div class="widget-numbers mt-0 fsize-3 text-success">{{ won_leads }}</div>
+                                </div>
+                                <div class="widget-content-right w-100">
+                                    <div class="progress-bar-xs progress">
+                                        <div class="progress-bar bg-success" role="progressbar"
+                                            [style.width.%]="(won_leads / 100) * 100">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-content-left fsize-1">
+                                <div class="text-muted opacity-6">Won</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card-shadow-warning mb-3 widget-chart widget-chart2 text-left card" routerLink="/crm/lost"
+                    (click)="activeTabs('Lost')">
+                    <div class="widget-content p-0 w-100">
+                        <div class="widget-content-outer">
+                            <div class="widget-content-wrapper">
+                                <div class="widget-content-left pr-2 fsize-1">
+                                    <div class="widget-numbers mt-0 fsize-3 text-alternate">{{ lost_leads }}</div>
+                                </div>
+                                <div class="widget-content-right w-100">
+                                    <div class="progress-bar-xs progress">
+                                        <div class="progress-bar bg-alternate1" role="progressbar"
+                                            [style.width.%]="(lost_leads / 100) * 100">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-content-left fsize-1">
+                                <div class="text-muted opacity-6">Lost</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-7">
+                <div class="tab-content" style="background-color: #fff;">
+                    <div class="tab-pane fade active show" id="tab-minimal-2">
+                        <div class="card-body">
+                            <div class="" id="fullscreenDiv2" style="background-color: #fff;">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="btn" (click)="toggleScreen2()" style="float: right;">
+                                            <i class="fa" style="color: #fff" [class.fa-compress]="isFullScreen"
+                                                [class.fa-expand]="!isFullScreen"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div #chartContainer>
+                                    <ng-container *ngIf="chartOptionsNegativeLeads">
+                                        <apx-chart #chartNegative [series]="chartOptionsNegativeLeads.series"
+                                            [chart]="chartOptionsNegativeLeads.chart"
+                                            [xaxis]="chartOptionsNegativeLeads.xaxis"
+                                            [stroke]="chartOptionsNegativeLeads.stroke"
+                                            [tooltip]="chartOptionsNegativeLeads.tooltip"
+                                            [dataLabels]="chartOptionsNegativeLeads.dataLabels"
+                                            [fill]="chartOptionsNegativeLeads.fill"
+                                            [yaxis]="chartOptionsNegativeLeads.yaxis"
+                                            [title]="chartOptionsNegativeLeads.title"
+                                            [grid]="chartOptionsNegativeLeads.grid">
+                                        </apx-chart>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <h5 class="card-title">Comparision between Current and Previous month</h5>
+                            <div class="mt-3 row">
+                                <div class="col-sm-12 col-md-3" *ngFor="let item of progressData">
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-outer">
+                                            <div class="widget-content-wrapper">
+                                                <div class="widget-content-left">
+                                                    <div class="widget-numbers text-dark">
+                                                        <mat-icon class="icon"
+                                                            [ngClass]="{ 'text-danger': item.value < 0, 'text-success': item.value >= 0 }">arrow_drop_{{
+                                                            item.value >= 0 ? 'up' : 'down'
+                                                            }}</mat-icon>
+                                                        {{ item.value | absNumber }}{{ item.isPercentage ? '%' : '$' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="widget-progress-wrapper mt-1">
+                                                <div class="progress-bar-xs progress-bar-animated-alt progress">
+                                                    <div class="progress-bar bg-info" [style.width.%]="item.value">
+                                                    </div>
+                                                </div>
+                                                <div class="progress-sub-label">
+                                                    <div class="sub-label-left font-size-md">{{ item.label }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-5">
+                <div class="tab-content h-100 p-3" style="background-color: #fff;">
+                    <div class="tab-pane fade active show" id="tab-minimal-2">
+                        <div class="" id="fullscreenDiv3" style="background-color: #fff;">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="btn" (click)="toggleScreen3()" style="float: right">
+                                        <i class="fa" style="color: #fff" [class.fa-compress]="isFullScreen"
+                                            [class.fa-expand]="!isFullScreen"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div #pieChartGraph>
+                                <ng-container *ngIf="chartOptions1 && chartOptions1.series.length">
+                                    <apx-chart #pieChart [series]="chartOptions1.series" [chart]="chartOptions1.chart"
+                                        [labels]="chartOptions1.labels" [responsive]="chartOptions1.responsive"
+                                        [title]="chartOptions1.title" [dataLabels]="chartOptions1.dataLabels"
+                                        [tooltip]="chartOptions1.tooltip" [legend]="chartOptions1.legend">
+                                    </apx-chart>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+    <p style="color: white">Please Wait...</p>
+</ngx-spinner>

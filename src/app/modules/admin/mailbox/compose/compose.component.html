@@ -1,0 +1,134 @@
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">New Message</div>
+        <button mat-icon-button (click)="saveAndClose()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Compose form -->
+    <form class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto" [formGroup]="composeForm">
+        <!-- To -->
+        <mat-form-field>
+            <mat-label>To</mat-label>
+            <mat-chip-list #chipListTo>
+                <mat-chip *ngFor="let email of toEmails" [selectable]="selectable" [removable]="removable"
+                    (removed)="removeToEmail(email)">
+                    {{email}}
+                    <button mat-icon-button matChipRemove *ngIf="data && !data.readonly">
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip>
+                <input placeholder="New email..." [formControl]="toEmailCtrl" [matChipInputFor]="chipListTo"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addToEmail($event)"
+                    [readOnly]="data && data.readonly">
+            </mat-chip-list>
+            <div class="copy-fields-toggles" matSuffix *ngIf="data && !data.readonly">
+                <span class="text-sm font-medium cursor-pointer select-none hover:underline" *ngIf="!copyFields.cc"
+                    (click)="showCopyField('cc')">
+                    Cc
+                </span>
+                <span class="ml-2 text-sm font-medium cursor-pointer select-none hover:underline"
+                    *ngIf="!copyFields.bcc" (click)="showCopyField('bcc')">
+                    Bcc
+                </span>
+            </div>
+        </mat-form-field>
+
+        <!-- Cc -->
+        <mat-form-field *ngIf="copyFields.cc">
+            <mat-label>Cc</mat-label>
+            <mat-chip-list #chipListCc>
+                <mat-chip *ngFor="let email of ccEmails" [selectable]="selectable" [removable]="removable"
+                    (removed)="removeCcEmail(email)">
+                    {{email}}
+                    <button mat-icon-button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip>
+                <input placeholder="New email..." [formControl]="ccEmailCtrl" [matChipInputFor]="chipListCc"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addCcEmail($event)">
+            </mat-chip-list>
+        </mat-form-field>
+
+        <!-- Bcc -->
+        <mat-form-field *ngIf="copyFields.bcc">
+            <mat-label>Bcc</mat-label>
+            <mat-chip-list #chipListBcc>
+                <mat-chip *ngFor="let email of bccEmails" [selectable]="selectable" [removable]="removable"
+                    (removed)="removeBccEmail(email)">
+                    {{email}}
+                    <button mat-icon-button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip>
+                <input placeholder="New email..." [formControl]="bccEmailCtrl" [matChipInputFor]="chipListBcc"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addBccEmail($event)">
+            </mat-chip-list>
+        </mat-form-field>
+
+        <!-- Subject -->
+        <mat-form-field>
+            <mat-label>Subject</mat-label>
+            <input matInput [formControlName]="'subject'">
+        </mat-form-field>
+
+        <!-- <label for="exampleDataList" class="form-label">Select Signature</label>
+        <input style="height:50px" class="form-control" list="emailSignatures" id="exampleDataList"
+            placeholder="Type to search..." (input)="onSignatureSelected($event)">
+        <datalist id="emailSignatures">
+            <option *ngFor="let item of emailSignatures" [value]="item.title"></option>
+        </datalist> -->
+
+        <!-- Body -->
+        <div class="flex flex-col gt-xs:flex-row mt-2">
+            <app-ck-editor [formControlName]="'body'" name="body" class="sendoutlook-email"></app-ck-editor>
+        </div>
+
+        <!-- Attachments -->
+        <div class="attachments mt-4">
+            <input type="file" (change)="onFileSelected($event)" #fileInput multiple hidden>
+            <button style="display: none !important" mat-icon-button (click)="fileInput.click()">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:paper-clip'"></mat-icon>
+            </button>
+            <div class="flex justify-between align-items-center" *ngFor="let attachment of attachments; let i = index">
+                <span>{{ attachment.name }}</span>
+                <button mat-icon-button (click)="removeAttachment(i)">
+                    <mat-icon>close</mat-icon>
+                </button>
+                <mat-progress-bar *ngIf="attachment.progress < 100" mode="determinate"
+                    [value]="attachment.progress"></mat-progress-bar>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+            <div class="-ml-2">
+                <!-- Attach file -->
+                <button mat-icon-button (click)="fileInput.click()">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:paper-clip'"></mat-icon>
+                </button>
+            </div>
+
+            <div class="flex items-center mt-4 sm:mt-0">
+                <!-- Discard -->
+                <button class="ml-auto sm:ml-0" mat-stroked-button (click)="discard()">
+                    Discard
+                </button>
+                <!-- Save as draft -->
+                <button *ngIf="data && !data.readonly" class="sm:mx-3" mat-stroked-button (click)="saveAsDraft()">
+                    <span>Save as draft</span>
+                </button>
+                <!-- Send -->
+                <button class="order-first sm:order-last" mat-flat-button [color]="'primary'" (click)="send()">
+                    Send
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+    <p style="color: white">Please Wait...</p>
+</ngx-spinner>

@@ -1,0 +1,32 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <!-- Main -->
+    <div class="flex-auto p-6">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+            <div class="user-main" style="border-radius: 10px;">
+                <div class="nav rounded-2xl">
+                    <h4>Portal Settings</h4>
+                </div>
+                <div class="main p-6 w-100">
+                    <div class="row main_inner">
+                        <ng-container *ngFor="let user of users">
+                            <div class="card p-0" *ngIf="user.enabled">
+                                <img class="card-img-top" [src]="user.image" alt="Card image">
+                                <div class="card-body">
+                                    <h4 class="card-title">{{ user.name }}</h4>
+                                    <p class="card-text">{{ user.text }}</p>
+                                    
+                                </div>
+                                <div class="actions card-footer bg-transparent border-0  ">
+                                    <button [routerLink]="['./'+user.url]" class="accept">
+                                        Access Now
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

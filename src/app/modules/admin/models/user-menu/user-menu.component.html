@@ -1,0 +1,1221 @@
+<div class="people-form__dialog-body-container">
+    <!-- body -->
+    <div class="people-form__dialog-body">
+        <!-- left side -->
+        <div class="people-form__dialog-body-left">
+            <!-- <div style="position:sticky;z-index:100000;top:0;background-color: white;"> -->
+            <div class="people-form__dialog-body-profile  align-items-center flex-row">
+
+                <div class="avatar text-center m-auto">
+                    <ng-container *ngIf="fromParent.profile_image">
+                        <img [src]="fromParent.profile_image" class="rounded-circle" alt=""
+                            style="width: 100%; height: 100%; margin: auto;">
+                    </ng-container>
+
+                    <ng-container *ngIf="!fromParent.profile_image">
+                        <div class="rounded-circle d-flex justify-content-center align-items-center text-uppercase font-weight-bold"
+                            style="width: 100%; height: 100%; background-color: #e8e8e8; font-size: larger;">
+                            {{ fromParent.first_name.charAt(0) }} {{ fromParent.last_name.charAt(0) }}
+                        </div>
+                    </ng-container>
+                </div>
+
+                <p class="name fw-bold text-center my-2">
+                    {{ fromParent.first_name | capitalize }}{{ fromParent.middle_name | capitalize }} {{
+                    fromParent.last_name | capitalize }}
+                </p>
+
+                <p class="designation text-center ">
+                    {{ fromParent.guard_type | capitalize }}
+                </p>
+
+            </div>
+            <!-- <div class="people-form-shift__start">
+                <button class="button">Start Unscheduled shift</button>
+            </div> -->
+
+            <!-- </div> -->
+            <!-- tabs -->
+
+            <!-- personal -->
+            <div class="people-form-tabs-nav">
+                <div class="people-form-tabs-nav__group" *ngFor="let item of tabs">
+                    <p class="title fw-bold">{{item.name}}</p>
+                    <ul class="people-form-tabs-nav__tabs" *ngFor="let i of item.types">
+                        <li class="people-form-tabs-nav__tab" [ngClass]="{'assign': i.id==selectedtypeId}"
+                            (click)="onClick(i)">{{i.type}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- right side -->
+
+        <!-- personal -->
+        <div class="people-form__dialog-body__right" *ngIf="selectedtypeName=='Personal'">
+
+            <div class="people-form-view people-form-tab-personal">
+                <!-- close button  -->
+                <button type="button" class="close" style="color: black;opacity: 1;position: absolute; right: 30px;
+                    top: 20px;" data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <div class="people-form-view__header">
+                    <div class="header-title">
+                        <h1>Personal</h1>
+                        <button class="btn btn-border-3" [disabled]="stafffPermissions && !stafffPermissions.update"
+                            (click)="open_PersonalDetail_Model()">Edit
+                        </button>
+                    </div>
+
+                    <div class="people-form-tab-personal__actions">
+                        <!-- <button style="background-color: rgb(229 227 243 / 60%);color:#3d1cba"
+                            class="primary">Message</button> -->
+                        <!-- <button style="background-color: rgb(229 227 243 / 60%);color:#3d1cba" class="primary">Manage
+                            login issues</button> -->
+                        <!-- <button style="background-color: #f3e6e6;color:#af1105" class="danger mr-1">Archive Team
+                            member</button> -->
+                        <button style="background-color: #f3f2e6;color:#af7305" class="danger"
+                            (click)="open_PersonalDetail_Model('passwordScroll')">Change Password
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="people-form-tab-personal__section">
+                    <div class="header">
+                        Personal details
+                    </div>
+                    <div class="people-form-section__body">
+
+                        <div class="people-form-section-info">
+                            <p class="label">Name</p>
+                            <p class="value" style="color:#3d1cba;">{{ fromParent.first_name }}{{ fromParent.middle_name
+                                }} {{fromParent.last_name }}
+                            </p>
+                        </div>
+                        <div class="people-form-section-info">
+                            <p class="label">Preferred name</p>
+                            <p class="value" style="color:#3d1cba;">{{ fromParent.first_name }}{{ fromParent.middle_name
+                                }} {{ fromParent.last_name }}
+                            </p>
+                        </div>
+                        <!-- <div class="people-form-section-info">
+                            <p class="label">Pronouns</p>
+                            <p class="value">not specified</p>
+                        </div> -->
+                        <div class="people-form-section-info">
+                            <p class="label">Date of birth</p>
+                            <div *ngIf="fromParent.dob; else elseDOB">
+                                <p class="value" style="color:#3d1cba;"> {{ fromParent.dob }}</p>
+                            </div>
+                            <ng-template #elseDOB>
+                                <p class="value" style="color:#3d1cba ;"> Add Date of Birth</p>
+                            </ng-template>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- contact -->
+                <div class="people-form-tab-personal__section">
+                    <div class="header">
+                        Contact
+                    </div>
+                    <div class="people-form-section__body">
+                        <div class="row">
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">Email</p>
+                                <div *ngIf="fromParent.email; else elseEmail">
+                                    <p class="value" style="color:#3d1cba ;"> {{ fromParent.email }}</p>
+                                </div>
+                                <ng-template #elseEmail>
+                                    <p class="value">Add email</p>
+                                </ng-template>
+                            </div>
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">Mobile</p>
+                                <div *ngIf="fromParent.phone; else elsePhone">
+                                    <p class="value" style="color:#3d1cba ;"> {{ fromParent.phone }}</p>
+                                </div>
+                                <!-- <ng-template #elsePhone>
+                                    <p class="value" (click)="open_PersonalDetail_Model(fromParent.id)">Add a mobile</p>
+                                </ng-template> -->
+                            </div>
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">Address</p>
+                                <!-- <div *ngIf="fromParent.address; else elseAddress"> -->
+                                <p class="value" style="color:#3d1cba ;"> {{ fromParent?.address?fromParent?.address:'No Address is given' }}</p>
+                                <!-- </div> -->
+                                <!-- <ng-template #elseAddress>
+                                    <p class="value" (click)="open_PersonalDetail_Model(fromParent.id)">Add an address
+                                    </p>
+                                </ng-template> -->
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">Emergency Contact.NO</p>
+                                <p class="value" style="color:#3d1cba ;"> {{ fromParent.emergency_contact_phone?fromParent.emergency_contact_phone:'No contact no. is given yet!' }}</p>
+                            </div>
+                            <!-- *ngIf="fromParent.emergency_contact_name; else elseEmegencyContact" -->
+                            <!-- <div> -->
+
+                            <!-- <div *ngIf="fromParent.emergency_contact_name; else elseEmegencyContact">
+
+                                    <p class="value" style="color:#3d1cba ;"> {{
+                                        fromParent.emergency_contact_phone?fromParent.emergency_contact_phone:'No contact no. is given yet!' }}</p>
+                                </div> -->
+
+                            <!-- <ng-template #elseEmegencyContact>
+                                    <p class="value">Add Emergency Contact</p>
+                                </ng-template> -->
+
+                            <!-- *ngIf="fromParent.emergency_contact_name; else elseEmegencyContact" -->
+                            <!-- <div>
+                                    <p class="value" style="color:#3d1cba ;"> {{
+                                            fromParent.emergency_contact_phone?fromParent.emergency_contact_phone:'No contact no. is given yet!' }}</p>
+                            </div> -->
+
+                            <!-- <ng-template #elseEmegencyContact>
+                                    <p class="value" >Add Emergency
+                                        Contact</p>
+                                        (click)="open_PersonalDetail_Model(fromParent.id)"
+                                </ng-template> -->
+
+                            <!-- </div> -->
+
+
+                            <!-- </div> -->
+
+
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">Emergency Contact Name</p>
+                                <p class="value" style="color:#3d1cba">
+                                    {{fromParent.emergency_contact_name?fromParent.emergency_contact_name:'No contact name is given yet!'}}</p>
+                            </div>
+
+                        </div>
+
+                        <!-- <div class="row" style="text-align: center; margin-bottom: 20px;">
+                    <div class="col-12">
+                        <button class="btn btn-border-3" (click)="open_PersonalDetail_Model()">Edit</button>
+                    </div>
+                    </div> -->
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="people-form-tab-personal__section">
+                    <div class="header">
+                        Address Detail
+                    </div>
+                    <div class="people-form-section__body">
+                        <div class="row">
+
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">Address</p>
+                                <p class="value" style="color:#3d1cba ;"> {{ fromParent?.address?fromParent?.address:'No Address is given' }}
+                                </p>
+                            </div>
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">City</p>
+                                <p class="value" style="color:#3d1cba ;"> {{ fromParent?.city??'N/A' }}</p>
+                            </div>
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">Suburb</p>
+                                <div *ngIf="fromParent.phone; else elsePhone">
+                                    <p class="value" style="color:#3d1cba ;"> {{ fromParent.suburb??'N/A' }}</p>
+                                </div>
+                            </div>
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">State</p>
+                                <div *ngIf="fromParent.phone; else elsePhone">
+                                    <p class="value" style="color:#3d1cba ;"> {{ fromParent.state??'N/A' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- employment -->
+
+        <div class="people-form__dialog-body__right" *ngIf="selectedtypeName=='Employment'">
+
+            <div class="people-form-view people-form-tab-personal">
+                <button type="button" class="close" style="color: black;opacity: 1;position: absolute; right: 30px;
+                    top: 20px;" data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <div class="people-form-view__header">
+                    <div class="header-title">
+                        <h3>Employment details</h3>
+                        <button class="btn btn-border-3 mb-0"
+                            [disabled]="stafffPermissions && !stafffPermissions.update"
+                            (click)="open_EmploymentDetail_Model()">Edit
+                        </button>
+                    </div>
+                </div>
+
+                <div class="people-form-tab-personal__section">
+                    <div class="header">
+                        Work details
+                    </div>
+                    <div class="people-form-section__body">
+
+                        <div class="people-form-section-info">
+                            <p class="label">User Type</p>
+                            <p class="value" style="color:#3d1cba;">Staff</p>
+                        </div>
+                        <!-- <div class="people-form-section-info">
+                            <p class="label">Works at</p>
+                            <p class="value">Muhammad's government services</p>
+                        </div> -->
+                        <div class="people-form-section-info">
+                            <p class="label">Created at </p>
+                            <p class="value">{{this.employee_ment_data?.created_at?this.employee_ment_data?.created_at:'No date is given '}}</p>
+                        </div>
+                        <!-- <div class="people-form-section-info">
+                            <p class="label">Training</p>
+                            <p class="value" style="color:#3d1cba">
+                                Add training</p>
+                        </div> -->
+
+                    </div>
+                </div>
+                <!-- pay detail -->
+
+                <div class="people-form-tab-personal__section">
+                    <div class="header">
+                        Pay details
+                    </div>
+                    <div class="people-form-section__body ">
+                        <div class="row">
+                            <div class="people-form-section-info contact col-2">
+                                <p class="label">Employment type</p>
+                                <p class="value text-capitalize" style="color:#3d1cba;">
+                                    {{fromParent?.staff_type?.replace('_',' ')}}
+                                </p>
+                            </div>
+
+                            <div class="people-form-section-info contact col-2">
+                                <p class="label">Bank Name</p>
+                                <p class="value" style="color:#3d1cba">
+                                    {{employee_ment_data?.bank_name??'N/A'}}
+                                </p>
+                            </div>
+
+                            <div class="people-form-section-info contact col-2">
+                                <p class="label">Account Holder Name</p>
+                                <p class="value" style="color:#3d1cba">
+                                    {{employee_ment_data?.account_holder??'N/A'}}
+                                </p>
+                            </div>
+
+                            <div class="people-form-section-info contact col-2">
+                                <p class="label">BSB</p>
+                                <p class="value" style="color:#3d1cba">
+                                    {{employee_ment_data?.bsb??'N/A'}}
+                                </p>
+                            </div>
+
+                            <div class="people-form-section-info contact col-2">
+                                <p class="label">Account Number</p>
+                                <p class="value" style="color:#3d1cba">
+                                    {{employee_ment_data?.bank_account_no??'N/A'}}
+                                </p>
+                            </div>
+
+                            <div class="people-form-section-info contact col-2">
+                                <p class="label">TFN</p>
+                                <p class="value" style="color:#3d1cba">
+                                    {{employee_ment_data?.tfn_file_no??'N/A'}}
+                                </p>
+                            </div>
+
+                            <div class="people-form-section-info contact col-2">
+                                <p class="label">ABN Number</p>
+                                <p class="value" style="color:#3d1cba">
+                                    {{employee_ment_data?.abn_no??'N/A'}}
+                                </p>
+                            </div>
+
+                            <div class="people-form-section-info contact col-2">
+                                <p class="label">Superannutation Name</p>
+                                <p class="value" style="color:#3d1cba">
+                                    {{employee_ment_data?.superannutation_name??'N/A'}}
+                                </p>
+                            </div>
+
+                            <div class="people-form-section-info contact col-2">
+                                <p class="label">Superannutation Number</p>
+                                <p class="value" style="color:#3d1cba">
+                                    {{employee_ment_data?.superannutation_no??'N/A'}}
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- working hours  -->
+
+                <div class="people-form-tab-personal__section">
+                    <div class="header">
+                        Working hours
+                    </div>
+                    <div class="people-form-section__body ">
+                        <div class="row">
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">Work period</p>
+                                <p class="value" style="color:#3d1cba">Weekly Period</p>
+                            </div>
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">Hours Limitations</p>
+                                <p class="value" style="color:#3d1cba">
+                                    {{this.employee_ment_data?.weekly_work_hours_limitation?this.employee_ment_data.weekly_work_hours_limitation:'no limitations given yet!'}}
+                                    <!-- <p class="value" style="color:#3d1cba">
+                                            {{employee_ment_data?this.employee_ment_data.weekly_work_hours_limitation:'no
+                                            limitations given yet!'}}
+                                            =======
+                                            <p class="value" style="color:#3d1cba">
+                                                {{this.employee_ment_data?.weekly_work_hours_limitation?this.employee_ment_data.weekly_work_hours_limitation:'no
+                                                limitations given yet!'}}
+                                                >>>>>>> e38cdd5 (naveed)
+                                                >>>>>>> 4d3cdeb (naveed)
+                                            </p> -->
+                                </p>
+                            </div>
+                            <div class="people-form-section-info contact col-3">
+                                <p class="label">Letter from Educational Institute</p>
+                                <p class="value" style="cursor:pointer"
+                                    (click)="openPdf(this.employee_ment_data?.letter_from_educational_institute)">
+                                    {{this.employee_ment_data?.letter_from_educational_institute?'View Educational Institute letter':'No Educational letter is submitted!'}}
+                                </p>
+                                <!-- <p class="value" style="color:#3d1cba;"> -->
+                                <!-- {{this.employee_ment_data.letter_from_educational_institute?'View Educational Institute letter':'No Educational letter is submitted!'}}</p> -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- documents  -->
+        <div class="people-form__dialog-body__right" *ngIf="selectedtypeName=='Documents'">
+            <div class="people-form-view people-form-tab-personal">
+                <button type="button" class="close" style="color: black;opacity: 1;position: absolute; right: 30px;
+                    top: 20px;" data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <div class="people-form-view__header" style="max-width: 100%;">
+
+                    <div class="header-title d-flex  align-items-center my-3">
+                        <h3>Documents</h3>
+                        <!-- close button  -->
+
+                        <button class="btn btn-border-3 mb-0"
+                            [disabled]="stafffPermissions && !stafffPermissions.create"
+                            (click)="openDocument(documentList)">Add
+                            documents
+                        </button>
+                    </div>
+                </div>
+
+                <div class="main-document">
+                    <table class="table w-100">
+                        <thead class="text-light document-table">
+                            <tr class="table-row">
+                                <th scope="col">Document Name</th>
+                                <th scope="col">DOC. No.</th>
+                                <th scope="col">Expiration Date</th>
+                                <th scope="col">Notes</th>
+                                <th scope="col">File</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let document of documentList ">
+                                <td>{{document.document_name}}</td>
+                                <td>{{document.document_no}}</td>
+                                <td>{{document.document_expire}}</td>
+                                <td>{{document.notes}}</td>
+                                <td class="file_view">
+                                    <div *ngIf="document.file; else noFile">
+                                        <mat-icon placement="right" ngbTooltip="View Document file!"
+                                            triggers="mouseenter:mouseleave"
+                                            (click)="viewFile(document.file)">remove_red_eye</mat-icon>
+                                    </div>
+                                    <ng-template #noFile>
+                                        <mat-icon *ngIf="stafffPermissions && stafffPermissions.update"
+                                            placement="right" ngbTooltip="Add Document!"
+                                            triggers="mouseenter:mouseleave"
+                                            (click)="openAddDocModel(document)">add_circle_outline</mat-icon>
+                                    </ng-template>
+                                </td>
+                                <td class="file_action">
+                                    <i class="fa-solid fa-pen" id="icon"
+                                        *ngIf="stafffPermissions && stafffPermissions.update"
+                                        (click)="openAddDocModel(document)">
+                                    </i>
+                                    <i class="fa-solid fa-trash" id="icon" (click)="delDocument(document.id)"
+                                        *ngIf="document.is_deleteable === 1 && stafffPermissions && stafffPermissions.update">
+                                    </i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <table>
+                        <thead>
+                            <tr>
+                                <div class="document-names-container">
+                                    <div class="document-name">
+                                        <th>
+                                            <p class="documents-user-column-header">Document Name</p>
+                                        </th>
+                                        <th *ngFor="let item of this.globals.documentsList; let i=index;">
+                                            <p class="documents-user-column-header">{{item.documentName}}</p>
+                                            <button mat-icon-button [matMenuTriggerFor]="menu"
+                                                aria-label="Example icon-button with a menu" class="hide">
+                                                <mat-icon>more_horiz</mat-icon>
+                                            </button>
+                                            <mat-menu #menu="matMenu">
+                                                <button mat-menu-item (click)="openDetailModel('settings',i)">
+                                                    <mat-icon>settings</mat-icon>
+                                                    <span>Document Settings</span>
+                                                </button>
+                                                <button mat-menu-item (click)="openDetailModel('notification',i)">
+                                                    <mat-icon>notifications_active</mat-icon>
+                                                    <span>Notify all users with empty or rejected status</span>
+                                                </button>
+                                                <button mat-menu-item (click)="openDetailModel('reset',i,item)">
+                                                    <mat-icon>refresh</mat-icon>
+                                                    <span>Reset entries</span>
+                                                </button>
+                                            </mat-menu>
+                                        </th>
+                                    </div>
+                                </div>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="overflow-anchor: none;">
+                                <div class="user-documents-row">
+                                    <td class="documents-users-col">
+                                        <div class="user-documents-initials-container">
+                                            <div class="user-initial" style=" width: 30px;
+                                            font-size: 11.1111px;">
+                                                <div class="inner-initials-container " style=" background-color: rgb(255, 138, 101);
+                                               color:white;
+                                                padding: 6px;
+                                                border-radius: 14px;
+                                                box-shadow: rgb(248 248 248) 0px 0px 0px 1.6px;">
+                                                    <span>NQ</span>
+                                                </div>
+                                            </div>
+                                            <p class="name m-0 ">Naveed qadir</p>
+                                        </div>
+                                    </td>
+                                    <td *ngFor="let item of this.globals.documentsList; let i=index;">
+                                        <div class="main-document-container"
+                                            [ngClass]="item.base64String?'approved' : 'empty'"
+                                            (click)="openDocumentModel('upload',item,i)">
+                                            <div class="document_container ">
+                                                <div class="main-table-document-instance-container">
+                                                    <mat-icon [style.color]="item.base64String?'#2d951f' : ' #2998ff'">
+                                                        {{item.base64String?item.detail.uploaded:item.detail.missing}}
+                                                    </mat-icon>
+                                                    <span
+                                                        [style.color]="item.detail.expiryDate?'#2d951f' : 'black'">{{item.detail.expiryDate?item.detail.expiryDate
+                                                        :'No Expiry date'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </div>
+                            </tr>
+                        </tbody>
+                    </table> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- uniform -->
+        <div class="people-form__dialog-body__right" *ngIf="selectedtypeName=='Staff Uniform'">
+
+            <div class="people-form-view people-form-tab-personal">
+                <button type="button" class="close" style="color: black;opacity: 1;position: absolute; right: 30px;
+                    top: 20px;" data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <div class="people-form-view__header ">
+                    <div class="header-title">
+                        <h3>Staff Uniform details</h3>
+                        <!-- <button class="btn btn-primary">Add Uniform </button> -->
+                        <button class="btn btn-border-3" [disabled]="stafffPermissions && !stafffPermissions.create"
+                            (click)="openUniform()">Add Uniform
+                        </button>
+                    </div>
+                </div>
+                <div class="form-togglelist">
+                    <div class="row head-row">
+                        <div class="col-2 head-col">No.</div>
+                        <div class="col-4 head-col">Customer Name</div>
+                        <div class="col-3 head-col">Uniform Type</div>
+                        <div class="col-2 head-col">Action</div>
+                    </div>
+                    <div class="row body-row" *ngFor="let data of uniformList let i=index; ">
+                        <div class="col-2 body-col">
+                            {{i+1}}
+                        </div>
+                        <div class="col-4 body-col">
+                            {{data.customer_id.name}}
+                        </div>
+                        <div class="col-3 body-col">
+                            {{data.uniform_type}}
+                        </div>
+                        <div class="col-2 body-col">
+                            <i class="fa-solid fa-pen" *ngIf="stafffPermissions && stafffPermissions.update"
+                                style="cursor:pointer" (click)="openUniform(data.id)" id="icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- uniform -->
+
+        <!-- ID's -->
+        <div class="people-form__dialog-body__right" *ngIf="selectedtypeName=='ID'">
+            <div class="people-form-view people-form-tab-personal">
+                <button type="button" class="close" style="color: black;opacity: 1;position: absolute; right: 30px;
+                    top: 20px;" data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form [formGroup]="addStaffIds">
+                    <div class="people-form-view__header">
+                        <div class="header-title d-flex  align-items-center my-3">
+                            <h3>Add Internal & External ID's</h3>
+                            <button class="btn btn-border-3 mb-0" (click)="saveIds()">Save</button>
+                        </div>
+                    </div>
+
+                    <div class="main-document">
+                        <div class="row">
+                            <!-- <div class="col-md-5"> -->
+                            <div class="form-group">
+                                <label for="select_guard" class="w-100">Internal ID</label>
+                                <input type="text" class="form-control p-2" formControlName="internal_id" placeholder="" style="height: 55px; width: 83%;" />
+                            </div>
+                            <!-- </div> -->
+                        </div>
+                        <div class="shift-tasks-container">
+                            <div class="tasks-rows-containers" formArrayName="guard_external_ids">
+                                <div *ngFor="let input of guard_external_ids?.controls; let i = index" [formGroupName]="i">
+                                    <input type="hidden" formControlName="id">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="select_guard" class="w-100">Customer</label>
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-select formControlName="customer_id">
+                                                        <mat-option *ngFor="let cus of customers" [value]="cus.id">{{ cus.name }}</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group mt-1">
+                                                <label for="select_guard" class="w-100">External ID</label>
+                                                <input type="text" class="form-control p-2" formControlName="external_id" placeholder="" style="height: 55px;" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <fa-icon [icon]="faTrash" (click)="removeTextArea(input.value,i)"></fa-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [ngClass]="!guard_external_ids?.controls? 'btn-90' : 'btn-40'" class="flex-row-centered flex-justify-content-center mb-4">
+                                <div class="no-shift-tasks-placeholder">
+                                    <!-- <div *ngIf="task!=0" cass="title">No tasks to display</div> -->
+                                    <div class="flex-row-centered flex-justify-content-center py-5">
+                                        <div class>
+                                            <div class="width-100-percent height-100-percent">
+                                                <div class="custom-cta-btn justify-content-center" (click)="addTask()">
+                                                    <span>+ Add ID's</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- shifts -->
+        <div class="people-form__dialog-body__right" *ngIf="selectedtypeName=='Shifts'">
+            <!-- close button -->
+            <button type="button" class="close" style="color: black;opacity: 1;position: absolute; right: 30px;
+                top: 20px;" data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+
+            <div class="people-form-view people-form-tab-personal">
+                <div class="people-form-view__header">
+                    <div class="header-title">
+                        <h1>Shifts</h1>
+                    </div>
+                </div>
+
+                <!-- upcomming shifts -->
+
+                <div class="people-form-tab-personal__section" style="padding:0px 30px;">
+                    <!-- <div class="header">
+                        Upcoming shifts
+
+                    </div> -->
+
+                    <!-- <div class=" shifts ">
+                        <img style="width:200px
+                               "
+                            src="https://d2sebmzxyyulvv.cloudfront.net/02b29874ffecc62b1a5c4fcdf6b9468518381464/js/vue-next/webapp/img/no-shift.svg"
+                            alt="">
+                        <p class="value">This Team member doesn't have any upcoming shifts</p>
+                    </div> -->
+
+                    <!-- <div class="people-form-section__body">
+                        shifts details data 
+                     <div class="people-form-tab-shifts-shift-card">
+                            <div class="people-form-card__left">
+                                <p class="date">Mon, 7 Nov 2022</p>
+                                <div class="shift-detail">
+                                    <p class="time">
+                                        9:05AM – 5:05PM
+                                    </p>
+                                    <p class="name">
+                                        Front Desk - Muhammad's government services
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="people-form-card__right">
+                                <button>View TimeSheet</button>
+                                <p class="status">
+                                    PENDING
+                                </p>
+
+                            </div>
+                        </div> 
+                    </div> -->
+
+                    <div class="people-form-tab-personal__section">
+                        <div class="header">
+                            Upcoming shifts <span>{{upCommingShifts.length}}</span>
+                        </div>
+                        <div class="people-form-section__body" *ngFor="let item of upCommingShifts">
+                            <!-- shifts details data  -->
+                            <div class="people-form-tab-shifts-shift-card">
+                                <div class="people-form-card__left">
+                                    <p class="date">{{item.date}}</p>
+                                    <div class="shift-detail">
+                                        <p class="time">
+                                            {{item.start +" - "+item.end}}
+                                        </p>
+                                        <!-- <p class="name">
+                                            Front Desk - Muhammad's government services
+                                        </p> -->
+                                    </div>
+
+                                </div>
+                                <div class="people-form-card__right">
+                                    <button>JobRoster Status</button>
+                                    <p class="status text-capitaliz">
+                                        {{item.job_status}}
+                                    </p>
+                                </div>
+                            </div>
+                            <!--  -->
+                        </div>
+                        <div class="shifts" *ngIf="upCommingShifts.length==0">
+                            <img style="width:200px "src="https://d2sebmzxyyulvv.cloudfront.net/02b29874ffecc62b1a5c4fcdf6b9468518381464/js/vue-next/webapp/img/no-shift.svg" alt="">
+                            <p class="value"> You have not any upcoming Weekly shifts</p>
+                        </div>
+                    </div>
+
+                    <!--  Previously worked shifts -->
+                    <div class="people-form-tab-personal__section">
+                        <div class="header">
+                            Previously worked shifts <span>{{previousShifts.length}}</span>
+                        </div>
+                        <div class="people-form-section__body" *ngFor="let item of previousShifts">
+                            <!-- shifts details data  -->
+                            <div class="people-form-tab-shifts-shift-card">
+                                <div class="people-form-card__left">
+                                    <p class="date">{{item.date}}</p>
+                                    <div class="shift-detail">
+                                        <p class="time">
+                                            {{item.start +" - "+item.end}}
+                                        </p>
+                                        <p class="name">
+                                            {{item.site?item.site:'No Assigned'}}
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="people-form-card__right">
+                                    <button>View JobRoster</button>
+                                    <p class="status">
+                                        {{item.job_status}}
+                                    </p>
+
+                                </div>
+                            </div>
+                            <!--  -->
+                        </div>
+
+                        <div class=" shifts " *ngIf="previousShifts.length==0">
+                            <img style="width:200px "src="https://d2sebmzxyyulvv.cloudfront.net/02b29874ffecc62b1a5c4fcdf6b9468518381464/js/vue-next/webapp/img/no-shift.svg" alt="">
+                            <p class="value"> You have not any Previous Week shifts</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <p class="no-more-previously-worked-shifts">
+                    No more previously worked shifts
+                </p> -->
+            </div>
+        </div>
+
+        <!-- leaves -->
+
+        <div class="people-form__dialog-body__right" *ngIf="selectedtypeName=='Leaves'">
+            <div class="people-form-view people-form-tab-personal">
+                <button type="button" class="close" style="color: black;opacity: 1;position: absolute; right: 30px;
+                    top: 20px;" data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <div class="people-form-view__header ">
+                    <div class="header-title">
+                        <h1>Leave Management</h1>
+                    </div>
+                </div>
+
+                <!-- <div class="people-form-tab-personal__section people-form-tab-leave-balances"> -->
+                <!-- <div class="header">
+                        Leave balances
+                    </div> -->
+
+                <!-- if leaves are not present  -->
+                <!-- add image  -->
+                <!-- if leaves are -->
+
+                <!-- <div class="people-form-section__body  people-form-section__leave-balance"> -->
+                <!-- leave table -->
+                <!-- <div class="people-form-tab-leave__leave-table-header row">
+                            <p class="leave-table-title col-3">
+                                Leave type
+
+                            </p>
+                            <p class="leave-table-title col-3">
+                                Current balance
+                            </p>
+                            <p class="leave-table-title col-3">
+                                Upcoming
+                            </p>
+                            <p class="leave-table-title col-3">
+                                Future balance
+                            </p>
+
+                        </div> -->
+                <!-- table content -->
+
+                <!-- <div class="leave-table-content row"> -->
+
+                <!-- <div class="leave-table-content-row row"> -->
+
+                <!-- <p class="leave-table-content-data col-3">Annual Leave</p>
+                            <p class="leave-table-content-data col-3">$10,000</p>
+                            <p class="leave-table-content-data col-3">7h 30m (1d)</p>
+                            <p class="leave-table-content-data col-3">$15,000</p> -->
+
+                <!-- </div> -->
+
+                <!-- </div> -->
+
+                <!-- <div class="leave-table-content row">
+
+                            <p class="leave-table-content-data col-3">Long Service Leave</p>
+                            <p class="leave-table-content-data col-3">$12,000</p>
+                            <p class="leave-table-content-data col-3">7h 30m (1d)</p>
+                            <p class="leave-table-content-data col-3">$25,000</p>
+                        </div>
+
+                        <p class="leave-table-info">1 standard day is 7h 30m · Last updated Wed 16/11/22</p> -->
+                <!-- </div> -->
+
+                <!-- </div> -->
+                <!-- Leave requests -->
+
+                <div class="leave__request-upcoming-section">
+
+                    <div class="body">
+                        <div class="scrollable">
+                            <div class="inner-body">
+                                <div class="section">
+                                    <p class="section__title"></p>
+                
+                                    <div class="section_content" >
+                                        <form [formGroup]="leaveForm"  class="mat-field-margin">
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <mat-form-field  appearance="outline" class="cutom-field">
+                                                            <mat-label> Annual Leave (in hours)</mat-label>
+                                                            <input matInput type="number" formControlName="annual_leave">
+                                                        </mat-form-field>
+                                                        <mat-error *ngIf="leaveForm.get('annual_leave').hasError('min')">
+                                                            Value must be a positive number.
+                                                        </mat-error>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <mat-form-field appearance="outline" class="cutom-field">
+                                                            <mat-label> Sick Leave (in hours)</mat-label>
+                                                            <input matInput type="number" formControlName="sick_leave">
+                                                        </mat-form-field>
+                                                        <mat-error *ngIf="leaveForm.get('sick_leave').hasError('min')">
+                                                            Value must be a positive number.
+                                                        </mat-error>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="text-align: center;">
+                            <div class="col-12">
+                                <button class="btn btn-border-3" style="text-align:end" (click)="getleave()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body-leave-request" *ngFor="let data of staffLeaves">
+
+                        <div class="tab-leave__card">
+                            <div class="leave-card__left">
+                                <p class="card-leave-title">Days: {{data.days}} </p>
+                                <div class="card-leave-content">
+                                    <p class="leave__upcoming-dates">Dates:
+                                        {{data.start_date}} - {{data.end_date}}
+                                    </p>
+                                    <p class="leave__upcoming-details">Reason:
+                                        {{data.reason}}
+                                    </p>
+                                    <p class="leave__upcoming-details" *ngIf="data.notes !== null">Note:
+                                        {{data.notes}}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="leave-card__right">
+                                <div class="card__bottom-right">
+                                    <p class="status"
+                                        [style.background-color]="data.status === 'approved' ? '#00891e' : 'red'">{{
+                                        data.status }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unavailability -->
+        <div class="people-form__dialog-body__right" *ngIf="selectedtypeName=='Availability'">
+            <div class="people-form-view people-form-tab-unavailability">
+                <!-- close button -->
+                <button type="button" class="close" style="color: black;opacity: 1;position: absolute; right: 30px;
+                    top: 20px;" data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <div class="people-form-view__header">
+                    <div class="header-title">
+                        <h3>Staff Availability</h3>
+                        <button class="btn btn-border-3" *ngIf="(stafffPermissions || !stafffPermissions.create) && (staffAvailbility.length <= 0)"
+                            (click)="openUnavailability()">Add Availability
+                        </button>
+                        <button class="btn btn-border-3"
+                            *ngIf="(stafffPermissions || !stafffPermissions.update) && (staffAvailbility.length>0)"
+                            (click)="openUnavailability(staffAvailbility)">Edit Availability
+                        </button>
+                    </div>
+                </div>
+                <div class="form-togglelist">
+                    <div class="row head-row">
+                        <div class="col-4 head-col">Day</div>
+                        <div class="col-4 head-col">Type</div>
+                        <div class="col-4 head-col">Time</div>
+                    </div>
+                    <div class="row body-row" *ngFor="let data of staffAvailbility">
+                        <div class="col-4 body-col m-0">
+                            {{ data.day }}
+                        </div>
+                        <div class="col-4 body-col m-0">
+                            {{ data.data }}
+                        </div>
+                        <div class="col-4 body-col m-0">
+                            {{ data.startTime }} - {{ data.endTime }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- profile_tracker -->
+
+        <div class="people-form__dialog-body__right" *ngIf="selectedtypeName=='Profile Tracker'">
+
+            <div class="people-form-tab-profile_tracker" style="overflow:hidden">
+                <button type="button" class="close" style="color: black;opacity: 1;position: absolute; right: 30px;
+                    top: 20px;" data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <div class="people-form-view__header" style="z-index:87698888">
+                    <div class="header-title">
+                        <h1 class="m-0" style="font-size:30px">Profile Tracker</h1>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="staffActivity.length==0;else trackerFound">
+                    <app-skelton></app-skelton>
+                </ng-container>
+
+                <ng-template #trackerFound>
+                    <div class="profile_tracker-body">
+                        <div class="col-lg-12 col-md-12 timeline_main">
+                            <!-- <h3 class="user-log-heading">User log</h3> -->
+                            <div class="overflow-div" style="height:65vh; overflow:auto; margin-top: 30px;">
+                                <div class="timeline">
+                                    <!-- yahan loop lgana -->
+                                    <div class="container right" style="--my-color-var: #01A37E;" *ngFor="let activity of staffActivity?.slice().reverse()">
+                                        <div class="content">
+                                            <p *ngIf="activity.action_type !== ''"
+                                                class="heading rounded-pill" style="background-color: #01A37E; color: white;">
+                                                {{ activity?.action_on?.replace('_', ' ') | titlecase }}
+                                            </p>
+
+                                            <div class="date_sheet ">
+                                                <p class="by">{{activity.action_by}}</p>
+                                                <p class="date">{{activity.date}}</p>
+                                            </div>
+                                            <div class="d-flex justify-content-between w-100">
+                                                <div class="card w-100">
+                                                    <p class="head">{{ activity.action_type}}</p>
+                                                    <div class="row mt-3" *ngIf="activity.reason !== 'N/A'">
+                                                        <h6 class="reason-color pb-0">Reason:</h6>
+                                                        <p class="mb-0">{{activity.reason}}</p>
+                                                    </div>
+                                                    <!-- <p class="dates" *ngIf="activity.start !== '' && activity.end !== ''  ">
+                                                        <span>{{activity.start}} - {{activity.end}}</span>
+                                                    </p> -->
+                                                    <mat-chip-list>
+                                                        <mat-chip *ngIf="activity.site_name" color="warning">Site:
+                                                            {{activity.site_name}}</mat-chip>
+                                                        <mat-chip *ngIf="activity.guard_name" color="warning">Guard:
+                                                            {{activity.guard_name}}</mat-chip>
+                                                    </mat-chip-list>
+
+                                                    <div class="d-flex justify-content-between w-100">
+                                                        <div class="card w-100" *ngIf="activity.updated_data">
+                                                            <p class="text-muted">Now</p>
+                                                            <mat-chip-list>
+                                                                <mat-chip color="warning"
+                                                                    *ngFor="let prop of filteredData(activity.updated_data) | keyvalue">
+                                                                    {{ prop?.key?.replace('_', ' ') | titlecase }}: {{
+                                                                    prop.value }}
+                                                                </mat-chip>
+                                                            </mat-chip-list>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="d-flex justify-content-between w-100"
+                                                        *ngIf="activity.before_update">
+                                                        <div class="card w-100">
+                                                            <p class="text-muted">Before
+                                                            </p>
+                                                            <mat-chip-list>
+                                                                <mat-chip color="warning"
+                                                                    *ngFor="let prop of activity?.before_update | keyvalue">
+                                                                    {{ prop?.key?.replace('_', ' ') | titlecase }}:
+                                                                    {{prop.value }}</mat-chip>
+                                                            </mat-chip-list>
+                                                        </div>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+            <!-- </div> -->
+        </div>
+        <!--Site Trained-->
+        <div class="people-form__dialog-body__right" *ngIf="selectedtypeName=='Trained Locations'">
+            <div class="people-form-view people-form-tab-personal">
+                <button type="button" class="close" style="color: black;opacity: 1;position: absolute; right: 30px; top: 20px;" data-dismiss="modal" (click)="dismiss('Cross click')" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+        
+                <form [formGroup]="addTrainedsites">
+                    <div class="people-form-view__header">
+                        <div class="header-title d-flex align-items-center my-3">
+                            <h3>Trained Locations</h3>
+                            <button class="btn btn-border-3 mb-0" (click)="saveSites()">Save</button>
+                        </div>
+                    </div>
+        
+                    <div class="main-document">
+                        <div class="shift-tasks-container">
+                            <div class="tasks-rows-containers" formArrayName="guard_trained_on_sites">
+                                <div *ngFor="let site of guard_trained_on_sites.controls; let i = index" [formGroupName]="i">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="select_guard" class="w-100">Customer</label>
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-select (selectionChange)="onCustomerSelect($event, i)" formControlName="customer_id">
+                                                        <mat-option value="" disabled selected>Select Customer</mat-option>
+                                                        <mat-option *ngFor="let cus of customers" [value]="cus.id">{{ cus.name }}</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="select_site" class="w-100">Location</label>
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-select formControlName="site_id">
+                                                        <mat-option value="" disabled selected>Select Site</mat-option>
+                                                        <mat-option *ngFor="let site of sites[guard_trained_on_sites.at(i).get('customer_id').value]" [value]="site.id">
+                                                            {{ site.site_name }}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="status" class="w-100">Status</label>
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-select placeholder="Select status" formControlName="status">
+                                                        <mat-option value="complete">Complete</mat-option>
+                                                        <mat-option value="incomplete">Incomplete</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <fa-icon [icon]="faTrash" (click)="removeSite(site.value, i)"></fa-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="no-shift-tasks-placeholder">
+                                <div class="flex-row-centered flex-justify-content-center py-5">
+                                    <div class="width-100-percent height-100-percent">
+                                        <div class="custom-cta-btn justify-content-center" (click)="addSite()">
+                                            <span>+ Add</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <ng-template #editUniform let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Uniform Update</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+        <div class="row">
+            <app-select-multiple-customer signleDouble="no"
+            (selectedCustomer)="receiveDataFromChildSingle($event)" class="select_job_roster"
+            [dataArray]="customers" [placeholderText]="'Select Customers'"></app-select-multiple-customer>
+        </div>
+
+        <div class="row">
+            <div class="col-3 mx-1">
+                <mat-form-field appearance="outline">
+                    <mat-select [placeholder]="'Select Uniform'" formControlName="uniform_type">
+                        <mat-option *ngFor="let option of optionArray" [value]="option">{{ option }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-3 mx-1">
+                <ng-container *ngIf="field.get('uniform_type').value !== 'Shoes'; else shoeSizes">
+                    <mat-form-field appearance="outline">
+                        <mat-select [placeholder]="'Select Size'" formControlName="size">
+                            <mat-option *ngFor="let opt of uniformSize" [value]="opt">{{ opt }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-container>
+                
+                <ng-template #shoeSizes>
+                    <mat-form-field appearance="outline">
+                        <mat-select [placeholder]="'Select Size'" formControlName="size">
+                            <mat-option *ngFor="let shoe of shoesSize" [value]="shoe">{{ shoe }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-template>
+            </div>
+
+            <div class="col-3 mx-1">
+                <mat-form-field appearance="outline">
+                    <mat-select [placeholder]="'Quantity'" formControlName="quantity">
+                        <mat-option *ngFor="let qua of uniQuantity" [value]="qua">{{ qua }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-2 mx-1">
+                <mat-label>Return Status</mat-label>
+                <mat-slide-toggle formControlName="return_status"></mat-slide-toggle>
+            </div>
+        </div>
+
+        <div class="row">
+            <mat-form-field appearance="outline" style="margin-top: 10px;">
+                <mat-label>Write a note</mat-label>
+                <textarea matInput formControlName="note"></textarea>
+            </mat-form-field>
+        </div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-outline-dark" (click)="updateUniform()">Save</button>
+	</div>
+</ng-template> -->

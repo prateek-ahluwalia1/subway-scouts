@@ -1,0 +1,32 @@
+.name-heading {
+    text-align: center;
+}
+
+.staff-fortnight {
+    display: flex;
+
+    .staff-detail {
+        width: 100%;
+        margin-left: 40px;
+
+        .staff-flex {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #e5e2e2;
+
+            p {
+                margin: 5px;
+            }
+
+            h6 {
+                margin: 5px;
+            }
+        }
+    }
+}
+.staff-close-model {
+    display: block;
+    background: #f39c12;
+    padding: 9px;
+    border-radius: 6px;
+}

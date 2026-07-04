@@ -1,0 +1,75 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <div class="flex-auto p-6">
+        <div class="rounded-2xl">
+            <div class="settings-main">
+                <section class="custom-pricing">
+                    <h3>Add flexible pricing plans</h3>
+                </section>
+                <div class="main">
+                    <fuse-alert *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false" [type]="alert.type"
+                        [@shake]="alert.type === 'error'">
+                        {{alert.message}}
+                    </fuse-alert>
+                    <div class="row card-design">
+                        <mat-form-field class="col-6">
+                            <mat-label>Packege Name</mat-label>
+                            <input matInput type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="name"
+                                name="name">
+                        </mat-form-field>
+                        <mat-form-field class="col-6">
+                            <mat-label>Packege Price</mat-label>
+                            <input matInput type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="price"
+                                name="price">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="main">
+                    <h4>Portal Pages</h4>
+                    <div id="page">
+                        <ng-container *ngFor="let nav of navigationItems; let i=index">
+                            <input class="toggle-box" [id]="'parent-identifier-' + (i+1)" type="checkbox"
+                                name="nav.title" [(ngModel)]="nav.parentEnabled">
+                            <label [for]="'parent-identifier-' + (i+1)">{{ nav.title }}</label>
+                            <div class="row card-design">
+                                <div *ngFor="let child of nav.childPage;let j=index">
+                                    <input class="toggle-box" [id]="'child-identifier-' + (i+1) + '-' + (j+1)"
+                                        type="checkbox" [(ngModel)]="child.childEnabled"
+                                        name="{{ child.childEnabled }}">
+                                    <label [for]="'child-identifier-' + (i+1) + '-' + (j+1)">{{ child.title }}</label>
+                                    <div class="row card-design flex" *ngIf="child.childEnabled">
+                                        <ng-container *ngFor="let subChild of child.subChildPages; let k=index">
+                                            <div class="col-md-4 col-lg-3">
+                                                <mat-card class="example-card navigation mb-3">
+                                                    <mat-card-header>
+                                                        <mat-card-title-group>
+                                                            <mat-card-title> {{ subChild.name }}</mat-card-title>
+                                                            <section class="example-section">
+                                                                <mat-slide-toggle class="example-margin"
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    [(ngModel)]="subChild.enabled"
+                                                                    name="{{ subChild.key }}">
+                                                                </mat-slide-toggle>
+                                                            </section>
+                                                        </mat-card-title-group>
+                                                    </mat-card-header>
+                                                </mat-card>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <button class="fuse-mat-button-large mt-6 float-right" mat-flat-button [color]="'primary'"
+                        [disabled]="submitted" (click)="onSaveButtonClick()">
+                        <span *ngIf="!submitted">
+                            {{ packege_id?'Update':'Submit' }}
+                        </span>
+                        <mat-progress-spinner *ngIf="submitted" [diameter]="24"
+                            [mode]="'indeterminate'"></mat-progress-spinner>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

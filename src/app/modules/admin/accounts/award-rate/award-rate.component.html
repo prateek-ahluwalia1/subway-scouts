@@ -1,0 +1,96 @@
+<div class="main p-6 w-100 main-body-watermark">
+    <h3>Award Rates List</h3>
+
+    <div class="row">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div class="searchbar_main">
+                <input type="text" placeholder="Search here.." class="searchbar" [(ngModel)]="searchTerm" (input)="filterPayRates()">
+                <mat-icon>search</mat-icon>
+            </div>
+            <button *ngIf="adminPermission && adminPermission.create" class="btn btn-border-3" (click)="openTemplateModal()">
+                Add Award Rates
+            </button>
+        </div>
+        <!--  current tab lists  -->
+
+        <!-- <div class="tabs-row p-2">
+            <div class="tab active-tab" [ngClass]="{ 'active-tab': tab.name == this.activeTab }"
+                *ngFor="let tab of tabs" (click)="getTab(tab)">
+                <div class="tab-inner">
+                    <div class="content d-flex align-content-center justify-content-center m-auto">
+                        <mat-icon>{{ tab.icon }}</mat-icon>
+                        <span>{{ tab.name }}</span>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="col-12 " *ngIf="this.activeTab=='Active' && adminPermission && adminPermission.read">
+            <br>
+            <br>
+            <table class="table w-100 table-striped table-responsive table-bordered">
+                <thead class="backg">
+                    <tr class="table-row bg-light">
+                        <th scope="col" colspan="2">Award Pay Rate</th>
+                        <th scope="col">Job Level</th>
+                        <!-- <th scope="col">State</th> -->
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let payrate of filteredPayRateList; trackBy: trackById" class="row_main">
+                        <th scope="row" colspan="2" (click)="editRates(payrate,'view')">
+                            {{payrate.title}}
+                        </th>
+                        <td>{{payrate.level}}</td>
+                        <!-- <td>{{payrate.state}}</td> -->
+                        <td>
+                            <div class="actions">
+                                <mat-icon *ngIf="adminPermission && adminPermission.update" placement="right"
+                                    ngbTooltip="Edit Payrates!" triggers="mouseenter:mouseleave" style="color: #074677;"
+                                    class="accent " svgIcon="heroicons_solid:pencil-alt"
+                                    (click)="editRates(payrate,'edit')">
+                                </mat-icon>
+
+                                <!-- <mat-icon *ngIf="adminPermission && adminPermission.update"
+                                    style="color: var(--background-primary);" placement="right"
+                                    ngbTooltip="Archive Payrates!" triggers="mouseenter:mouseleave" class="accent "
+                                    (click)="archive(payrate)">archive
+                                </mat-icon> -->
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--  archive tab lists  -->
+        <div class="col-12 " *ngIf="this.activeTab=='Archive' && adminPermission && adminPermission.read">
+            <br>
+            <br>
+            <table class="table w-100 table-striped table-responsive table-bordered">
+                <thead class="backg">
+                    <tr class="table-row bg-light">
+                        <th scope="col" colspan="3">Pay Rate</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Job Level</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let payrate of archivePayRateList; trackBy: trackById" class="row_main">
+                        <th scope="row" colspan="3">
+                            {{payrate.title}}
+                        </th>
+                        <td>{{payrate.state}}</td>
+                        <td>{{payrate.level}}</td>
+                        <td *ngIf="adminPermission && adminPermission.update" (click)="editRates(payrate,'view')">
+                            <mat-icon placement="right" ngbTooltip="Edit Payrate!"
+                                triggers="mouseenter:mouseleave">remove_red_eye
+                            </mat-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

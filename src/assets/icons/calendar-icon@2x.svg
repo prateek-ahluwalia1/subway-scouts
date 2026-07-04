@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="109px" height="73px" viewBox="0 0 109 73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
+    <title>Group 55</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="100%" y1="19.8449525%" x2="0%" y2="80.1550475%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#F3F9FF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="LP" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="new-workflows" transform="translate(-306.000000, -357.000000)">
+            <g id="Group-55" transform="translate(306.000000, 357.000000)">
+                <path d="M2,0 L94,0 L94,0 L94,73 L0,73 L0,2 C-1.3527075e-16,0.8954305 0.8954305,2.02906125e-16 2,0 Z" id="Rectangle" fill="url(#linearGradient-1)"></path>
+                <polygon id="Path-5" fill="#1669B7" points="94 -7.09154957e-15 109 73 94 73"></polygon>
+                <path d="M2,0 L94,0 L94,0 L94,14 L0,14 L0,2 C-1.3527075e-16,0.8954305 0.8954305,2.02906125e-16 2,0 Z" id="Rectangle" fill="#2998FF"></path>
+                <rect id="Rectangle" fill="#CAE5FF" x="0" y="25" width="94" height="1"></rect>
+                <rect id="Rectangle-Copy-4" fill="#CAE5FF" x="0" y="37" width="94" height="1"></rect>
+                <rect id="Rectangle-Copy-5" fill="#CAE5FF" x="0" y="49" width="94" height="1"></rect>
+                <rect id="Rectangle-Copy-6" fill="#CAE5FF" x="0" y="61" width="94" height="1"></rect>
+                <rect id="Rectangle" fill="#2998FF" x="6" y="27" width="36" height="9" rx="4.5"></rect>
+                <rect id="Rectangle-Copy-7" fill="#2998FF" x="55" y="39" width="26" height="9" rx="4.5"></rect>
+                <polyline id="Path-7" stroke="#2998FF" stroke-linecap="round" stroke-linejoin="round" points="21 55.3333333 23.8 58 29 53"></polyline>
+                <circle id="Oval" fill="#FFFFFF" cx="6.5" cy="7.5" r="1.5"></circle>
+                <circle id="Oval-Copy-16" fill="#FFFFFF" cx="16.5" cy="7.5" r="1.5"></circle>
+                <circle id="Oval-Copy-17" fill="#FFFFFF" cx="26.5" cy="7.5" r="1.5"></circle>
+                <circle id="Oval-Copy-18" fill="#FFFFFF" cx="36.5" cy="7.5" r="1.5"></circle>
+                <circle id="Oval-Copy-21" fill="#FFFFFF" cx="46.5" cy="7.5" r="1.5"></circle>
+                <circle id="Oval-Copy-22" fill="#FFFFFF" cx="56.5" cy="7.5" r="1.5"></circle>
+                <circle id="Oval-Copy-23" fill="#FFFFFF" cx="66.5" cy="7.5" r="1.5"></circle>
+                <circle id="Oval-Copy-24" fill="#FFFFFF" cx="76.5" cy="7.5" r="1.5"></circle>
+                <circle id="Oval-Copy-25" fill="#FFFFFF" cx="86.5" cy="7.5" r="1.5"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

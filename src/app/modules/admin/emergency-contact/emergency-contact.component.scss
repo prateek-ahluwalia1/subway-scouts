@@ -1,0 +1,74 @@
+app-form{
+    width: 100 !important;
+}
+:host{
+    width: 100% !important;
+    height: 100% !important;
+}
+.wrap_form{
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+}
+.myContent {
+    padding-left: 7%;
+    padding-right: 7%;
+    .logo{
+        img{
+            height: 8rem;
+            width: 8rem;
+        }
+    }
+}
+.bar{
+    padding: 3px;
+    background-color: #01A37E;
+}
+.form-1{
+.form-body{
+    
+    input{
+        margin-bottom: 12px;
+    }
+    .date{
+        width: 68%;
+    }
+}}
+.form-2{
+    .form-body{
+        .checkbox{
+            display: flex;
+            align-items: center;
+            input{
+                margin-bottom: 0px;
+            }
+        } .radio{
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        input{
+            margin-bottom: 12px;
+        }
+        .tfn{
+            width: 72%
+        }
+        .Abn{
+            width: 64%
+        }
+        .docow{
+            width: 67%;
+        }
+    }
+}
+.active{
+    background-color: #01A37E;
+    color: white;
+}
+.selected{
+    background-color: #01A37E;
+    color: white;
+
+}

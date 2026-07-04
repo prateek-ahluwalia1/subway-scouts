@@ -1,0 +1,116 @@
+<div class="absolute inset-0 flex flex-col">
+    <div class="flex-auto">
+        <div class="rounded-2xl">
+            <div class="list-main">
+                <div class="nav rounded-2xl">
+                    <h4>Businesses List</h4>
+                    <div>
+                        <button class="create_btn mr-2" [routerLink]="'add-packege'">Add Packege</button>
+                        <button class="create_btn" [routerLink]="'add-business'">Add Business</button>
+                    </div>
+                </div>
+                <div class="main">
+                    <div class="main_inner pb-2">
+                        <mat-tab-group>
+                            <!-- Business List Tab -->
+                            <mat-tab label="Businesses List">
+                                <div class="flex-auto">
+                                    <table class="table w-100">
+                                        <thead>
+                                            <tr class="table-row">
+                                                <th scope="col">Business Name</th>
+                                                <th scope="col">Unique ID</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Domain</th>
+                                                <th scope="col">Business Status</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let temp of businesses">
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <ng-container *ngIf="temp.temp_logo; else placeholderImage">
+                                                            <img id="logoImage" [src]="temp.temp_logo"
+                                                                style="width: 60px; height: 50px"
+                                                                class="rounded-circle" />
+                                                        </ng-container>
+
+                                                        <ng-template #placeholderImage>
+                                                            <img id="logoImage"
+                                                                src="/assets/images/avatars/no-image.jpg"
+                                                                style="width: 50px; height: 50px;"
+                                                                class="rounded-circle mx-2" />
+                                                        </ng-template>
+                                                        <div class="ms-2">
+                                                            <p class="fw-bold mb-1">{{temp.business_name}}</p>
+                                                            <p class="text-muted mb-0">{{temp.email}}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="table-data">{{temp.app_id}}</td>
+                                                <td class="table-data">{{temp.address}}</td>
+                                                <td class="table-data">{{temp.domain}}</td>
+                                                <td class="table-data">{{temp.business_status}}</td>
+                                                <td class="table-action">
+                                                    <!-- <mat-icon svgIcon="mat_outline:settings"
+                                                        (click)="businesssettingPage(temp)"
+                                                        style="cursor: pointer;"></mat-icon>&nbsp; -->
+                                                    <mat-icon svgIcon="heroicons_solid:pencil-alt"
+                                                        style="cursor: pointer;"
+                                                        [routerLink]="'update-business/' + temp.id"></mat-icon>&nbsp;
+                                                    <mat-icon svgIcon="heroicons_outline:trash" style="cursor: pointer;"
+                                                        (click)="deleteBusiness('business',temp.id)"></mat-icon>&nbsp;
+                                                </td>
+                                            </tr>
+                                    </table>
+                                </div>
+                            </mat-tab>
+
+                            <!-- Package List Tab -->
+                            <mat-tab label="Package List">
+                                <div class="flex-auto">
+                                    <table class="table w-100">
+                                        <thead>
+                                            <tr class="table-row">
+                                                <th scope="col">Packege Name</th>
+                                                <th scope="col">Packege Price</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let temp of packeges">
+                                                <td class="table-data">{{temp.name}}</td>
+                                                <td class="table-data">{{temp.price}}</td>
+                                                <td class="table-action">
+                                                    <!-- <mat-icon svgIcon="mat_outline:settings"
+                                                        (click)="businesssettingPage(temp)"
+                                                        style="cursor: pointer;"></mat-icon>&nbsp; -->
+                                                    <mat-icon svgIcon="heroicons_solid:pencil-alt"
+                                                        style="cursor: pointer;"
+                                                        [routerLink]="'update-packege/' + temp.id"></mat-icon>&nbsp;
+                                                    <!-- <mat-icon svgIcon="heroicons_outline:trash" style="cursor: pointer;"
+                                                        (click)="deleteBusiness('packege',temp.id)"></mat-icon>&nbsp; -->
+                                                </td>
+                                            </tr>
+                                    </table>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </div>
+                <!-- table for showing forms -->
+
+                <!-- <div class="main">
+                    <div class="main_inner pb-2">
+                        <div class="d-flex justify-content-end searchbar_main">
+                            <input type="text" placeholder="Search here.." class="searchbar" [(ngModel)]="searchQuery"
+                                (input)="filterTable()">
+                            <mat-icon>search</mat-icon>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,114 @@
+<div class="card" style="min-height: 450px; max-height: 450px;" #fullScreen>
+    <div class="p-3 card-header-title flex align-items-center justify-content-between font-size-lg text-capitalize font-weight-normal">
+        <div class="flex align-items-center">
+            <mat-icon svgIcon="mat_outline:assignment" class="mr-2"></mat-icon>
+            <div class="fw-bold">Journal</div>
+        </div>
+        <mat-icon svgIcon="mat_outline:open_in_full" class="icon-size-5" (click)="openFullscreen()"></mat-icon>
+    </div>
+
+    <div class="scroll-area-lg">
+        <div class="scrollbar-container">
+            <div class="p-2">
+                <ul class="todo-list-wrapper list-group list-group-flush">
+                    <li class="list-group-item" *ngFor="let item of todoList">
+                        <div class="todo-indicator bg-warning"></div>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper">
+                                <div class="widget-content-left mr-2">
+                                    <div class="custom-checkbox custom-control">
+                                        <input type="checkbox" [id]="item.id" [checked]="item.status === 'completed'"
+                                            class="custom-control-input" [value]="item.id"
+                                            (click)="changeTodoStatus(item)">
+                                        <label class="custom-control-label" [for]="item.id">&nbsp;</label>
+                                    </div>
+                                </div>
+                                <div class="widget-content-left">
+                                    <div class="widget-heading">{{ item.title }}
+                                        <div class="badge ml-2"
+                                            [ngClass]="item.status === 'completed' ? 'badge-success' : 'badge-info'">
+                                            {{ item.status }}
+                                        </div>
+                                    </div>
+                                    <div class="widget-subheading">
+                                        <i>{{ item.description }}</i>
+                                    </div>
+                                    <div class="flex justify-content-between w-100">
+                                        <small>Updated at:</small>
+                                        <small class="ml-2">{{ item.updated_at | date:'dd-MM-yyyy hh:mm' }}</small>
+                                    </div>
+                                </div>
+                                <div class="widget-content-right widget-content-actions">
+                                    <button class="border-0 btn-transition btn btn-outline-success" (click)="editTodo(item)">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="border-0 btn-transition btn btn-outline-danger" (click)="delTodo(item.id)">
+                                        <i class="fa fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="d-block text-right card-footer">
+        <div *ngIf="showAddTaskSection">
+            <input type="text" [(ngModel)]="newTask.title" placeholder="Task Title *" class="form-control mb-2">
+            <textarea [(ngModel)]="newTask.description" placeholder="Task Body *" class="form-control mb-2"></textarea>
+        </div>
+        <button *ngIf="showAddTaskSection" (click)="toggleAddTaskSection()" class="mr-2 btn btn-link btn-sm">Cancel</button>
+        <button *ngIf="showAddTaskSection && !editingTask" (click)="saveToDo()" class="btn btn-primary">Save</button>
+        <button *ngIf="showAddTaskSection && editingTask" (click)="saveToDo()" class="btn btn-primary">Update</button>
+        <button *ngIf="!showAddTaskSection" (click)="addTask()" class="btn btn-primary">Add Task</button>
+    </div>
+</div>
+
+<ng-template #mockShifts let-modal>
+    <h2 mat-dialog-title>Uncovered Shifts</h2>
+    <mat-dialog-content style="max-height: 100%;" class="mat-typography">
+        <main>
+            <ol class="gradient-list">
+                <li *ngFor="let item of unconverdShifts">
+                    <strong>{{ item?.site_name }}</strong>
+                    <p>{{ item?.site_description }}</p>
+                    <div class="flex justify-between">
+                        <span>{{ item?.start }} - {{ item?.end }}</span>
+                        <span>{{ item?.date }}</span>
+                    </div>
+                </li>
+            </ol>
+        </main>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close color="warn">Close</button>
+        <button mat-raised-button color="primary" [mat-dialog-close]="true" style="background-color: #01ACED"
+            (click)="acknowledged()">Acknowledged
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+
+<ng-template #notes let-modal>
+    <h2 mat-dialog-title>Operations Notes ({{ operationNotes.length }})</h2>
+    <mat-dialog-content class="mat-typography">
+        <div *ngFor="let item of operationNotes ; let i = index" class="border-bottom">
+            <hr>
+            <h4>{{ i + 1 }}. {{ item.title }} </h4>
+            <div [innerHtml]="sanitizeHtml(item.note)"></div>
+            <div class="flex justify-between my-2">
+                <section class="example-section">
+                    <mat-checkbox class="example-margin" (change)="onCheckboxChange(item)">Acknowledge!</mat-checkbox>
+                </section>
+                <div>
+                    <h6>Sent By: <span class="badge rounded-pill bg-danger"> {{ item.created_by }}</span></h6>
+                    <p class="text-end m-0"> {{ item.created_at }}</p>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close color="warn">Close</button>
+        <button mat-raised-button color="primary" style="background-color: #01ACED" (click)="readAll()" [mat-dialog-close]="true">Acknowledge All</button>
+    </mat-dialog-actions>
+</ng-template>

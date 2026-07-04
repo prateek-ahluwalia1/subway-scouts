@@ -1,0 +1,134 @@
+<!-- Loading bar -->
+<fuse-loading-bar></fuse-loading-bar>
+
+<!-- Navigation -->
+<fuse-vertical-navigation class="bg-gray-900 print:hidden" [appearance]="'compact'"
+    [mode]="isScreenSmall ? 'over' : 'side'" [name]="'mainNavigation'" [navigation]="navigation.compact"
+    [opened]="!isScreenSmall">
+    <ng-container fuseVerticalNavigationContentHeader>
+        <div class="flex items-center justify-center h-20 mt-3 mb-4">
+            <img class="w-100 p-3" [src]="logo" alt="Logo image" (error)="handleImageError()">
+        </div>
+    </ng-container>
+</fuse-vertical-navigation>
+
+<!-- Wrapper -->
+<div class="flex flex-col flex-auto w-full min-w-0">
+    <div class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden">
+        <!-- Navigation toggle button -->
+        <button mat-icon-button (click)="toggleNavigation('mainNavigation')">
+            <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+        </button>
+        <label class="nav m-2">
+            <span class="flex flex-direction-row align-items-center" style="font-size: 11;font-weight: 500;">
+                <svg class="svg-icon css-i6dzq1 mr-2" viewBox="0 0 20 20" width="20" height="20">
+                    <path d="M17.237,3.056H2.93c-0.694,0-1.263,0.568-1.263,1.263v8.837c0,0.694,0.568,1.263,1.263,1.263h4.629v0.879c-0.015,0.086-0.183,0.306-0.273,0.423c-0.223,0.293-0.455,0.592-0.293,0.92c0.07,0.139,0.226,0.303,0.577,0.303h4.819c0.208,0,0.696,0,0.862-0.379c0.162-0.37-0.124-0.682-0.374-0.955c-0.089-0.097-0.231-0.252-0.268-0.328v-0.862h4.629c0.694,0,1.263-0.568,1.263-1.263V4.319C18.5,3.625,17.932,3.056,17.237,3.056 M8.053,16.102C8.232,15.862,8.4,15.597,8.4,15.309v-0.89h3.366v0.89c0,0.303,0.211,0.562,0.419,0.793H8.053z M17.658,13.156c0,0.228-0.193,0.421-0.421,0.421H2.93c-0.228,0-0.421-0.193-0.421-0.421v-1.263h15.149V13.156z M17.658,11.052H2.509V4.319c0-0.228,0.193-0.421,0.421-0.421h14.308c0.228,0,0.421,0.193,0.421,0.421V11.052z"></path>
+                </svg>
+                {{ businessName || 'The Scouts'}}
+            </span>
+        </label>
+        <div class="layout flex" *ngIf="global.showCrmTab">
+            <label class="nav tab-crm m-2" [class.active-crm-tab]="global.selectTabCrm === 'dashboard'" for="home" routerLink="/crm-dashboard" (click)="activeTab('dashboard')">
+                <span class="flex flex-direction-row align-items-center" style="font-size: 11;font-weight: 500;">
+                    <svg class="svg-icon css-i6dzq1 mr-2" viewBox="0 0 20 20" width="15" height="15">
+                        <path d="M18.121,9.88l-7.832-7.836c-0.155-0.158-0.428-0.155-0.584,0L1.842,9.913c-0.262,0.263-0.073,0.705,0.292,0.705h2.069v7.042c0,0.227,0.187,0.414,0.414,0.414h3.725c0.228,0,0.414-0.188,0.414-0.414v-3.313h2.483v3.313c0,0.227,0.187,0.414,0.413,0.414h3.726c0.229,0,0.414-0.188,0.414-0.414v-7.042h2.068h0.004C18.331,10.617,18.389,10.146,18.121,9.88 M14.963,17.245h-2.896v-3.313c0-0.229-0.186-0.415-0.414-0.415H8.342c-0.228,0-0.414,0.187-0.414,0.415v3.313H5.032v-6.628h9.931V17.245z M3.133,9.79l6.864-6.868l6.867,6.868H3.133z"></path>
+                    </svg>
+                    Dashboard
+                </span>
+            </label>
+            <label *ngIf="lead && lead.enabled" class="nav tab-crm m-2" [class.active-crm-tab]="global.selectTabCrm === 'leads'" matBadgeColor="accent" for="about" routerLink="/crm/lead" (click)="activeTab('leads')">
+                <span class="flex flex-direction-row align-items-center" style="font-size: 11;font-weight: 500;">
+                    <svg class="svg-icon css-i6dzq1 mr-2" viewBox="0 0 20 20" width="15" height="15">
+                        <path d="M15.573,11.624c0.568-0.478,0.947-1.219,0.947-2.019c0-1.37-1.108-2.569-2.371-2.569s-2.371,1.2-2.371,2.569c0,0.8,0.379,1.542,0.946,2.019c-0.253,0.089-0.496,0.2-0.728,0.332c-0.743-0.898-1.745-1.573-2.891-1.911c0.877-0.61,1.486-1.666,1.486-2.812c0-1.79-1.479-3.359-3.162-3.359S4.269,5.443,4.269,7.233c0,1.146,0.608,2.202,1.486,2.812c-2.454,0.725-4.252,2.998-4.252,5.685c0,0.218,0.178,0.396,0.395,0.396h16.203c0.218,0,0.396-0.178,0.396-0.396C18.497,13.831,17.273,12.216,15.573,11.624 M12.568,9.605c0-0.822,0.689-1.779,1.581-1.779s1.58,0.957,1.58,1.779s-0.688,1.779-1.58,1.779S12.568,10.427,12.568,9.605 M5.06,7.233c0-1.213,1.014-2.569,2.371-2.569c1.358,0,2.371,1.355,2.371,2.569S8.789,9.802,7.431,9.802C6.073,9.802,5.06,8.447,5.06,7.233 M2.309,15.335c0.202-2.649,2.423-4.742,5.122-4.742s4.921,2.093,5.122,4.742H2.309z M13.346,15.335c-0.067-0.997-0.382-1.928-0.882-2.732c0.502-0.271,1.075-0.429,1.686-0.429c1.828,0,3.338,1.385,3.535,3.161H13.346z"></path>
+                    </svg>
+                    Leads<span class="badge badge-success p-1 ml-1" style="font-size: 10px;">{{ allLeads?.all_leads }}</span>
+                </span>
+            </label>
+            <label *ngIf="lead && lead.enabled" class="nav tab-crm m-2"
+                [class.active-crm-tab]="global.selectTabCrm === 'contacts'" for="contact" routerLink="/crm/contacted" (click)="activeTab('contacts')">
+                <span class="flex flex-direction-row align-items-center" style="font-size: 11;font-weight: 500;">
+                    <svg class="svg-icon css-i6dzq1 mr-2" viewBox="0 0 20 20" width="15" height="15">
+                        <path d="M14.911,1.295H5.09c-0.737,0-1.339,0.603-1.339,1.339v14.733c0,0.736,0.603,1.338,1.339,1.338h9.821c0.737,0,1.339-0.602,1.339-1.338V2.634C16.25,1.898,15.648,1.295,14.911,1.295 M15.357,17.367c0,0.24-0.205,0.445-0.446,0.445H5.09c-0.241,0-0.446-0.205-0.446-0.445v-0.893h10.714V17.367z M15.357,15.58H4.644V4.42h10.714V15.58z M15.357,3.527H4.644V2.634c0-0.241,0.205-0.446,0.446-0.446h9.821c0.241,0,0.446,0.206,0.446,0.446V3.527z"></path>
+                    </svg>
+                    Contacts <span class="badge badge-success p-1 ml-1" style="font-size: 10px;">{{ allLeads?.contacted_leads }}</span>
+                </span>
+            </label>
+            <label *ngIf="quotation && quotation.enabled" class="nav tab-crm m-2"
+                [class.active-crm-tab]="global.selectTabCrm === 'p'" for="contact" routerLink="/crm/quotation"
+                (click)="activeTab('Financials')">
+                <span class="flex flex-direction-row align-items-center" style="font-size: 11;font-weight: 500;">
+                    <svg class="svg-icon css-i6dzq1 mr-2" viewBox="0 0 20 20" width="15" height="15">
+                        <path d="M14.467,1.771H5.533c-0.258,0-0.47,0.211-0.47,0.47v15.516c0,0.414,0.504,0.634,0.802,0.331L10,13.955l4.136,4.133c0.241,0.241,0.802,0.169,0.802-0.331V2.241C14.938,1.982,14.726,1.771,14.467,1.771 M13.997,16.621l-3.665-3.662c-0.186-0.186-0.479-0.186-0.664,0l-3.666,3.662V2.711h7.994V16.621z"></path>
+                    </svg>
+                    Financials
+                </span>
+            </label>
+            <label *ngIf="lead && lead.enabled" class="nav tab-crm m-2" [class.active-crm-tab]="global.selectTabCrm === 'Won'" for="Won"
+                routerLink="/crm/won" (click)="activeTab('Won')">
+                <span class="flex flex-direction-row align-items-center" style="font-size: 11;font-weight: 500;">
+                    <svg class="svg-icon css-i6dzq1 mr-2" viewBox="0 0 20 20" width="15" height="15">
+                        <path d="M15.94,10.179l-2.437-0.325l1.62-7.379c0.047-0.235-0.132-0.458-0.372-0.458H5.25c-0.241,0-0.42,0.223-0.373,0.458l1.634,7.376L4.06,10.179c-0.312,0.041-0.446,0.425-0.214,0.649l2.864,2.759l-0.724,3.947c-0.058,0.315,0.277,0.554,0.559,0.401l3.457-1.916l3.456,1.916c-0.419-0.238,0.56,0.439,0.56-0.401l-0.725-3.947l2.863-2.759C16.388,10.604,16.254,10.22,15.94,10.179M10.381,2.778h3.902l-1.536,6.977L12.036,9.66l-1.655-3.546V2.778z M5.717,2.778h3.903v3.335L7.965,9.66L7.268,9.753L5.717,2.778zM12.618,13.182c-0.092,0.088-0.134,0.217-0.11,0.343l0.615,3.356l-2.938-1.629c-0.057-0.03-0.122-0.048-0.184-0.048c-0.063,0-0.128,0.018-0.185,0.048l-2.938,1.629l0.616-3.356c0.022-0.126-0.019-0.255-0.11-0.343l-2.441-2.354l3.329-0.441c0.128-0.017,0.24-0.099,0.295-0.215l1.435-3.073l1.435,3.073c0.055,0.116,0.167,0.198,0.294,0.215l3.329,0.441L12.618,13.182z"></path>
+                    </svg>
+                    Won<span class="badge badge-success p-1 ml-1" style="font-size: 10px;">{{ allLeads?.won_leads }}</span>
+                </span>
+            </label>
+            <label *ngIf="lead && lead.enabled" class="nav tab-crm m-2" [class.active-crm-tab]="global.selectTabCrm === 'Lost'" for="Lost"
+                routerLink="/crm/lost" (click)="activeTab('Lost')">
+                <span class="flex flex-direction-row align-items-center" style="font-size: 11;font-weight: 500;">
+                    <svg class="svg-icon css-i6dzq1 mr-2" viewBox="0 0 20 20" width="15" height="15">
+                        <path d="M17.35,2.219h-5.934c-0.115,0-0.225,0.045-0.307,0.128l-8.762,8.762c-0.171,0.168-0.171,0.443,0,0.611l5.933,5.934c0.167,0.171,0.443,0.169,0.612,0l8.762-8.763c0.083-0.083,0.128-0.192,0.128-0.307V2.651C17.781,2.414,17.587,2.219,17.35,2.219M16.916,8.405l-8.332,8.332l-5.321-5.321l8.333-8.332h5.32V8.405z M13.891,4.367c-0.957,0-1.729,0.772-1.729,1.729c0,0.957,0.771,1.729,1.729,1.729s1.729-0.772,1.729-1.729C15.619,5.14,14.848,4.367,13.891,4.367 M14.502,6.708c-0.326,0.326-0.896,0.326-1.223,0c-0.338-0.342-0.338-0.882,0-1.224c0.342-0.337,0.881-0.337,1.223,0C14.84,5.826,14.84,6.366,14.502,6.708"></path>
+                    </svg>
+                    Lost<span class="badge badge-success p-1 ml-1" style="font-size: 10px;">{{ allLeads?.lost_leads }}</span>
+                </span>
+            </label>
+            <label *ngIf="task && task.enabled" class="nav m-2 tab-crm" [class.active-crm-tab]="global.selectTabCrm === 'Tasks'"
+                for="Tasks" routerLink="/crm/tasks" (click)="activeTab('Tasks')">
+                <span class="flex flex-direction-row align-items-center" style="font-size: 12;font-weight: 500;">
+                    <svg class="svg-icon css-i6dzq1 mr-2" viewBox="0 0 20 20" width="15" height="15">
+                        <path d="M12.319,5.792L8.836,2.328C8.589,2.08,8.269,2.295,8.269,2.573v1.534C8.115,4.091,7.937,4.084,7.783,4.084c-2.592,0-4.7,2.097-4.7,4.676c0,1.749,0.968,3.337,2.528,4.146c0.352,0.194,0.651-0.257,0.424-0.529c-0.415-0.492-0.643-1.118-0.643-1.762c0-1.514,1.261-2.747,2.787-2.747c0.029,0,0.06,0,0.09,0.002v1.632c0,0.335,0.378,0.435,0.568,0.245l3.483-3.464C12.455,6.147,12.455,5.928,12.319,5.792 M8.938,8.67V7.554c0-0.411-0.528-0.377-0.781-0.377c-1.906,0-3.457,1.542-3.457,3.438c0,0.271,0.033,0.542,0.097,0.805C4.149,10.7,3.775,9.762,3.775,8.76c0-2.197,1.798-3.985,4.008-3.985c0.251,0,0.501,0.023,0.744,0.069c0.212,0.039,0.412-0.124,0.412-0.34v-1.1l2.646,2.633L8.938,8.67z M14.389,7.107c-0.34-0.18-0.662,0.244-0.424,0.529c0.416,0.493,0.644,1.118,0.644,1.762c0,1.515-1.272,2.747-2.798,2.747c-0.029,0-0.061,0-0.089-0.002v-1.631c0-0.354-0.382-0.419-0.558-0.246l-3.482,3.465c-0.136,0.136-0.136,0.355,0,0.49l3.482,3.465c0.189,0.186,0.568,0.096,0.568-0.245v-1.533c0.153,0.016,0.331,0.022,0.484,0.022c2.592,0,4.7-2.098,4.7-4.677C16.917,9.506,15.948,7.917,14.389,7.107 M12.217,15.238c-0.251,0-0.501-0.022-0.743-0.069c-0.212-0.039-0.411,0.125-0.411,0.341v1.101l-2.646-2.634l2.646-2.633v1.116c0,0.174,0.126,0.318,0.295,0.343c0.158,0.024,0.318,0.034,0.486,0.034c1.905,0,3.456-1.542,3.456-3.438c0-0.271-0.032-0.541-0.097-0.804c0.648,0.719,1.022,1.659,1.022,2.66C16.226,13.451,14.428,15.238,12.217,15.238"></path>
+                    </svg>
+                    Tasks
+                </span>
+            </label>
+            <!-- <label class="nav m-2 tab-crm" [class.active-crm-tab]="global.selectTabCrm === 'AllLeads'" for="AllLeads"
+            routerLink="/crm/all/leads" (click)="activeTab('AllLeads')">
+            <span class="flex flex-direction-row align-items-center" style="font-size: 12;font-weight: 500;">
+                <svg class="svg-icon css-i6dzq1 mr-2" viewBox="0 0 20 20" width="15" height="15">
+                    <path d="M12.319,5.792L8.836,2.328C8.589,2.08,8.269,2.295,8.269,2.573v1.534C8.115,4.091,7.937,4.084,7.783,4.084c-2.592,0-4.7,2.097-4.7,4.676c0,1.749,0.968,3.337,2.528,4.146c0.352,0.194,0.651-0.257,0.424-0.529c-0.415-0.492-0.643-1.118-0.643-1.762c0-1.514,1.261-2.747,2.787-2.747c0.029,0,0.06,0,0.09,0.002v1.632c0,0.335,0.378,0.435,0.568,0.245l3.483-3.464C12.455,6.147,12.455,5.928,12.319,5.792 M8.938,8.67V7.554c0-0.411-0.528-0.377-0.781-0.377c-1.906,0-3.457,1.542-3.457,3.438c0,0.271,0.033,0.542,0.097,0.805C4.149,10.7,3.775,9.762,3.775,8.76c0-2.197,1.798-3.985,4.008-3.985c0.251,0,0.501,0.023,0.744,0.069c0.212,0.039,0.412-0.124,0.412-0.34v-1.1l2.646,2.633L8.938,8.67z M14.389,7.107c-0.34-0.18-0.662,0.244-0.424,0.529c0.416,0.493,0.644,1.118,0.644,1.762c0,1.515-1.272,2.747-2.798,2.747c-0.029,0-0.061,0-0.089-0.002v-1.631c0-0.354-0.382-0.419-0.558-0.246l-3.482,3.465c-0.136,0.136-0.136,0.355,0,0.49l3.482,3.465c0.189,0.186,0.568,0.096,0.568-0.245v-1.533c0.153,0.016,0.331,0.022,0.484,0.022c2.592,0,4.7-2.098,4.7-4.677C16.917,9.506,15.948,7.917,14.389,7.107 M12.217,15.238c-0.251,0-0.501-0.022-0.743-0.069c-0.212-0.039-0.411,0.125-0.411,0.341v1.101l-2.646-2.634l2.646-2.633v1.116c0,0.174,0.126,0.318,0.295,0.343c0.158,0.024,0.318,0.034,0.486,0.034c1.905,0,3.456-1.542,3.456-3.438c0-0.271-0.032-0.541-0.097-0.804c0.648,0.719,1.022,1.659,1.022,2.66C16.226,13.451,14.428,15.238,12.217,15.238"></path>
+                </svg>
+                All Leads
+            </span>
+        </label> -->
+        </div>
+        <!-- Components -->
+        <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
+            <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
+
+            <!-- <messages></messages> -->
+            <!-- <outlook-notifications></outlook-notifications> -->
+            <notifications></notifications>
+            <languages></languages>
+
+            <!-- <button class="lg:hidden" mat-icon-button (click)="quickChat.toggle()">
+                <mat-icon [svgIcon]="'heroicons_outline:chat-alt-2'"></mat-icon>
+            </button> -->
+            <!-- <user></user> -->
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col flex-auto">
+        <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
+             Otherwise, layout changes won't be registered and the view won't be updated! -->
+        <router-outlet *ngIf="true"></router-outlet>
+    </div>
+
+    <!-- Footer -->
+    <!-- <div class="relative flex flex-0 items-center justify-start w-full h-14 px-4 md:px-6 z-49 border-t bg-card dark:bg-transparent print:hidden">
+        <span class="font-medium text-secondary">Fuse &copy; {{currentYear}}</span>
+    </div> -->
+
+</div>
+
+<!-- Quick chat -->
+<!-- <quick-chat #quickChat="quickChat"></quick-chat> -->

@@ -1,0 +1,302 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <!-- Main -->
+    <div class="flex-auto p-6">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+            <div class="signature-main" style="border-radius: 10px;">
+                <div class="nav rounded-2xl">
+                    <h4>Forms</h4>
+                    <button *ngIf="adminPermissions && adminPermissions.actionsObject.create && selectedTabLabel === 'Custom Form'" class="save_btn"
+                        (click)="openVerticallyCentered(content)" >Create New Template</button>
+                    <!--Create new template modal start-->
+                    <ng-template #content let-modal>
+                        <div class="modal-header">
+                            <h4 class="modal-title">New Form</h4>
+                            <button type="button" class="btn-close" aria-label="Close"
+                                (click)="modal.dismiss('Cross click')">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form [formGroup]="createform">
+                                <div class="row">
+                                    <mat-form-field>
+                                        <mat-label>Form Name</mat-label>
+                                        <input matInput type="text" formControlName="name" name="name">
+                                    </mat-form-field>
+                                </div>
+                                <div class="row px-3">
+                                    <div class="col-6 standard">
+                                        <div class="row" style="text-align: center;">
+                                            <h6>Standard Form</h6>
+                                        </div>
+                                        <div class="row">
+                                            <ul class="list ml-3">
+                                                <li>All wokers can fill out standard form.</li>
+                                                <li>All workers can view standard form.</li>
+                                            </ul>
+                                        </div>
+                                        <button type=submit class="create_btn mb-1" style="margin-top: 96px;"
+                                            (click)="onSubmit('Standard')">Create Standard Form</button>
+                                    </div>
+                                    <div class="col-6 private">
+                                        <div class="row" style="text-align: center;">
+                                            <h6>Private Form</h6>
+                                        </div>
+                                        <div class="row">
+                                            <ul class="list ml-4">
+                                                <li>All wokers can fill out private form.</li>
+                                                <li>Workers can only view private forms when:</li>
+                                                <ul>
+                                                    <li>Viewing on the device it was signed on.</li>
+                                                    <li>Viewing from the admin panel.</li>
+                                                </ul>
+                                            </ul>
+                                        </div>
+                                        <button type=submit class="create_btn mb-1" (click)="onSubmit('Private')">Create
+                                            Private Form</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="save_btn" (click)="modal.dismiss()">Cancel</button>
+                        </div>
+                    </ng-template>
+                    <!--modal end-->
+
+                </div>
+                <!-- table for showing forms -->
+                <div class="main">
+                    <div class="main_inner pb-2">
+                        <div class="d-flex justify-content-end searchbar_main" *ngIf="selectedTabLabel === 'Custom Form'">
+                            <input type="text" placeholder="Search here.." class="searchbar" [(ngModel)]="searchTerm">
+                            <mat-icon>search</mat-icon>
+                        </div>
+                        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="custome-built-form" (selectedIndexChange)="onTabChange($event)">
+                            <mat-tab label="Custom Form">
+                                <table class="table w-100">
+                                    <thead>
+                                        <tr class="table-row">
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let temp of FormList | titleFilter:searchTerm; let i=index">
+                                            <td>{{temp.title}}</td>
+                                            <td>{{temp.type}}</td>
+                                            <td>
+                                                <mat-icon svgIcon="heroicons_outline:eye" style="cursor: pointer;"
+                                                    (click)="viewForm(temp,formView)"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read"></mat-icon>&nbsp;
+                                                <mat-icon svgIcon="heroicons_solid:pencil-alt" style="cursor: pointer;"
+                                                    (click)="editForm(temp,formtemp)"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.update"></mat-icon>&nbsp;
+                                                <mat-icon svgIcon="heroicons_outline:trash" style="cursor: pointer;"
+                                                    (click)="deleteForm(temp.id)"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.delete"></mat-icon>&nbsp;
+                                                <mat-icon svgIcon="heroicons_outline:share" style="cursor: pointer;"
+                                                    (click)="showStaff(temp,guardlist)"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read"></mat-icon>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-tab>
+                            <mat-tab label="Built-in Forms">
+                                <table class="table w-100">
+                                    <thead>
+                                        <tr class="table-row">
+                                            <th scope="col">Name</th>
+                                            <!-- <th scope="col">Status</th> -->
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr>
+                                            <td>Check List</td>
+                                            <td>
+                                                <mat-icon svgIcon="heroicons_outline:eye" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="showbuiltPage('check','built-in/check-list')"></mat-icon>&nbsp;
+                                                <mat-icon svgIcon="heroicons_outline:share" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="shreBuiltPage('Check List Form',guardlist,'check-list')"></mat-icon>
+                                            </td>
+                                        </tr> -->
+                                        <tr>
+                                            <td>Employee Details</td>
+                                            <td>
+                                                <mat-icon svgIcon="heroicons_outline:eye" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="showbuiltPage('employee','built-in/employee-details')"></mat-icon>&nbsp;
+                                                <mat-icon svgIcon="heroicons_outline:share" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="shreBuiltPage('Employee Details Form', guardlist, 'employee-details')"></mat-icon>
+                                                <mat-icon svgIcon="heroicons_outline:information-circle" (click)="viewList('Employee Details Form', guardForm, 'employee-details')"></mat-icon>
+                                            </td>
+                                        </tr>
+                                        <!-- <tr>
+                                            <td>Uniform Form</td>
+                                            <td>
+                                                <mat-icon svgIcon="heroicons_outline:eye" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="showbuiltPage('uniform', 'built-in/uniform-form' )"></mat-icon>&nbsp;
+                                                <mat-icon svgIcon="heroicons_outline:share" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="shreBuiltPage('Uniform Form', guardlist, 'uniform-form')"></mat-icon>
+                                            </td>
+                                        </tr> -->
+                                        <!-- <tr>
+                                            <td>Emergency Contact</td>
+                                            <td>
+                                                <mat-icon svgIcon="heroicons_outline:eye" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="showbuiltPage('emergency', 'built-in/emergency-contact')"></mat-icon>&nbsp;
+                                                <mat-icon svgIcon="heroicons_outline:share" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="shreBuiltPage('Emergency Contact Form', guardlist, 'emergency-contact')"></mat-icon>
+                                            </td>
+                                        </tr> -->
+                                        <!-- <tr>
+                                            <td>References</td>
+                                            <td>
+                                                <mat-icon svgIcon="heroicons_outline:eye" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="showbuiltPage('references', 'built-in/refrences-form')"></mat-icon>&nbsp;
+                                                <mat-icon svgIcon="heroicons_outline:share" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="shreBuiltPage('Reference Form', guardlist, 'refrences-form')"></mat-icon>
+                                            </td>
+                                        </tr> -->
+                                        <!-- <tr>
+                                            <td>Personal References</td>
+                                            <td>
+                                                <mat-icon svgIcon="heroicons_outline:eye" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="showbuiltPage('personal', 'built-in/personal-refrence-form')"></mat-icon>&nbsp;
+                                                <mat-icon svgIcon="heroicons_outline:share" style="cursor: pointer;"
+                                                    *ngIf="adminPermissions && adminPermissions.actionsObject.read" (click)="shreBuiltPage('Personal Reference Form', guardlist, 'personal-refrence-form')"></mat-icon>
+                                            </td>
+                                        </tr> -->
+                                    </tbody>
+                                </table>
+                            </mat-tab>
+                        </mat-tab-group>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--form builder for create/update create new-->
+<ng-template #formtemp let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Form Template</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form-builder [form]="form" (change)="onChange($event)"></form-builder>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn" (click)="save()">Save</button>
+    </div>
+</ng-template>
+<!--modal end-->
+
+
+<!--show guard list modal start-->
+<ng-template #guardlist let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{nameValue || formtype}}</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body p-0 my-3">
+        <div class="row mx-2">
+            <div class="col-6">
+                <div class="row">
+                    <mat-form-field class="fuse-mat-rounded state">
+                        <mat-select [placeholder]="'Select state...'" #state (selectionChange)="getState(state.value)">
+                            <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <app-select-multiple-customer signleDouble="yes" (selectedCustomer)="receiveDataFromChild($event)"
+                        class="select_job_roster" [dataArray]="customers"
+                        [placeholderText]="'Select Customers'"></app-select-multiple-customer>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-2" style="margin-top: 10px;">
+            <app-select-multiple-site (selectedSite)="receiveDataFromChildSite($event)"
+                class="select_job_roster site-job-new-roster" [placeholderText]="'Select Sites'"
+                [dataArray]="sitesList"></app-select-multiple-site>
+        </div>
+
+        <div class="row mx-2" style="margin-top: 10px;">
+            <app-select-multiple-guards signleDouble="yes" (selectedUsers)="receiveDataFromGuards($event)"
+                [dataArray]="guardList"
+                [placeholderText]="'Select Staff'"></app-select-multiple-guards>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="save_btn" (click)="SendEmail()">Send</button>
+    </div>
+</ng-template>
+
+
+<ng-template #formView let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{nameValue}}</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <formio [form]="formDatas" [options]="{ readOnly: true, noeval: true }"></formio>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="modal.dismiss()">Close</button>
+    </div>
+</ng-template>
+<!--modal end-->
+
+
+<ng-template #guardForm let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Staff List</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <h4>Form sent to</h4>
+        <div class="table-wrapper" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px;">
+            <table class="table">
+                <thead>
+                    <th>Staff Name</th>
+                    <th>Contact No</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of history">
+                        <td>{{data.guard_details.name}}</td>
+                        <td>{{data.guard_details.phone}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h4>Form seen by</h4>
+        
+        <div class="table-wrapper" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px;">
+            <table class="table">
+                <thead>
+                    <th>Staff Name</th>
+                    <th>Contact No</th>
+                </thead>
+                <tbody style="overflow-y: scroll;">
+                    <tr *ngFor="let history of clickedHistory">
+                        <td>{{history.guard_details.name}}</td>
+                        <td>{{history.guard_details.phone}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn" (click)="modal.dismiss('Cross click')">Close</button>
+    </div>
+</ng-template>

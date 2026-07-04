@@ -1,0 +1,259 @@
+/*******************************
+* MODAL AS LEFT/RIGHT SIDEBAR
+* Add "left" or "right" in modal parent div, after class="modal".
+* Get free snippets on bootpen.com
+*******************************/
+.add-document-sticky{
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #ffffff;
+}
+.modal.left .modal-dialog,
+.modal.right .modal-dialog {
+    position: fixed;
+    margin: auto;
+    width: 320px;
+    height: 100vh;
+    -webkit-transform: translate3d(0%, 0, 0);
+    -ms-transform: translate3d(0%, 0, 0);
+    -o-transform: translate3d(0%, 0, 0);
+    transform: translate3d(0%, 0, 0);
+}
+
+.modal.left .modal-content,
+.modal.right .modal-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.modal.left .modal-body,
+.modal.right .modal-body {
+    padding: 15px 15px 80px;
+}
+
+
+
+/*Right*/
+.modal.right.fade .modal-dialog {
+    right: -320px;
+    -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+    -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+    -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+    transition: opacity 0.3s linear, right 0.3s ease-out;
+}
+
+.modal.right.fade.in .modal-dialog {
+    right: 0;
+}
+
+/* ----- MODAL STYLE ----- */
+.modal-content {
+    border-radius: 0;
+    border: none;
+}
+
+/* ----- v CAN BE DELETED v ----- */
+
+.main {
+
+    //position: absolute;
+    .header {
+
+        align-items: center;
+        padding: 12px 0px 0px 0px;
+
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #ffffff;
+        border-bottom: 1px solid rgba(63, 70, 72, .5);
+
+        .icon {
+
+            font-size: 28px;
+            padding: 15px;
+            color: rgba(63, 70, 72, .5);
+        }
+
+        h3 {
+            color: #3f464880;
+            font-size: 18px;
+        }
+    }
+
+    .body {
+        z-index: 2;
+        flex: 1;
+        margin-top: 20px;
+        height: 67vh;
+        overflow-y: auto;
+        overflow-x: clip;
+
+        .example-form {
+            min-width: 150px;
+            max-width: 500px;
+            width: 80%;
+            mat-form-field{
+                width: 100%;
+            }
+
+            .example-full-width {
+
+                width: 100%;
+                padding: 12px;
+
+                textarea {
+                    height: 30vh;
+                    width: 32vw;
+                    // min-height: 150px;
+                }
+            }
+            .hidden {
+                display: none;
+              }
+        }
+    }
+}
+
+.calender {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 5px 0;
+
+    .buttons {
+        font-size: 13px;
+        width: 100%;
+
+        .expiry,
+        .frequency {
+            padding: 5px;
+            width: 27vw;
+            margin-top: 9px;
+
+            p
+             {
+                border-radius: 25px;
+                margin: 0;
+                padding: 7px;
+                margin-right: 6px;
+                font-size: 12px !important;
+            }
+            input{
+                border: 0.5px solid #3f464880;
+    padding: 2px 9px;
+    border-radius: 18px;
+            }
+
+            button {
+                margin-left: 15px;
+            }
+
+            .form-select-sm {
+                padding-top: 0.25rem;
+                padding-bottom: 0.25rem;
+                padding-left: 0.4rem;
+                font-size: .775rem;
+                border-radius: 2.25rem;
+                width: 83px;
+            }
+        }
+    }
+
+    // .frequency{
+
+    // }
+}
+
+.footer {
+    position: sticky;
+    bottom: 0px;
+    background-color: #ffffff;
+    z-index: 10;
+    height: 40px;
+    width: 100%;
+    border-top: 1px solid #e1e1e1;
+    padding: 27px 25px;
+    button {
+        border-radius: 3.25rem;
+        border: 1px solid #dbdee0;
+        height: 40px;
+        padding-inline: 16px;
+        min-width: 64px;
+    }
+
+    .active {
+        background: #fff;
+        color: #c1c5ca;
+    }
+}
+
+.documentOptions_section {
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    // margin: 5px 0px 5px 11px;
+    position: relative;
+    border: none;
+    img{
+        object-fit: fill;
+        height: 50vh;
+    }
+}
+
+.document_content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgb(165 165 165 / 42%);
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+
+    .example-button-row {
+
+        .example-flex-container {
+            position: absolute;
+            top: 30%;
+            width: 100%;
+            z-index: 11;
+
+            .example-button-container {
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                border-radius: 50%;
+
+                button {
+                    align-items: center;
+                    padding: 16px;
+                    display: flex;
+                    justify-content: center;
+                    border-radius: 50%;
+                    background-color: white;
+
+                    mat-icon {
+                        color:white !important;
+                    }
+                }
+            }
+        }
+    }
+}
+.add-document-footer{
+    position: absolute;
+    bottom: 0;
+    right: 5px;
+    width: 98%;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+}
+.add-document-body{
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 80vh;
+    margin-bottom: 20px;
+}

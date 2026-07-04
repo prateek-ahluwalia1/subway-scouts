@@ -1,0 +1,44 @@
+<h1 mat-dialog-title>Add New Project</h1>
+<div mat-dialog-content>
+    <form  novalidate (ngSubmit)="saveProject()" [formGroup]="projectForm">
+        <div class="col-12 p-0 pr-4">
+            <div class="row">
+                <mat-form-field class="form-field w-100" appearance="outline">
+                    <mat-label>Title</mat-label>
+                    <input matInput id="title" type="text" placeholder="Title (required)" formControlName="title" />
+                    <mat-error *ngIf="displayMessage.title">
+                        {{displayMessage.title}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="row">
+                <mat-form-field class="form-field w-100" appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput placeholder="Project description" formControlName="description" ></textarea>
+                </mat-form-field>
+            </div>
+
+            <div class="row my-2">
+                <mat-form-field class="form-field w-100" appearance="outline">
+                    <mat-label>Add Tags</mat-label>
+                    <mat-chip-list #chipList1>
+                        <mat-chip *ngFor="let tag of tags" [selectable]="selectable" [removable]="removable"
+                            (removed)="remove(tag)">
+                            {{tag.tag}}
+                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input placeholder="Add tag..." [matChipInputFor]="chipList1"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                </mat-form-field>
+            </div>
+
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close color="warn" >Cancel</button>
+    <button type="submit" (click)="saveProject()" [disabled]='!projectForm.valid' mat-button cdkFocusInitial style="background-color:#e07c9e">Submit</button>
+</div>

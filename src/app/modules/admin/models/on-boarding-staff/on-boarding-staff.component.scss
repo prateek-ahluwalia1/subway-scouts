@@ -1,0 +1,62 @@
+$primary-color: var(--primary_color, #01A37E);
+$color-secondary: var(--color-secondary, hsl(218, 33%, 18%));
+$color-light-button: var(--color-light-button, #01a37e2e);
+.onboard-field1 {
+    padding: 0 17px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.onboard-field2 {
+    padding: 0 17px;
+    display: flex;
+    justify-content: space-around;
+
+    mat-form-field {
+        width: 46%;
+    }
+}
+
+mat-dialog-title {
+    padding: 30px;
+}
+
+.onboard-field3 {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 17px;
+
+    mat-form-field {
+        width: 29%;
+    }
+}
+
+.onBoardingClose {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: $primary-color;
+    color: #fff;
+    margin-bottom: 20px;
+
+    .mat-icon {
+        cursor: pointer;
+    }
+}
+
+.onboard-field4 {
+    padding: 0 34px;
+    padding-bottom: 5px;
+
+    mat-form-field {
+        width: 100%;
+    }
+}
+
+.error {
+    padding: 10px;
+    color: red;
+    margin-left: 24px;
+}

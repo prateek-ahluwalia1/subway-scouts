@@ -1,0 +1,155 @@
+<div class="container-fluid main-body-watermark">
+    <div class="row-center"
+   
+    >
+     <div class="form-builder-header mt-10 pt-2">
+        <div class="d-flex flex-row" [ngStyle]="{ 'justify-content': logoData[0]?.logoAlign }">
+            <div class="form-builder-logo">
+              <img *ngIf="logo" class="logo" src="{{ logo }}" [style.width.%]="logoData[0].logoSize">
+            </div>
+          </div>
+     </div>
+      
+     
+   <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()" class="container form-builder-form mt-4" 
+   [style.background-color]="backgroundColor"
+   [style.background-image]="backgroundImage ? 'url(' + backgroundImage + ')' : 'none'"
+   [style.opacity]="backgroundOpacity" [style.color]="textColor"
+   >
+            <div formArrayName="fields">
+                <div *ngFor="let element of dynamicForm?.get('fields')?.controls; let i = index" [formGroupName]="i" @zoomIn>
+                   <ng-container *ngIf="element.get('type')?.value">
+                    <ng-container [ngSwitch]="element.get('type').value">
+                        <div *ngSwitchCase="'heading'" class="form-group row">
+                            <div class="col-12">
+                                <h2>{{ element.get('label')?.value }}</h2>
+                            </div>
+                            <hr>
+                        </div>
+
+                        <div *ngSwitchCase="'single'" class="form-element">
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <label>{{ element.get('label')?.value }}</label>
+                                    <ng-container [ngSwitch]="element?.get('name')?.value">
+                                        <textarea *ngSwitchCase="'textarea'"  class="form-control" formControlName="value" [placeholder]="element.get('placeholder')?.value" rows="3" [readonly]="element.get('properties').value?.readonly"></textarea>
+
+                                        <!-- <input *ngSwitchCase="'textarea'" class="form-control" formControlName="value" [placeholder]="element.get('placeholder')?.value" rows="3" /> -->
+                                        <!-- <input *ngSwitchCase="'signature'" class="form-control" type="button" (click)="openSignaturePad(i)" value="Sign" /> -->
+                                        <input *ngSwitchDefault class="form-control" [type]="element?.get('properties')?.value.inputType || 'text'" formControlName="value" [placeholder]="element.get('placeholder')?.value" [readonly]="element.get('properties').value?.readonly"/>
+                                        <ng-container *ngSwitchCase="'signature'" >
+                                            <div class="signature-container">
+                                                <signature-pad [options]="signaturePadOptions"></signature-pad>
+                                            </div>
+                                            <div class="buttons-signature">
+                                                <mat-icon svgIcon="mat_outline:clear" (click)="clearSignature()"
+                                                    matTooltip="Clear Signature"></mat-icon>
+                                                <mat-icon svgIcon="mat_outline:check" (click)="savePad()"
+                                                    matTooltip="Save Signature"></mat-icon>
+                                            </div>
+                                        </ng-container>
+                                        <div *ngIf="element.get('value')?.errors && element.get('value')?.touched" class="invalid-feedback">
+                                            <div *ngIf="element.get('value')?.errors.required">This field is required.</div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngSwitchCase="'group'" class="form-group row">
+                            <ng-container formArrayName="fields">
+                                <div *ngFor="let subField of element.get('fields').controls; let j = index" [formGroupName]="j" class="col-md-6">
+                                    <label>{{ subField.get('label').value }}</label>
+                                    <input class="form-control" [type]="subField.get('properties').value.inputType || 'text'" formControlName="value" [placeholder]="subField.get('placeholder').value" [readonly]="subField.get('properties').value?.readonly"/>
+                                    <div *ngIf="subField.get('value').errors && subField.get('value').touched" class="invalid-feedback">
+                                        <div *ngIf="subField.get('value').errors.required">This field is required.</div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+
+                        <div *ngSwitchCase="'dropdown'" class="form-group row">
+                          <div class="col-12 position-relative">
+                            <label>{{ element.get('label').value }}</label>
+                            <div class="d-flex align-items-center">
+                              <select class="form-control" formControlName="value">
+                                <option *ngFor="let option of element.get('options').value" [value]="option.text">{{ option.text }}</option>
+                              </select>
+                              <div class="dropdown-arrow">
+                                <i class="fas fa-chevron-down"></i> 
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngSwitchCase="'PDFRadioGroup'" class="form-group row">
+                          <div class="col-12">
+                            <label>{{ element.get('label').value }}</label>
+                            <div *ngFor="let option of element.get('options').value">
+                              <input type="radio" [formControlName]="'value'" [value]="option.text"> {{ option.text }}
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngSwitchCase="'submit'" class="form-group row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">{{ element.get('label').value }}</button>
+                            </div>
+                        </div>
+                    </ng-container>
+                   </ng-container>
+                   
+                </div>
+            </div>
+        </form>
+      <div class="row footer">
+        <div *ngIf="logo" class="col-4" style="margin-top: 15px;">
+          <img src="{{ logo }}" style="height: 100px; width: 110px; margin-bottom: 0px;">
+          <p>© 2023 The Scouts.<br>All rights reserved.</p>
+        </div>
+        <div class="col-4">
+          <h5 class="heading">Get in Touch</h5>
+          <div class="row">
+            <div class="col-2">
+              <mat-icon svgIcon="mat_outline:location_on" class="location"></mat-icon>
+            </div>
+            <div class="col-10">
+              <p>11/29 Richards Road, Hoppers Crossing Victoria 3029, Australia</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-2">
+              <mat-icon svgIcon="mat_outline:email" class="email"></mat-icon>
+            </div>
+            <div class="col-10">
+              <p style="word-wrap: break-word;">info@247staffingsolution.com.au</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-2">
+              <mat-icon svgIcon="mat_outline:phone" class="contact"></mat-icon>
+            </div>
+            <div class="col-10">
+              <p>+61 1300 550 401</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 sociallinks">
+          <a href="https://twitter.com/247_staffing" target="_blank">
+            <i class="fa-brands fa-twitter fa-xl"></i>
+          </a>
+          <a href="https://m.facebook.com/247staffingsolutions/" target="_blank">
+            <i class="fa-brands fa-facebook-f fa-xl"></i>
+          </a>
+          <a href="https://www.linkedin.com/company/247-staffing-solutions/" target="_blank">
+            <i class="fa-brands fa-linkedin fa-2xl"></i>
+          </a>
+          <a href="https://www.instagram.com/247staffingsolutions/" target="_blank">
+            <i class="fa-brands fa-instagram fa-2xl"></i>
+          </a>
+          <a href="https://www.youtube.com/channel/UCAcBUKUBeplgXO7t6tbUkTg" target="_blank">
+            <i class="fa-brands fa-youtube fa-2xl"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  

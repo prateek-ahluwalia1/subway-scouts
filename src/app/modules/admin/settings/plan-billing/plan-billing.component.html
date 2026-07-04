@@ -1,0 +1,44 @@
+<section class="app">
+    
+    <h4 class="gray-color">If you can't find a solution to your problems in our <span class="blue-color"><i class="fa fa-rocket"></i>knowledgebase</span>, you can submit a ticket by selecting the appropriate department below</h4>
+    <article (click)="sendDataToParent('Sales')" class="feature1">
+        <input type="radio" id="feature1" name="features" />
+        <div>
+            <span>
+                Sales<br />
+                <!-- You can submit all sales related questions here -->
+            </span>
+        </div>
+    </article>
+
+    <article (click)="sendDataToParent('Support')" class="feature2">
+        <input type="radio" id="feature2" name="features" />
+        <div>
+            <span>
+                Support<br />
+                <!-- You can submit all your support related questions here -->
+            </span>
+        </div>
+    </article>
+
+    <article (click)="sendDataToParent('Abuse')" class="feature3">
+        <input type="radio" id="feature3" name="features" />
+        <div>
+            <span>
+                Abuse<br />
+                <!-- You can report abuse here -->
+            </span>
+        </div>
+    </article>
+
+    <article (click)="sendDataToParent('DMCA')" class="feature4">
+        <input type="radio" id="feature4" name="features" />
+        <div>
+            <span>
+                DMCA<br />
+                <!-- You can submit all DMCA related issues here -->
+            </span>
+        </div>
+    </article>
+
+</section>

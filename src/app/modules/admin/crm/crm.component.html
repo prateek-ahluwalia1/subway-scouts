@@ -1,0 +1,29 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <!-- Main -->
+    <div class="flex-auto p-6">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+            <div class="com-main" style="border-radius: 10px;">
+                <div class="nav rounded-2xl">
+                    <h4>CRM Portal</h4>
+                </div>
+                <div class="main p-6 w-100">
+                    <div class="row main_inner">
+                        <div class="card p-0" *ngFor="let crm of crm">
+                            <img class="card-img-top" [src]="crm.image" alt="Card image">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ crm.name }}</h4>
+                                <p class="card-text">{{ crm.text }}</p>
+                                <div class="actions">
+                                    <button (click)="crmHead(crm.url)" class="accept">
+                                        Access Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

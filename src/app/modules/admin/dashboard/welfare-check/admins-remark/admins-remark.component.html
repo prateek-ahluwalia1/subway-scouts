@@ -1,0 +1,23 @@
+<div class="container">
+    <table class="table">
+        <thead style="background-color: #DDF4EF; width: 100%;">
+            <th>Admin Name</th>
+            <th>Remarks</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let note of adminNotes">
+                <td>{{note.admin_name}}</td>
+                <td>{{note.note}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<form [formGroup]="AddAdminRemark">
+    <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Write a Note:</mat-label>
+        <input matInput formControlName="note">
+        <mat-error *ngIf="AddAdminRemark.get('note').hasError('required') && AddAdminRemark.get('note').touched">
+            Note is required.
+        </mat-error>
+    </mat-form-field>
+</form>

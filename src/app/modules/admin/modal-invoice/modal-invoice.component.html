@@ -1,0 +1,192 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <div class="w-100 mt-3 pe-3 d-flex justify-content-end">
+        <mat-icon role="button" (click)="close()">close</mat-icon>
+    </div>
+    <!-- Main -->
+    <div class="flex-auto p-6">
+        <!-- CONTENT GOES HERE -->
+        <div class="invoice container" #modalContent style="padding-left: 7%;padding-top: 50px;padding-right: 7%;">
+            <div class="row justify-content-between">
+                <div class="col-9">
+                    <h4>INVOICE</h4>
+                </div>
+                <div class="col-3 logo" style="text-align: -webkit-center">
+                    <img src="assets/images/logo/sco1.png" alt="Company Logo">
+                </div>
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <h5>From:</h5>
+                        <p>The Scouts</p>
+                        <p>info@247staffingsolutions.com.au</p>
+                        <p style="word-wrap:break-word;">11/29 Richards Road, Hoppers Crossing
+                            Victoria 3029, Australia</p>
+                    </div>
+                    <div class="col-6">
+                        <h5>To:</h5>
+                        <p>{{ fromParent?fromParent[0].customer_name:'User' }}</p>
+                        <p>Info@gmail.com</p>
+                        <p> Unit 1/23 Hastings Road, Melbourne 3000,
+                            Victoria, Australia.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <h5>Dear {{ fromParent?fromParent[0].customer_name:'User' }}</h5>
+                    <p class="text-muted fw-bold">Here are your roster details. We thank you for use our services.</p>
+                </div>
+
+                <div class="w-100 buhaha h-6"></div>
+
+                <div class="row mt-2">
+                    <div class="col-3">Date</div>
+                    <div class="col-3">{{ date }}</div>
+                    <div class="col-3">Invoice ID</div>
+                    <div class="col-3">#INV-000414</div>
+                </div>
+
+                <!-- <div class="row mt-2">
+                    <p class="m-0 text-muted">Address</p>
+                </div>
+                <div class="row">
+                    <p class="">
+                        Unit 1/23 Hastings Road,
+                        Melbourne 3000,
+                        Victoria,
+                        Australia.
+                    </p>
+                </div> -->
+
+                <!-- Table -->
+                <div class="col-12 table-responsive mb-10 px-0">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Hours</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let data of fromParent">
+                            <tr>
+                                <td scope="row" class="pe-7 pl-0 border-0">
+                                    <div class="item">
+                                        <div class="row align-items-center">
+                                            <p>{{ data.site_name }}</p>
+                                            <div class="d-flex justify-content-between p-2 bg-green-50 rounded">
+                                                <span>Division</span>
+                                                <span>Hours</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between p-2 bg-gray-100 rounded">
+                                                <span>Morning</span>
+                                                <span>{{ data.morning_hours }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between p-2 bg-gray-100 rounded">
+                                                <span>Night</span>
+                                                <span>{{ data.night_hours }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between p-2 bg-gray-100 rounded">
+                                                <span>Saturday</span>
+                                                <span>{{ data.saturday_hours }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between p-2 bg-gray-100 rounded">
+                                                <span>Sunday</span>
+                                                <span>{{ data.sunday_hours }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between p-2 bg-gray-100 rounded">
+                                                <span>Public Holiday</span>
+                                                <span>{{ data.ph_hours }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="ps-0 border-0">
+                                    <input class="form-control" type="number" disabled [value]="data.hours" min="0">
+                                </td>
+                                <td class="border-0"><input class="form-control" [disabled]="true" type="text" [value]="data.day_rate">
+                                </td>
+                                <td class="pt-4 text-end text-nowrap border-0">
+                                    $ <span>{{ data.total_amount }}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <!-- <div class="row w-100 justify-content-between haha  p-3">
+                    <div class="col-md-6 text-muted"></div>
+                    <div class="col-sm-2 text-muted text-end"></div>
+                    <div class="col-sm-2 text-muted text-end">Subtotal</div>
+                    <div class="col-sm-2 text-muted text-end">$264.00</div>
+                </div>
+                <div class="row w-100 justify-content-between haha  p-3">
+                    <div class="col-md-6 text-muted"></div>
+                    <div class="col-sm-2 text-muted text-end"></div>
+                    <div class="col-sm-2 text-muted text-end">VAT (0%)</div>
+                    <div class="col-sm-2 text-muted text-end">$0.00</div>
+                </div>
+                <div class="row w-100 justify-content-between haha  p-3">
+                    <div class="col-md-6 text-muted"></div>
+                    <div class="col-sm-2 text-muted text-end"></div>
+                    <div class="col-sm-2 text-muted text-end">Shipping Rate</div>
+                    <div class="col-sm-2 text-muted text-end">$5.00</div>
+                </div> -->
+                <div class="row w-100 justify-content-between p-3">
+                    <div class="col-md-6 text-muted"></div>
+                    <div class="col-sm-2 text-muted text-end"></div>
+                    <div class="col-sm-2  text-end">
+                        <h5>Grand Total</h5>
+                    </div>
+                    <div class="col-sm-2  text-end">
+                        <h5>${{ grand_total }}</h5>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="createPdf()">Save pdf</button>
+        <button type="button" class="btn btn-success" (click)="sendInvoice(addGuard)">Send Invoice</button>
+    </div>
+</div>
+
+
+
+<ng-template #addGuard let-modal>
+
+    <div class="modal-header">
+        <h5 class="modal-title">Add Email</h5>
+        <button type="button" class="close" style="color: white;opacity: 1;" data-dismiss="modal"
+            (click)="close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <mat-form-field class="example-chip-list">
+                <mat-chip-list #chipList>
+                    <mat-chip *ngFor="let newStaff of newStaff" [selectable]="selectable" [removable]="removable"
+                        (removed)="remove(newStaff,'newStaff')">
+                        {{newStaff.email}}
+                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="New Guards..." [matChipInputFor]="chipList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                        (matChipInputTokenEnd)="add($event,'newStaff')">
+                </mat-chip-list>
+            </mat-form-field>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="send()">Send</button>
+        <button type="button" class="btn btn-secondary" (click)="dismiss()">Close</button>
+    </div>
+
+
+</ng-template>

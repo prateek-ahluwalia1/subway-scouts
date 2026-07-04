@@ -1,0 +1,206 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-3 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <!-- Title -->
+        <div class="flex-1 min-w-0">
+            <h2 class="text-3xl tracking-tight leading-7 truncate">
+                {{board.title}}
+            </h2>
+        </div>
+        <!-- Actions -->
+        <!-- <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <a
+                mat-stroked-button
+                [routerLink]="['..']">
+                <mat-icon
+                    class="icon-size-5 mr-2"
+                    [svgIcon]="'heroicons_solid:view-boards'"></mat-icon>
+                Boards
+            </a>
+            <button
+                class="ml-3"
+                mat-stroked-button>
+                <mat-icon
+                    class="icon-size-5 mr-2"
+                    [svgIcon]="'heroicons_solid:cog'"></mat-icon>
+                Settings
+            </button>
+        </div> -->
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto p-6 sm:p-8 sm:pt-4 overflow-y-auto" cdkScrollable>
+
+        <!-- Lists -->
+        <div class="flex" cdkDropList [cdkDropListData]="board.lists" [cdkDropListOrientation]="'horizontal'"
+            (cdkDropListDropped)="listDropped($event)">
+
+            <!-- Group all cdkDropList's after this point together so that the cards can be transferred between lists -->
+            <div class="flex items-start" cdkDropListGroup>
+
+                <!-- List -->
+                <ng-container *ngFor="let list of board.lists; trackBy: trackByFn">
+                    <div class="flex-0 w-72 p-2 rounded-2xl bg-default" cdkDrag [cdkDragLockAxis]="'x'">
+
+                        <div class="flex items-center justify-between" cdkDragHandle>
+                            <div
+                                class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                    [value]="list.title" (focusout)="updateListTitle($event, list)"
+                                    (keydown.enter)="listTitleInput.blur()" #listTitleInput>
+                            </div>
+                            <div
+                                class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
+                                {{list.cards.length}}
+                            </div>
+                            <div class="ml-1">
+                                <button class="w-8 h-8 min-h-8" mat-icon-button [matMenuTriggerFor]="listMenu">
+                                    <mat-icon class="icon-size-5"
+                                        [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                                </button>
+                                <mat-menu #listMenu="matMenu">
+                                    <button mat-menu-item (click)="renameList(listTitleInput)">
+                                        <mat-icon class="icon-size-5"
+                                            [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                                        Rename list
+                                    </button>
+                                    <button mat-menu-item (click)="deleteList(list.id)">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                        Delete list
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+
+                        <!-- Cards -->
+                        <div
+                            class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border no-underline">
+                            <div [id]="list.id" class="p-3 pb-0" cdkDropList [cdkDropListData]="list.cards"
+                                (cdkDropListDropped)="cardDropped($event)">
+
+                                <!-- Card -->
+                                <ng-container *ngFor="let card of list.cards; trackBy: trackByFn">
+                                    <a class="flex flex-col items-start mb-3 p-3 space-y-3 shadow rounded-lg overflow-hidden bg-card no-underline text-black cursor-pointer"
+                                        (click)="openCardDetail(card.id)" cdkDrag>
+                                        <!-- Cover image -->
+                                        <ng-container *ngIf="card.coverImage">
+                                            <div class="-mx-5 -mt-5 mb-2">
+                                                <img class="w-full object-cover" [src]="card.coverImage">
+                                            </div>
+                                        </ng-container>
+                                        <!-- Title -->
+                                        <div class="text-lg font-medium leading-5">{{card.customer?.name}}</div>
+                                        <div class="text-lg fs-6 leading-5">{{card.description}}</div>
+                                        <!-- Labels -->
+                                        <ng-container *ngIf="card.labels.length">description
+                                            <div>
+                                                <div class="flex flex-wrap -mx-1 -mb-2">
+                                                    <ng-container *ngFor="let label of card.labels; trackBy: trackByFn">
+                                                        <div
+                                                            class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                            {{label.title}}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <!-- Due date -->
+                                        <div class="row w-100">
+                                            <div class="col-6">
+                                                <div class="flex rounded text-sm font-medium leading-5">
+                                                    <ng-container *ngIf="card.salesperson">
+                                                        <div class="rounded-circle text-sm font-medium d-flex justify-content-center align-items-center text-uppercase"
+                                                            style="width: 25px; height: 25px; background-color: #e8e8e8"
+                                                            (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false">
+                                                            {{ getInitials(card.salesperson?.name) }}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 flex align-items-end justify-content-end">
+                                                <div
+                                                    class="flex rounded text-sm font-medium leading-5 text-secondary align-items-center">
+                                                    <div class="mr-1">
+                                                        {{ card.comments_count }}
+                                                    </div>
+                                                    <mat-icon class="icon-size-4 text-current"
+                                                        [svgIcon]="'mat_outline:mode_comment'"></mat-icon>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Custom tooltip -->
+                                        <div *ngIf="card.salesperson && showTooltip" class="custom-tooltip leading-5">
+                                            <img src="https://img.freepik.com/free-icon/user_318-159711.jpg"
+                                                alt="User Image" class="user-image">
+                                            <div
+                                                class="flex rounded text-sm font-medium leading-5 text-secondary align-items-center my-2">
+                                                <mat-icon class="icon-size-4 text-current"
+                                                    svgIcon="feather:user"></mat-icon>
+                                                <div class="ml-3">
+                                                    {{ card.salesperson?.name }}
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                class="flex rounded text-sm font-medium leading-5 text-secondary align-items-center my-2">
+                                                <mat-icon class="icon-size-4 text-current"
+                                                    svgIcon="feather:phone-call"></mat-icon>
+                                                <div class="ml-3">
+                                                    {{ card.salesperson?.phone }}
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                class="flex rounded text-sm font-medium leading-5 text-secondary align-items-center my-2">
+                                                <mat-icon class="icon-size-4 text-current"
+                                                    svgIcon="feather:mail"></mat-icon>
+                                                <div class="ml-3">
+                                                    {{ card.salesperson?.email }}
+                                                </div>
+                                            </div>
+                                            <!-- <button class="rounded-full p-2 bg-sky-500/100">View Profile</button> -->
+                                        </div>
+                                        <ng-container *ngIf="card.updated_at">
+                                            <div
+                                                class="flex items-center rounded text-sm font-medium leading-5 text-secondary"
+                                                [ngClass]="{'text-red-600': isOverdue(card.updated_at)}">
+                                                <mat-icon
+                                                    class="icon-size-4 text-current"
+                                                    [svgIcon]="'heroicons_outline:clock'"></mat-icon>
+                                                <div class="ml-1">
+                                                    {{card.updated_at | date: 'longDate'}}
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </a>
+                                </ng-container>
+                            </div>
+
+                            <!-- New card -->
+                            <scrumboard-board-add-card (saved)="addCard(list, $event)"
+                                [buttonTitle]="list.cards.length ? 'Add another customer' : 'Add a customer'">
+                            </scrumboard-board-add-card>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- New list -->
+                <scrumboard-board-add-list (saved)="addList($event)"
+                    [buttonTitle]="board.lists ? 'Add another list' : 'Add a list'">
+                </scrumboard-board-add-list>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Invisible router-outlet for ScrumboardCard component -->
+<div class="absolute invisible w-0 h-0 opacity-0 pointer-events-none">
+    <router-outlet></router-outlet>
+</div>

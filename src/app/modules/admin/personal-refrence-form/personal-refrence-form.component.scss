@@ -1,0 +1,47 @@
+app-form{
+    width: 100 !important;
+}
+:host{
+    width: 100% !important;
+    height: 100% !important;
+}
+.wrap_form{
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+}
+
+.content{
+    padding-left: 7%;
+    padding-right: 7%;
+    .logo{
+        margin-bottom: 28px;
+        img{
+            height: 8rem;
+            width: 8rem;
+        }
+    }
+
+    .bar{
+        background-color: #01A37E;
+        h5{
+            color: white;
+        }
+    }
+ul{
+    li{
+        list-style: disc;
+    }
+}
+.link{
+    color: #01A37E;
+}
+}
+
+.no-spin-box::-webkit-inner-spin-button,
+.no-spin-box::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

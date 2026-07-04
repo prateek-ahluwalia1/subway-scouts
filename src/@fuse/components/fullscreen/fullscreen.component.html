@@ -1,0 +1,21 @@
+<!-- Button -->
+<!-- <button
+    mat-icon-button
+    [matTooltip]="tooltip || 'Toggle Fullscreen'"
+    (click)="toggleFullscreen()">
+    <ng-container [ngTemplateOutlet]="iconTpl || defaultIconTpl"></ng-container>
+</button> -->
+
+<!-- Default icon -->
+<!-- <ng-template #defaultIconTpl>
+    <mat-icon [svgIcon]="'heroicons_outline:arrows-expand'"></mat-icon>
+</ng-template> -->
+
+<button mat-icon-button [matTooltip]="tooltip" (click)="toggleFullscreen()">
+    <ng-container [ngTemplateOutlet]="iconTpl || defaultIconTpl"></ng-container>
+</button>
+  
+  <!-- Default icon -->
+  <ng-template #defaultIconTpl>
+    <mat-icon>{{ _isFullscreen ? 'fullscreen_exit ' : 'fullscreen' }}</mat-icon>
+</ng-template>

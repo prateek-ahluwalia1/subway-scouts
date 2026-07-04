@@ -1,0 +1,79 @@
+<div class="card staff-confirmation-jobs" #fullScreen>
+    <div class="flex p-4 justify-between align-items-center font-size-lg text-capitalize font-weight-normal">
+        <span class="mr-2 opacity-7 fw-bold">
+            Shifts Confirmation 
+        </span>
+        <div class="flex align-items-center">
+            <mat-icon (click)="displayPrevWeek()">navigate_before</mat-icon>
+            <app-weekly-selection (startDate)="receiveStartDate($event)"
+                (endDate)="receiveEndDate($event)">
+            </app-weekly-selection>
+            <mat-icon (click)="displayNextWeek()">navigate_next</mat-icon>
+            <mat-icon svgIcon="mat_outline:open_in_full" class="icon-size-5 ml-2" (click)="openFullscreen()"></mat-icon>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full min-w-0 p-4">
+        <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden bg-indigo-50 text-indigo-800 dark:bg-white dark:bg-opacity-5 dark:text-indigo-400">
+            <div class="flex flex-col items-center mt-2">
+                <div class="text-5xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">
+                    {{confirmShiftCount}}
+                </div>
+                <div class="text-sm font-medium text-blue-600 dark:text-blue-500">Confirmed Shifts</div>
+            </div>
+        </div>
+        <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col items-center mt-2">
+                <div class="text-5xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">
+                    {{rejectedShiftsCount}}
+                </div>
+                <div class="text-sm font-medium text-red-600 dark:text-red-500">Rejected Shifts</div>
+            </div>
+        </div>
+        <div
+            class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden bg-green-50 text-green-800 dark:bg-white dark:bg-opacity-5 dark:text-green-500">
+            <div class="flex flex-col items-center mt-2">
+                <div class="text-5xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">
+                    {{unconfirmShiftCount}}
+                </div>
+                <div class="text-sm font-medium text-amber-600 dark:text-amber-500">Unconfirmed Shifts</div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row w-100 m-0 overflow-hidden">
+            <div class="col-6 m-0 p-0">
+                <p class="mb-4 bold">STAFF RESPONDED:</p>
+
+                <div class="flex flex-row">
+                    <div class="flex flex-wrap" *ngFor="let data of ConfirmstaffData.slice(0, 4); let i=index">
+                        <img class="w-10 h-10 rounded-full mx-1"
+                            [src]="'https://apis.thescouts.com.au/guard/' + data?.profile_image"
+                            (error)="handleBrokenImage($event)" [matTooltip]="data.first_name + ' ' + data.last_name"
+                        style="cursor: pointer; object-fit: cover;">
+                    </div>
+                </div>
+                <div class="flex flex-row items-center mt-2">
+                    <a class="px-3" mat-button [color]="'primary'" (click)="openLg('confirm')">
+                        See all
+                    </a>
+                </div>
+            </div>
+            <div class="col-6 m-0 p-0">
+                <p class="mb-4 bold">STAFF THAT NEED TO RESPOND:</p>
+                <div class="flex flex-row">
+                    <div class="flex flex-wrap" *ngFor="let value of UnConfirmStaffdata.slice(0, 5); let i = index">
+                        <img class="w-10 h-10 rounded-full mx-1"
+                            [src]="'https://apis.thescouts.com.au/guard/' + value?.profile_image"
+                            (error)="handleBrokenImage($event)" [matTooltip]="value.first_name + ' ' + value.last_name"
+                        style="cursor: pointer; object-fit: cover;">
+                    </div>
+                </div>
+                <div class="flex flex-row items-center mt-3">
+                    <a class="px-3" mat-button [color]="'primary'" (click)="openLg('unconfirmed')">
+                        See all
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

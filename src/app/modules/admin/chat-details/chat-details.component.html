@@ -1,0 +1,80 @@
+<div class="w-100 mt-3 pe-3 d-flex justify-content-end">
+    <mat-icon role="button" (click)="close()">close</mat-icon>
+</div>
+<div class="modal-body" #content>
+    <div class="header d-flex justify-content-between align-content-between">
+        <div class="logo ">
+            <img src="../../assets/images/logo/1651136562.jpg" alt="">
+        </div>
+        <div class="detail">
+            <h5 class="row"><strong class=" col-3">From: </strong>
+                <span class=" col-9">{{this.dates.from}}</span>
+            </h5>
+            <h5 class="row">
+                <strong class=" col-3 pe-0">To</strong>
+                <span class="pe-1 col-9"><strong>:</strong>{{this.dates.to}}</span>
+            </h5>
+            <h5 *ngIf="this.search_term">Chat for :{{this.search_term}}</h5>
+            <!-- <h6><strong>Name: </strong>{{}}</h6>
+       <h6><strong>Phone.no: </strong>{{}}</h6> -->
+
+
+
+        </div>
+
+    </div>
+
+    <div class="w-100 text-center title  mb-3">
+        <h3 class="text-break ">Chat History</h3>
+    </div>
+    <div class="bar mb-1"></div>
+    <!-- <div class="bar text-center text-light">
+        <h5>Chat</h5>
+    </div> -->
+
+    <section>
+        <div class="show_table">
+            <table class="datatables-sms table border-top">
+                <thead style="background-color: $color-light-button">
+                    <tr>
+                        <th style="width: 250px;">USER NAME</th>
+                        <th style="width: 128px; text-align: center;">DATE</th>
+                        <th style="width: 128px; text-align: center;">FROM</th>
+                        <th style="width: 128px; text-align: center;">TO</th>
+                        <th style="width: 90px;">STATUS</th>
+                        <th style="width: 350px;">BODY</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let sms of chats">
+                        <td>
+                            <div class="d-flex justify-content-left align-items-center">
+                                <div class="d-flex flex-column">
+                                    <span class="fw-semibold">{{mergeName(sms.first_name,sms.last_name)}}</span>
+                                    <small class="text-muted">{{sms.email}}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{date(sms.datetime)}}</td>
+                        <td>{{sms.from_number}}</td>
+                        <td>{{sms.to_number}}</td>
+                        <td>
+                            <div *ngIf="sms.direction == 'out'; else other_content">
+                                <span class="badge bg-success" style="padding-bottom: 7px;">{{sms.seen_status}}</span>
+                            </div>
+                            <ng-template #other_content><span class="badge bg-secondary"
+                                    style="padding-bottom: 7px;">{{sms.seen_status}}</span></ng-template>
+                        </td>
+                        <td style="overflow-wrap: anywhere;">{{sms.msg_body}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="createPdf()">Download Pdf</button>
+</div>

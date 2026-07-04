@@ -1,0 +1,52 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <div class="flex-auto p-6">
+        <div class="rounded-2xl common-style-for-cards">
+            <div class="user-main" style="border-radius: 10px;">
+                <div class="nav rounded-2xl">
+                    <h4>System Users</h4>
+                    <input type="text" name="text" placeholder="Search here" class="input" [(ngModel)]="searchText">
+                </div>
+                <div class="main pt-6 w-100">
+                    <div class="row main_inner w-100 m-0">
+                        <ng-container *ngFor="let user of users | nameFilter:searchText">
+                            <div class="card p-0" *ngIf="user.enabled">
+                                <img class="card-img-top" [src]="user.image" alt="Card image">
+                                <div class="card-body">
+                                    <h4 class="card-title">{{ user.name }}</h4>
+                                    <p class="card-text">{{ user.text }}</p>
+                                    
+                                </div>
+                                <div class="card-footer bg-transparent border-0 actions">
+                                    <button (click)="jobTracker(user.url)" class="accept">
+                                        Access Now
+                                    </button>
+                                    <button *ngIf="user.url !== 'potential-new-staff' &&
+                                        (user.url === 'admins' ? admin.create :
+                                        user.url === 'customers' ? customer.create :
+                                        user.url === 'contractor' ? contractor.create :
+                                        user.url === 'sales-person' ? salePerson.create :
+                                        user.url === 'staff' ? curStaff.create : false)"
+                                        [matMenuTriggerFor]="user.url == 'staff' ? newGuard : null" class="accept"
+                                        (click)="creatNow(user.url)">
+                                        Create New
+                                    </button>
+
+                                    <mat-menu #newGuard="matMenu">
+                                        <button mat-menu-item
+                                            (click)="createNewStaff('onBoarding')"><mat-icon>sentiment_very_satisfied</mat-icon>
+                                            <span>Quick Onboarding Staff</span>
+                                        </button>
+                                        <button mat-menu-item
+                                            (click)="createNewStaff('newStaff')"><mat-icon>people</mat-icon>
+                                            <span>Create New Staff</span>
+                                        </button>
+                                    </mat-menu>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

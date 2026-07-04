@@ -1,0 +1,138 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <!-- Main -->
+    <div class="flex-auto p-6">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+            <div class="leavemanag-main" style="border-radius: 10px;">
+                <div class="nav rounded-2xl">
+                    <h4>Leave Management</h4>
+                </div>
+
+                <div class="row main mx-1">
+                    <!-- abbr -->
+                    <div class="col-12">
+                        <div class="row ">
+                            <div class="col-3 p-2 ">
+                                <div class="items">
+                                    <p>WH = Worked Hours</p>
+                                </div>
+                            </div>
+                            <div class="col-3 p-2">
+                                <div class="items blue">
+                                    <p>AAL = Accumulated Annual Leaves</p>
+                                </div>
+                            </div>
+                            <div class="col-3 p-2 ">
+                                <div class="items grey">
+                                    <p>ASL = Accumulated Sick Leaves</p>
+                                </div>
+                            </div>
+                            <div class="col-3 p-2 ">
+                                <div class="items">
+                                    <p>UAL = Used Annual Leaves</p>
+                                </div>
+                            </div>
+                            <div class="col-3 p-2 ">
+                                <div class="items blue">
+                                    <p>USL = Used Sick Leaves</p>
+                                </div>
+                            </div>
+                            <div class="col-3 p-2 ">
+                                <div class="items grey">
+                                    <p>RAL = Remaining Anual Leaves</p>
+                                </div>
+                            </div>
+                            <div class="col-3 p-2 ">
+                                <div class="items blue">
+                                    <p>RSL = Remaining Sick Leaves</p>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <hr>
+                    </div>
+
+                    <!-- searchbar -->
+
+                    <div class="col-12 d-flex justify-content-end searchbar_main">
+                        <button *ngIf="adminPermissions && adminPermissions.create" (click)="openModal('','add')"
+                            class="btn btn-border-3" style="margin: 13px;">Add Leave
+                        </button>
+                        <input type="text" placeholder="Search here.." class="searchbar" [(ngModel)]="searchQuery">
+                        <mat-icon>search</mat-icon>
+                    </div>
+                </div>
+
+                <!-- guardslist -->
+                <div class="row main mx-2" style="background-color: white; border-radius: 10px;">
+                    <div class="col-12 p-0">
+                        <table class="table w-100">
+                            <thead class="guard_table">
+                                <tr class="table-row">
+                                    <th width="30%" scope="col">Staff</th>
+                                    <th scope="col">WH</th>
+                                    <th scope="col">AAL</th>
+                                    <th scope="col">ASL</th>
+                                    <th scope="col">UAL</th>
+                                    <th scope="col">USL</th>
+                                    <th scope="col">RAL</th>
+                                    <th scope="col">RSL</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody [@stagger]="guards.length">
+                                <ng-container *ngFor="let guard of filteredGuards | filter:searchQuery;let i = index">
+                                    <tr [@fadeIn]="''" [@stagger]="i">
+                                        <th scope="row">
+                                            <div class="item">
+                                                <div class="row align-items-center">
+
+                                                    <div class="col-3">
+                                                        <ng-container *ngIf="guard.profile_image">
+                                                            <img [src]="guard.profile_image" class="rounded-circle"
+                                                                alt=""
+                                                                style="width: 50px; height: 50px;object-fit: contain;">
+                                                        </ng-container>
+
+                                                        <ng-container *ngIf="!guard.profile_image">
+                                                            <div class="rounded-circle d-flex justify-content-center align-items-center text-uppercase font-weight-bold"
+                                                                style="width: 50px; height: 50px; background-color: #e8e8e8">
+                                                                {{ guard.first_name.charAt(0) }} {{
+                                                                guard.last_name?guard.last_name.charAt(0):'' }}
+                                                            </div>
+                                                        </ng-container>
+                                                        <!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg"> -->
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <p class="name">{{guard?.name}}</p>
+                                                        <p class="email">{{guard.email}}</p>
+                                                        <p class="phone">{{guard.phone}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <td>{{guard.wh}}</td>
+                                        <td>{{guard.AAL}}</td>
+                                        <td>{{guard.ASL}}</td>
+                                        <td>{{guard.UAL}}</td>
+                                        <td>{{guard.USL}}</td>
+                                        <td>{{guard.RAL}}</td>
+                                        <td>{{guard.RSL}}</td>
+                                        <td class="text-capitalize">{{guard.guard_status}}</td>
+                                        <td class="action_button">
+                                            <div *ngIf="adminPermissions && adminPermissions.create" class="acb d-flex justify-content-center align-items-center ">
+                                                <!-- <mat-icon>more_vert</mat-icon> -->
+                                                <p class="requests" (click)="openModal(guard, 'check')">{{guard.leave_requests}}</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

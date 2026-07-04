@@ -1,0 +1,59 @@
+.title-spacer {
+    flex: 1 1 auto;
+}
+
+.form-field {
+    width: 100%;
+    margin: 0 5px 0 5px;
+}
+
+.avatar-field {
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    margin-left: 50px;
+}
+
+.name-title {
+    border: 1px solid #CBD5E1;
+    /* height: 34px; */
+    padding: 8px;
+    position: relative;
+    top: -10px;
+    width: 84px;
+    border-radius: 5px;
+    height: 47px;
+}
+
+.time-picker-component {
+    display: flex;
+    align-items: center;
+}
+
+.time-input {
+    flex: 1;
+    margin-right: 8px;
+}
+
+.select_job_roster {
+    margin-top: -12px;
+}
+
+.table-container {
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    background-color: white;
+    /* Adjust this value if you have other content on the page */
+}
+
+.centered-table {
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    border: 1px solid #dee2e6;
+    margin: 0 auto;
+}
+
+.centered-table th,
+.centered-table td {
+    border: 1px solid #dee2e6;
+}

@@ -1,0 +1,75 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+  <div class="flex-auto p-2">
+    <div class="rounded-2xl common-admin-ticket-contractor">
+      <mat-card class='light' style="height: 100%;">
+
+        <mat-card-header>
+          <mat-card-title class="view-card-title">
+            <h3>{{ticketName }} Tickets</h3>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-toolbar class="primary">
+          <mat-toolbar-row>
+            <span class="title-spacer"></span>
+            <mat-form-field appearance="standard" class="search-form-fileld">
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event.target.value)">
+              <mat-icon>filter_list</mat-icon>
+            </mat-form-field>
+
+          </mat-toolbar-row>
+        </mat-toolbar>
+
+        <ng-container *ngIf="isShowSkelton">
+          <app-skelton></app-skelton>
+        </ng-container>
+        <mat-table #table [dataSource]="dataSource" matSort *ngIf="!isShowSkelton">
+          <ng-container matColumnDef="subject">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Subject </mat-header-cell>
+            <mat-cell *matCellDef="let ticket" class="cursor-pointer" (click)="goToChat(ticket)"> {{ticket.subject}}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+            <mat-cell *matCellDef="let ticket"> {{ticket.status }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="priority">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Priority </mat-header-cell>
+            <mat-cell *matCellDef="let ticket" class="cursor-pointer">
+              <span [ngClass]="getStatusClass(ticket.priority)"> {{ticket.priority}}</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+            <mat-cell *matCellDef="let ticket" class="cursor-pointer">
+              <span> {{ticket.name}}</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="sender_name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Last Reply </mat-header-cell>
+            <mat-cell *matCellDef="let ticket" class="cursor-pointer">
+              <span> {{ticket.sender_name}}</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="updated_at">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Last Updated </mat-header-cell>
+            <mat-cell *matCellDef="let ticket"> {{ticket.updated_at | date:'dd-MM-yyyy' }} </mat-cell>
+          </ng-container>
+
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator [pageSize]="20" [pageSizeOptions]="[5, 20]">
+        </mat-paginator>
+      </mat-card>
+      <!-- </mat-sidenav-container> -->
+
+    </div>
+  </div>
+
+
+</div>

@@ -1,0 +1,94 @@
+<div class="absolute inset-0 flex flex-col overflow-hidden main-body-watermark">
+  <div class="flex-auto p-3 overflow-auto">
+    <!-- CONTENT GOES HERE -->
+    <div class="rounded-2xl common-admin-customer-contractor mat-field-client">
+      <div class="container">
+        <!-- <h2>{{ title }} A Task</h2> -->
+        <div class="form-container p-4">
+          <form (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <label for="name">Task Owner:</label>
+                <input type="text" class="form-control" placeholder="Task Owner" [(ngModel)]="taskOwner"
+                  name="taskOwner" readonly>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="email">Subject:</label>
+                <input type="text" class="form-control" placeholder="Subject" [(ngModel)]="subject" name="subject">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 m-0 pr-0">
+                <label>Type:</label>
+                <ngx-select-dropdown #typeDropdown [config]="typeConfig" [(ngModel)]="selectedType"
+                  [options]="typeOptions" (change)="onTypeChange($event, typeDropdown)" name="type">
+                </ngx-select-dropdown>
+              </div>
+
+              <!-- Main dropdown -->
+              <!-- <div class="col-4 m-0 pl-0">
+                <label>Options:</label>
+                <ngx-select-dropdown #dropdown [config]="config" [(ngModel)]="selectedOption"
+                  [options]="dropdownOptions" (change)="onDropdownChange($event)" name="option">
+                </ngx-select-dropdown>
+              </div> -->
+
+
+              <div class="col-md-6 form-group">
+                <label for="due_date">Due Date:</label>
+                <input type="date" class="form-control" id="due_date" name="due_date" [(ngModel)]="dueDate">
+              </div>
+
+            </div>
+
+            <div class="row">
+              <!-- Status Dropdown -->
+              <div class="col-md-6 form-group">
+                <label for="status">Status:</label>
+                <select class="form-control" id="status" name="selectedStatus" [(ngModel)]="selectedStatus">
+                  <option *ngFor="let status of statuses" [value]="status.value">
+                    {{ status.label }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Priority Dropdown -->
+              <div class="col-md-6 form-group">
+                <label for="priority">Priority:</label>
+                <select class="form-control" [(ngModel)]="selectedPriority" name="priority">
+                  <option *ngFor="let priority of priorities" [ngValue]="priority">
+                    {{ priority.label }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+           
+            <div class="form-group">
+              <label for="description">Assign To Sales-Person:</label>
+              <app-select-multiple-guards signleDouble="no" style="position: relative;"
+              (selectedUsers)="receiveDataFromChildSingle($event)" class="select_job_roster w-100"
+              [dataArray]="salePerson" [placeholderText]="'Select an agent'"></app-select-multiple-guards>
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description Information:</label>
+              <textarea class="form-control" id="description" name="description" rows="3"
+                placeholder="Enter description..." [(ngModel)]="description"></textarea>
+            </div>
+
+            <div class="text-right mt-3">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-secondary ml-2">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+  <p style="color: white">Loading...</p>
+</ngx-spinner>

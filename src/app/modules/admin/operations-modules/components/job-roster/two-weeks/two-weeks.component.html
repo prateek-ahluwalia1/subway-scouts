@@ -1,0 +1,282 @@
+<!-- <div id="phone-container" [style.display]="showMobile ? 'block' : 'none'">
+    <button (click)="shideMobile()">
+        <mat-icon svgIcon="mat_outline:close"
+            style="position: absolute; top: 0; left: 48%;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;"></mat-icon>
+    </button>
+    <div id="phone"></div>
+</div> -->
+<table
+    class="table table-bordered table-responsive align-middle mb-0 bg-white two-week-table-jobroster common-one-two-week">
+    <thead>
+        <tr>
+            <th class="two-weeks-th">
+                <div class="search-here">
+                    <mat-icon svgIcon="feather:search" class="search-icon"
+                        style="color: #94a3b8 !important; margin:0 7px !important;"></mat-icon>
+                    <input matInput placeholder="Search..." name="search" [(ngModel)]="searchSites">
+                </div>
+            </th>
+            <th class="two-weeks-th" *ngFor="let day of global.getWeekDays;let i=index">{{day.customFormat}}</th>
+        </tr>
+    </thead>
+    <tbody class="tbodyoftable" cdkDropListGroup>
+        <ng-container *ngFor="let site of sites | siteFilter:searchSites; trackBy: trackBySiteId">
+            <tr (click)="global.selectedSitesIds.length > 0 && siteAction('select',site.id)" [id]="site.id"
+                class="troftable" [ngClass]="{'select-sites' : global.selectedSitesIds.includes(site.id)}">
+                <td class="usertd p-2">
+                    <div class="d-flex align-items-center usersitediv">
+                        <div>
+                            <ng-container *ngIf="calenderType == 'staff'">
+                                <ng-container *ngIf="site.profile_image">
+                                    <img [src]="site.profile_image" class="rounded-circle" alt="profile image"
+                                        style="width: 50px; height: 50px; object-fit: fill;">
+                                </ng-container>
+                                <ng-container *ngIf="!site.profile_image">
+                                    <div class="rounded-circle d-flex justify-content-center align-items-center text-uppercase font-weight-bold"
+                                        style="width: 56px; height: 56px; background-color: #e8e8e8; padding: 6px; font-size: 12px;">
+                                        {{ site.site_name | shortName }}
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+
+                            <div class="budget-info mt-2 mb-1">
+        <div class="d-flex justify-content-between small text-muted">
+            <span style="font-size: 14px;"><strong>Branch Budget:</strong> {{ site.site_budget * 2 | currency:'USD':'symbol':'1.0-0' }}</span>
+            <span style="font-size: 13px;"><strong>Total Amount:</strong> {{ site.total_amount | currency:'USD':'symbol':'1.0-0' }}</span>
+        </div>
+        <div class="d-flex justify-content-between mt-1">
+            <span class="text-success fw-bold">
+                Remaining: {{ (site.site_budget - site.total_amount) | currency:'USD':'symbol':'1.0-0' }}
+            </span>
+        </div>
+    </div>
+
+                            <p class="mb-1 site-p font-bold"
+                                [ngClass]="{ 'small-font': calenderType === 'staff', 'large-font': calenderType !== 'staff' }">
+                                {{ site.site_name }}
+                            </p>
+                            <p class="m-0"
+                                [ngClass]="{ 'small-font': calenderType === 'staff', 'large-font': calenderType !== 'staff' }"
+                                [style.fontSize]="calenderType === 'staff' ? 'small' : 'smaller'">
+                                {{ (calenderType === 'location') ? site.site_description : site.email }}
+                            </p>
+                        </div>
+                        <mat-icon [matMenuTriggerFor]="menu"
+                            *ngIf="rosterStatus === 'active' && loginUser !== 'customer' && global.selectedSitesIds.length==0"
+                            svgIcon="feather:more-vertical" class="more" [id]="site.id"></mat-icon>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="siteAction('select', site.id)">
+                                <mat-icon>library_books</mat-icon>
+                                <span>Select</span>
+                            </button>
+                            <ng-container *ngIf="calenderType !== 'staff'">
+                                <button mat-menu-item *ngIf="rosterPermissions && rosterPermissions.updateLocation"
+                                    (click)="siteAction('edit', site.id)"
+                                    [disabled]="global.selectedSitesIds.length > 0">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Edit</span>
+                                </button>
+                                <button mat-menu-item *ngIf="rosterPermissions && rosterPermissions.deleteLocation"
+                                    (click)="siteAction('delete', site.id)"
+                                    [disabled]="global.selectedSitesIds.length > 0">
+                                    <mat-icon>delete_forever</mat-icon>
+                                    <span>Delete</span>
+                                </button>
+                            </ng-container>
+                        </mat-menu>
+                    </div>
+                    <p class="m-0 position-absolute end-0 bottom-0 small-font flex align-items-center badge" style="color: black;"><mat-icon
+                            svgIcon="mat_outline:av_timer" class="icon-size-4"></mat-icon>{{
+                        site.jobRosterSum?site.jobRosterSum :0 }} Hrs</p>
+                </td>
+                <td class="tdoftable" *ngFor="let day of global.getWeekDays;let i=index"
+                    [cdkDropListData]="site.jobRoster" [id]="day.momentFormat" cdkDropList
+                    (cdkDropListDropped)="drop($event)">
+                    <ng-container *ngFor="let job of site.jobRoster; trackBy: trackByJobRosterId">
+                        <div class="parent-shift-activity" cdkDragLockAxis="x" cdkDrag
+                            [cdkDragDisabled]="!rosterPermissions || !rosterPermissions.rosterOptions || !checkWeek(rosterPermissions.lockPreweek)"
+                            [cdkDragData]="job" [id]="i">
+                            <!-- [cdkContextMenuTriggerFor]="isContextMenuDisabled || rosterStatus !== 'active' ? null : context_menu" -->
+                            <div class="card divoftd" appShiftStatus [job]="job"
+                                [ngClass]="{'select-shift' : selectedCardIds.includes(job.roster_id),'copy-shift' : copyID==job.roster_id}"
+                                [cdkMenuTriggerFor]="isContextMenuDisabled || rosterStatus !== 'active' ? null : file"
+                                *ngIf="calenderType == 'location' ? day.customFormat==job.date && job.site_id==site.id : day.customFormat==job.date && job.guard_id==site.id"
+                                (click)="executeFunction(job)">
+                                <div [ngClass]="{'pendingShiftStatus': job.status == 'pending' && job.first_name && job.publish_status==0,
+                                           'missedShiftStatus': job.status == 'missed'}"></div>
+                                <p>{{job.start_time}}-{{job.end_time}}</p>
+                                <span>{{ calenderType === 'location' ? (job.rejected_by ? ('Rejected By: ' +
+                                    job.rejected_by) : getFormattedName(job)) : (calenderType === 'staff' ?
+                                    job.site_name : '') }}
+                                </span>
+                                <div *ngIf="job.confilict && job.guard_id"
+                                    [ngbTooltip]="'This shift has ' + job.confilict + ' other shift start ' + job.confilict_start.toString() + ' end ' + job.confilict_end.toString()"
+                                    class="cccc conflict">
+                                </div>
+                                <div *ngIf="job.operation_notes" [ngbTooltip]="job.operation_notes.toString()"
+                                    class="task_shift task_shift_conflict">
+                                </div>
+
+                                <!-- limitation confilict -->
+                                <div *ngIf="job.work_limitaion_confilict" [ngbTooltip]="job.work_limitaion_confilict"
+                                    class="cccc conflict"></div>
+                                <!-- document conflict -->
+                                <div *ngIf="job.document_confilict !='active' && job.document_confilict"
+                                    [ngbTooltip]="job.document_confilict" class="cccc conflict"></div>
+                            </div>
+
+                            <!-- *ngIf="job.first_name" -->
+                            <div *ngIf="calenderType == 'location' ? day.customFormat==job.date && job.site_id==site.id  && job.first_name: day.customFormat==job.date && job.guard_id==site.id"
+                                class="shift-activity-button">
+                                <button class="activity" (click)="staffDetail('activity',job)">Activity</button>
+                                <button class="detail" (click)="staffDetail('detail', job)">Detail</button>
+                            </div>
+                        </div>
+
+                        <ng-template #file>
+                            <div class="example-menu-roster" cdkMenu>
+                                <button class="example-menu-item" cdkMenuItem
+                                    [disabled]="(!rosterPermissions || !rosterPermissions.updateShift) || (!checkWeek(rosterPermissions.lockPreweek))"
+                                    (click)="editShiftAction('edit',job,site,day)"><fa-icon
+                                        [icon]="faCreditCard"></fa-icon></button>
+                                <button class="example-menu-item" cdkMenuItem
+                                    (click)="editShiftAction('popover',job,site,day)"><fa-icon
+                                        [icon]="faPencil"></fa-icon></button>
+                                <button class="example-menu-item" cdkMenuItem (click)="editShiftAction('delete',job)"
+                                    [disabled]="job.signin_status==1 || !rosterPermissions || !rosterPermissions.deleteShift || !checkWeek(rosterPermissions.lockPreweek)">
+                                    <fa-icon [icon]="faTrash"></fa-icon>
+                                </button>
+                                <!-- <button class="example-menu-item" cdkMenuItem (click)="loadPhone(job?.phone)"
+                                    [disabled]="!job.guard_id || !rosterPermissions || !rosterPermissions.createShift">
+                                    <fa-icon [icon]="phone"></fa-icon>
+                                </button> -->
+                                <!-- <button class="example-menu-item" cdkMenuItem (click)="sendMessage(job)"
+                                    [disabled]="!job.guard_id || !rosterPermissions || !rosterPermissions.createShift">
+                                    <fa-icon [icon]="msg"></fa-icon>
+                                </button> -->
+
+                            </div>
+                        </ng-template>
+
+                        <!-- <ng-template #context_menu>
+                            <div class="example-menu example-menu-select-copy" cdkMenu>
+                                <button class="example-menu-item" id="talha-dash-dash" cdkMenuItem
+                                    (click)="shiftSelect(job.roster_id)">Select</button>
+                                <button class="example-menu-item" id="samad-dash-dash" cdkMenuItem
+                                    (click)="shiftCopy(job)">{{
+                                    shift_paste? 'Cancel' : 'Copy'}}</button>
+                            </div>
+                        </ng-template> -->
+                    </ng-container>
+                    <br> <br>
+                    <div *ngIf="shift_paste && rosterPermissions && rosterPermissions.createShift && checkWeek(rosterPermissions.lockPreweek)"
+                        class="shift_paste">
+                        <mat-icon svgIcon="mat_outline:content_paste" (click)="paste(day,site.id)"></mat-icon>
+                    </div>
+
+                    <app-basic-shift-popover
+                        *ngIf="!shift_paste && rosterStatus=='active' && rosterPermissions && rosterPermissions.createShift && checkWeek(rosterPermissions.lockPreweek)"
+                        [calenderType]="calenderType" [day]="day" [site]="site"></app-basic-shift-popover>
+
+                    <div *ngIf="!shift_paste && rosterStatus=='active' && calenderType == 'location' && loginUser!='customer' && rosterPermissions && rosterPermissions.createShift"
+                        class="hardcoded-schedule" (click)="showShiftTemplate(day,site.id)" #p="ngbPopover"
+                        [autoClose]="'outside'" popoverClass="schedule-shift" [ngbPopover]="popoverContent">
+                        <mat-icon svgIcon="heroicons_solid:menu"></mat-icon>
+                        <ng-template #popoverContent>
+                            <div class="card w-100">
+                                <div class="card-header">
+                                    <div class="popover-header-date">
+                                        <span class="title">Shift Template</span>
+                                        <span type="button" class="add-template-button"
+                                            (click)="customTemplateModal(day,p)">+Add</span>
+                                    </div>
+                                </div>
+
+                                <main class="leaderboard__profiles">
+                                    <article class="leaderboard__profile"
+                                        *ngFor="let custom_template of buit_in_template"
+                                        (click)="addCustomShift(custom_template,day,site.id)"
+                                        [disabled]="apiCallInProgress">
+                                        <span
+                                            class="leaderboard__name">{{custom_template.start}}-{{custom_template.end}}</span>
+                                    </article>
+                                </main>
+
+                            </div>
+                        </ng-template>
+                    </div>
+
+                </td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>
+
+<div class="table-responsive two-week-table-jobroster-hours shift-total-hors">
+    <table class="table table-bordered align-middle mb-0 bg-white two-week-table-jobroster common-one-two-week">
+        <tr class="troftable">
+            <td class="site-shifts-hour">
+                <div class="first">
+                    <p style="font-weight:bold">Total Hours</p>
+                    <p style="font-weight:bold">{{ totalHours }} Hrs</p>
+                </div>
+            </td>
+            <td class="tdoftable site-shifts-hour" *ngFor="let day of global.getWeekDays" [id]="day.customFormat">
+                <div class="week-shifts-hour">
+                    <ng-container *ngFor="let hour of shiftDayhours;let i=index">
+                        <p *ngIf="hour.date==day.customFormat" style="font-weight:bold">{{ hour.count }} Hours</p>
+                    </ng-container>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- hira site delete-->
+<ng-template #deletecontent let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Delete location</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="AddDeleteReason">
+        <div class="modal-body">
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Write a reason</mat-label>
+                    <textarea matInput formControlName="reason"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+            <button type="button" class="btn text-white button-back" [disabled]="!AddDeleteReason.valid"
+                (click)="deletedata(siteid)">Delete</button>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #sendMsg let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Send Message</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="sdMessage">
+        <div class="modal-body">
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Write a message</mat-label>
+                    <textarea matInput formControlName="msg"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+            <button type="button" class="btn text-white button-back" [disabled]="!sdMessage.valid"
+                (click)="sendMesg(siteid)">Send</button>
+        </div>
+    </form>
+</ng-template>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+    <p style="color: white">Please Wait...</p>
+</ngx-spinner>

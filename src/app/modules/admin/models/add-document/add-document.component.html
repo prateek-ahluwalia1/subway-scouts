@@ -1,0 +1,156 @@
+<div class="modal-header">
+  <h4>{{ !addDocumentButtonActive ? "Upload Document" : "Add documents" }}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="close('dismiss')"></button>
+</div>
+<div class="modal-body add-document-body">
+  <div class="body">
+    <form class="example-form" #addDocForm="ngForm">
+      <input type="hidden" name="" />
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Document Name</mat-label>
+        <mat-select [(ngModel)]="document_type" name="document_type"
+          [disabled]="this.globals.documentViewEnable || documentList" required #docType="ngModel">
+          <mat-option value="visa">Visa</mat-option>
+          <mat-option value="passport">Passport</mat-option>
+          <mat-option value="vaccination">Vaccination</mat-option>
+          <mat-option value="security_license">Security License</mat-option>
+          <mat-option value="driver_license_front">Driver License Front</mat-option>
+          <mat-option value="driver_license_back">Driver License Back</mat-option>
+          <mat-option value="citizen_ship">Citizen Ship</mat-option>
+          <mat-option value="medicare">Medicare</mat-option>
+          <mat-option value="birth_certificate">Birth Certificate</mat-option>
+          <mat-option value="wwc">WWC</mat-option>
+          <mat-option value="rsa">RSA</mat-option>
+          <mat-option value="application_form">Application Form</mat-option>
+          <mat-option value="casual_contract_form">Casual Contract Form</mat-option>
+          <mat-option value="part_time_contract_form">Part Time Contract Form</mat-option>
+          <mat-option value="sec_certidicate">Security Certificate</mat-option>
+          <mat-option value="work_with_child">Working with Children </mat-option>
+          <mat-option value="other">Other</mat-option>
+        </mat-select>
+
+        <mat-error *ngIf="docType.invalid && (docType.dirty || docType.touched)">
+          Document Type is required*
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" *ngIf="document_type == 'other'">
+        <input style="background-color: transparent" class="text-capitalize fw-bold" matInput
+          [disabled]="this.globals.documentViewEnable" placeholder="Document Name" [(ngModel)]="document_name"
+          name="document_name" required #nameInput="ngModel" />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width my-2">
+        <textarea style="background-color: transparent" [(ngModel)]="notes" matInput
+          [disabled]="this.globals.documentViewEnable" placeholder="Description (Optional)" name="notes"></textarea>
+      </mat-form-field>
+
+      <div class="documentOptions_section mt-2">
+        <ng-container *ngIf="pdfView; else noPdfView">
+          <iframe [src]="previewUrl" style="width: 100%; height: 250px"></iframe>
+        </ng-container>
+        <ng-template #noPdfView>
+          <img [src]="imgView" alt="" *ngIf="isimage || imgView"
+            onerror="this.src='assets/images/avatars/no-image.jpg'" />
+        </ng-template>
+        <!-- <pdf-viewer *ngIf="pdfView" [src]="previewUrl" [render-text]="true" [original-size]="false"
+                    style="width: 100%; height: 250px"></pdf-viewer> -->
+        <div class="document_content">
+          <div class="example-button-row">
+            <div class="example-flex-container d-flex justify-content-evenly align-items-center">
+              <div class="example-button-container">
+                <button style="background: #c0392b" mat-fab [disabled]="this.globals.documentViewEnable"
+                  aria-label="Example icon button with a delete icon" (click)="add()">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+
+              <div class="example-button-container">
+                <button style="background: #2ecc71" mat-fab [disabled]="this.globals.documentViewEnable"
+                  aria-label="Example icon button with a home icon" (click)="downloadFile()">
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+              </div>
+
+              <div class="example-button-container">
+                <button style="background:#3498db" mat-fab [disabled]="!documentList?.file"
+                  aria-label="Example icon button with a bookmark icon" (click)="delFile()">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="(c_f_roster || c_f_profile) && !pdfView && !isimage" style="color: red; font-size: 11px">
+        Document is required*
+      </div>
+
+      <div class="row mt-3">
+        <mat-checkbox class="example-margin" [(ngModel)]="c_f_roster" name="c_f_roster"
+          [disabled]="this.globals.documentViewEnable">Compulsory for roster
+        </mat-checkbox>
+        <mat-checkbox class="example-margin" [(ngModel)]="c_f_profile" name="c_f_profile"
+          [disabled]="this.globals.documentViewEnable">Compulsory for profile
+        </mat-checkbox>
+      </div>
+      <div>
+        <section class="example-section">
+          <mat-checkbox class="example-margin" [(ngModel)]="isCheckedNum" name="no"
+            [disabled]="this.globals.documentViewEnable">Add Document Number
+          </mat-checkbox>
+        </section>
+        <mat-form-field *ngIf="isCheckedNum">
+          <input matInput [(ngModel)]="document_no" name="document_no" [placeholder]="placeholderText"
+            [disabled]="this.globals.documentViewEnable" />
+        </mat-form-field>
+        <div class="mt-2" *ngIf="isCheckedNum && !document_no" style="color: red; font-size: 11px">
+          {{ placeholderText }}*
+        </div>
+        <div class="mt-1" *ngIf="
+            isCheckedNum &&
+            document_no &&
+            document_type == 'security_license' &&
+            fromUserMenu.state === 'Victoria' &&
+            ipAddress?.countryName == 'Australia'
+          " style="display: flex; justify-content: end">
+          <button class="btn btn-sm" style="padding: 5px" (click)="verifyLicense()">
+            Verify
+          </button>
+        </div>
+      </div>
+      <div class="calender" *ngIf="document_expire != 'current, pending renewal'">
+        <section class="example-section">
+          <mat-checkbox class="example-margin" [(ngModel)]="isCheckedExp" name="exp"
+            [disabled]="this.globals.documentViewEnable">Set Expiration date
+          </mat-checkbox>
+        </section>
+        <mat-form-field *ngIf="isCheckedExp">
+          <input matInput [(ngModel)]="document_expire" name="document_expire" [matDatepicker]="picker1"
+            [disabled]="checkEnableStatus()" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1 color="primary"></mat-datepicker>
+        </mat-form-field>
+        <div class="buttons d-flex align-item-center"></div>
+        <div class="mt-2" *ngIf="isCheckedExp && !document_expire"
+          style="color: red; font-size: 11px; margin-top: -11px">
+          Expiration Date is required*
+        </div>
+      </div>
+      <div class="mt-2" *ngIf="document_expire == 'current, pending renewal'"
+        style="color: red; font-size: 14px; margin-top: -11px">
+        {{ document_expire }}*
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-footer add-document-footer">
+  <button class="btn btn-border-3" type="submit" [disabled]="this.globals.documentViewEnable"
+    (click)="submitStaffDoc(addDocForm)">
+    Save
+  </button>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+  <p style="color: white">Loading...</p>
+</ngx-spinner>

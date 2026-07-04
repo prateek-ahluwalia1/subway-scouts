@@ -1,0 +1,68 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Notes for Shift</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeComponent()"></button>
+</div>
+<div class="modal-body">
+    <form>
+        <div class="form-group row">
+            <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Position note</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row mt-2">
+            <label for="exampleFormControlTextarea1" class="col-sm-3 col-form-label">Short note</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="form-group row mt-2">
+            <label for="exampleFormControlTextarea2" class="col-sm-3 col-form-label">Long note</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" id="exampleFormControlTextarea2" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="form-group row mt-2">
+            <label for="exampleFormControlTextarea3" class="col-sm-3 col-form-label">Internal note</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" id="exampleFormControlTextarea3" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="form-group row mt-2">
+            <label for="exampleFormControlTextarea4" class="col-sm-3 col-form-label">Customer note</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" id="exampleFormControlTextarea4" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="form-group row mt-2">
+            <label for="exampleFormControlTextarea2" class="col-sm-3 col-form-label">Invoice note</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" id="exampleFormControlTextarea2" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="form-group row mt-2">
+            <label for="customer_po" class="col-sm-3 col-form-label">Customer PO</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" id="customer_po">
+            </div>
+        </div>
+        <div class="form-group row mt-2">
+            <label for="event_id" class="col-sm-3 col-form-label">Event ID</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" id="event_id">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer note_footer">
+    <button type="button" class="btn btn-outline-secondary cancel_note" >Cancel</button>
+  <mat-checkbox class="example-margin"> <span style="font-size: 11px;">Do not display to staff member!</span> </mat-checkbox>
+    <button type="button" class="btn btn-success" >Save</button>
+    <button type="button" class="btn btn-primary" >Clear</button>
+</div>

@@ -1,0 +1,39 @@
+<div class="mb-3 card dashboard-leave-management" #fullScreen>
+    <div class="flex mt-4 px-4 justify-between font-size-lg text-capitalize font-weight-normal">
+        <span class="mr-2 opacity-7 fw-bold">
+            Availability / Leave Requests ({{ leaves.length }})
+        </span>
+        <mat-icon svgIcon="mat_outline:open_in_full" class="icon-size-5" (click)="openFullscreen()"></mat-icon>
+    </div>
+    <div class="flex pr-6 justify-content-end font-size-lg text-capitalize font-weight-normal mt-1">
+        <input class="live-operation-search" name="text" placeholder="Search..." type="search" [(ngModel)]="searchStaff">
+        <span class="border add-new-leave p-2" (click)="showAllLeave()">{{ leavesDuration?'Show All Time Off Requests':'Show Current Week' }}</span>
+        <span class="border add-new-leave p-2" (click)="openModal('','add')">Add new</span>
+    </div>
+    <div class="card-body" [ngClass]="{'full-height-license': isFullscreen, 'table-container-welfare': !isFullscreen}">
+        <table style="width: 100%; height: 100%;" id="example2" class="table table-hover table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Staff Type</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Approved By</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody [@stagger]="leaves.length">
+                <ng-container *ngFor="let data of leaves | nameFilter:searchStaff; trackBy: trackById">
+                    <tr scope="row" [@fadeIn]="''" [@stagger]="i">
+                        <td>{{ data.name }}</td>
+                        <td> {{ data.gaurd_type }}</td>
+                        <td> {{ data?.leave_reason?.replace('_', ' ') | titlecase }}</td>
+                        <td> {{ data.leave_status }}</td>
+                        <td> {{ data.leave_approved_by }}</td>
+                        <td> <mat-icon svgIcon="mat_outline:save" (click)="openModal(data,'check')"></mat-icon></td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</div>

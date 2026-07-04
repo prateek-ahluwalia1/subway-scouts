@@ -1,0 +1,128 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Broadcast a job</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="close('Cross Click')"></button>
+        </div>
+
+        <div class="modal-body">
+            <form #myForm="ngForm">
+                <div class="row w-100 m-auto mx-2">
+                    <div class="col-6">
+                        <app-select-multiple-customer signleDouble="no"
+                            (selectedCustomer)="receiveDataFromChildCustomer($event)" class="select_job_roster"
+                            [dataArray]="customers"
+                            [placeholderText]="'Select Customers'"></app-select-multiple-customer>
+                    </div>
+
+                    <div class="col-6">
+                        <app-select-multiple-site (selectedSite)="receiveDataFromChildSiteAdhos($event)"
+                            class="select_job_roster site-job-new-roster" signleDouble="no"
+                            [placeholderText]="'Select Locations'" [dataArray]="locations"></app-select-multiple-site>
+                    </div>
+
+                </div>
+                <div class="row w-100 m-auto ad-hoc-state">
+                    <div class="col-12">
+                        <mat-form-field class="w-100">
+                            <mat-label>State</mat-label>
+                            <input matInput [disabled]="true" [(ngModel)]="ad_hoc_formData.state" name="state"
+                                [ngModelOptions]="{standalone: true}">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row mx-2 align-items-center" style="margin-top: 10px;">
+                    <div class="col-6">
+                        <mat-form-field class="w-100">
+                            <mat-label>Start Date</mat-label>
+                            <input matInput [matDatepicker]="picker2" placeholder="Start Date"
+                                [ngModelOptions]="{standalone: true}" id="start_date" name="start_date"
+                                [(ngModel)]="ad_hoc_formData.start_date" required>
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group m-0">
+                            <label for="start_time">Start Time</label>
+                            <div class="ngx-timepicker-field-example" style="height: 40px;">
+                                <ngx-timepicker-field [controlOnly]="true" [ngModelOptions]="{standalone: true}"
+                                    [format]="24" id="start_time" name="start_time"
+                                    [(ngModel)]="ad_hoc_formData.start_time" required></ngx-timepicker-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mx-2 align-items-center" style="margin-top: 10px;">
+                    <div class="col-6">
+                        <mat-form-field class="w-100">
+                            <mat-label>End Date</mat-label>
+                            <input matInput [matDatepicker]="picker" placeholder="End Date"
+                                [ngModelOptions]="{standalone: true}" id="end_date" name="end_date"
+                                [(ngModel)]="ad_hoc_formData.end_date" required>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group m-0">
+                            <label for="start_time">End Time</label>
+                            <div class="ngx-timepicker-field-example" style="height: 40px;">
+                                <ngx-timepicker-field [controlOnly]="true" [ngModelOptions]="{standalone: true}"
+                                    [format]="24" id="end_time" name="end_time" [(ngModel)]="ad_hoc_formData.end_time"
+                                    required></ngx-timepicker-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mx-2" style="margin-top: 10px;">
+                    <mat-form-field>
+                        <mat-label>Job Instructions</mat-label>
+                        <textarea matInput rows="3" [(ngModel)]="ad_hoc_formData.job_instrcutions"
+                            name="job_instrcutions" [ngModelOptions]="{standalone: true}"></textarea>
+                    </mat-form-field>
+                </div>
+
+                <div class="row mx-2" style="margin-top: 10px;">
+                    <mat-form-field class="example-form-field">
+                        <mat-label>Address</mat-label>
+                        <input matInput [disabled]="true" [(ngModel)]="ad_hoc_formData.address" name="address"
+                            [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                </div>
+
+                <div class="row mx-2" style="margin-top: 10px;">
+                    <mat-form-field class="example-form-field">
+                        <mat-label>Coordinates</mat-label>
+                        <input matInput [disabled]="true" [(ngModel)]="ad_hoc_formData.coordinates" name="coordinates"
+                            [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                </div>
+
+                <div class="row mx-2">
+                    <mat-form-field class="example-form-field">
+                        <mat-label>Radius(Miles)</mat-label>
+                        <input matInput type="number" id="radiusInput" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="radius" (keyup)="updateCircleRadius($event)">
+                    </mat-form-field>
+                </div>
+                <div class="row w-100 m-auto mt-2" *ngIf="isShowMap && guardInRadius.length>0">
+                    <div class="col-12">
+                        <div id="map" style="height: 400px;"></div>
+                    </div>
+                </div>
+                <div class="row w-100 m-auto mt-2" *ngIf="isShowMap && guardInRadius.length === 0">
+                    <p>Staff not found in this given radius. Please increase the radius.</p>
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn default-btn" (click)="close('Cancel')">Cancel</button>
+            <button type="button" class="btn default-btn" (click)="submitForm()">Save</button>
+        </div>
+    </div>
+</div>

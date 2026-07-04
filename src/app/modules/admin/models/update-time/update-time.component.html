@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <h4 class="modal-title">Update Time</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCancel()"></button>
+</div>
+<form (ngSubmit)="onSubmit()" class="updateTimecomponent">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+
+                    <label for="select_guard">Start Time</label>
+                    <div class="ngx-timepicker-field-example">
+                        <ngx-timepicker-field id="start_time" name="start_time" [(ngModel)]="start_time" [controlOnly]="true" [format]="24"
+                            [defaultTime]="'00:00'"></ngx-timepicker-field>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                  <label for="end_time">End Time</label>
+                  <div class="ngx-timepicker-field-example">
+                      <ngx-timepicker-field id="end_time" name="end_time" [(ngModel)]="end_time" [controlOnly]="true" [format]="24"
+                          [defaultTime]="'00:00'"></ngx-timepicker-field>
+                  </div>
+
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn update" style="background-color:#063E69;"> Update Time</button>
+        <button type="button" (click)="onCancel()" class="btn btn-outline-secondary">Cancel</button>
+    </div>
+</form>

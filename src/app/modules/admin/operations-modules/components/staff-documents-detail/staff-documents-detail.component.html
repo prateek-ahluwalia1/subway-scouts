@@ -1,0 +1,94 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <!-- Main -->
+    <div class="flex-auto p-6">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+            <div class="color-main" style="border-radius: 10px;">
+                <div class="nav rounded-2xl">
+                    <h4>Staff Documentation Details</h4>
+                </div>
+                <div class="main">
+                    <div class="filters">
+                        <div class=" item">
+                            <label>Vaccination</label>
+                            <mat-slide-toggle (change)="toggleDocument('vaccination')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>Driver License Front</label>
+                            <mat-slide-toggle (change)="toggleDocument('driver_license_front')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>Driver License Back</label>
+                            <mat-slide-toggle (change)="toggleDocument('driver_license_back')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>Security License</label>
+                            <mat-slide-toggle (change)="toggleDocument('security_license')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>Visa</label>
+                            <mat-slide-toggle (change)="toggleDocument('visa')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>Citizenship</label>
+                            <mat-slide-toggle (change)="toggleDocument('citizenship')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>Medicare</label>
+                            <mat-slide-toggle (change)="toggleDocument('medicare')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>Passport</label>
+                            <mat-slide-toggle (change)="toggleDocument('passport')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>Birth Certificate</label>
+                            <mat-slide-toggle (change)="toggleDocument('birth_certificate')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>Firstaid</label>
+                            <mat-slide-toggle (change)="toggleDocument('first_aid')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>WWC</label>
+                            <mat-slide-toggle (change)="toggleDocument('wwc')"></mat-slide-toggle>
+                        </div>
+                        <div class=" item">
+                            <label>RSA</label>
+                            <mat-slide-toggle (change)="toggleDocument('rsa')"></mat-slide-toggle>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tables_list p-4">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-end searchbar_main">
+                            <input type="text" placeholder="Search here.." class="searchbar" [(ngModel)]="searchTerm" (input)="filterGuards()">
+                            <mat-icon>search</mat-icon>
+                        </div>
+                        <div class="p-2" style="width: 20%;" *ngFor="let guard of filteredGuards | paginate: { itemsPerPage: 40, currentPage: startPage  } ">
+                            <div class="card">
+                                <div class="card-header">
+                                    <p class="name" style="text-align: center;" (click)="openModel(guard.id)">
+                                        {{guard.first_name}} {{guard.middle_name}}
+                                        {{guard.last_name}}
+                                    </p>
+                                </div>
+                                <mat-chip-list>
+                                    <mat-chip *ngFor="let doc of guard.documents" (click)="viewDoc(doc)">
+                                        {{ doc?.document_name }}
+                                    </mat-chip>
+                                </mat-chip-list>
+                            </div>
+                        </div>
+
+                        <div class="pagination">
+                            <pagination-controls (pageChange)="startPage = $event"></pagination-controls>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

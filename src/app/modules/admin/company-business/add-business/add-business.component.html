@@ -1,0 +1,172 @@
+<div class="container company-add-business">
+    <form [formGroup]="createbusiness">
+        <section class="custom-pricing">
+            <h3>Add A New Business</h3>
+        </section>
+
+        <div class="mt-4 flex flex-col bg-gray-100 rounded-lg p-4 shadow-sm w-100">
+            <div class="mt-4 flex flex-row space-x-2">
+                <div class="flex-1">
+                    <div class="header">
+                        <h6 class="p-2">Business Logo</h6>
+                        <div class="image" (click)="uploadFiles($event,'logo')">
+                            <img onerror='this.src="https://via.placeholder.com/150"'
+                                [src]="createbusiness.get('logo').value" alt="">
+                            <!-- ngbPopover="Change Avatar!" -->
+                        </div>
+                        <!-- <mat-icon class="close-icons" placement="top" ngbTooltip="Remove Avatar!"
+                            triggers="mouseenter:mouseleave" (click)="uploadFiles($event,'logo')">close</mat-icon> -->
+                        <mat-icon class="edit-icons business" placement="right" ngbTooltip="Change avatar!"
+                            triggers="mouseenter:mouseleave" (click)="uploadFiles($event,'logo')">edit</mat-icon>
+                    </div>
+                </div>
+
+                <div class="flex-1">
+                    <div class="mt-4 flex flex-col space-x-2">
+                        <label class="text-black" for="name">Name</label>
+                        <input placeholder="Your name"
+                            class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1"
+                            formControlName="name" type="text">
+                        <div *ngIf="f.name.invalid && submitted" class="text-red-500 text-sm">Name is required</div>
+                    </div>
+                    <div class="mt-3 flex flex-col space-x-2">
+                        <label class="text-black" for="country">Business Status</label>
+                        <select class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1"
+                            formControlName="status" id="country">
+                            <option value="">Please select status</option>
+                            <option value="live">Live</option>
+                            <option value="demo">Demo</option>
+                        </select>
+                        <div *ngIf="f.status.invalid && submitted" class="text-red-500 text-sm">Status is required</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mt-4 flex flex-row space-x-2">
+                <div class="flex-1">
+                    <label class="text-black" for="city">Database Name</label>
+                    <input placeholder="Database Name"
+                        class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1"
+                        formControlName="db_name" id="database_name" type="text">
+                    <div *ngIf="f.db_name.invalid && submitted" class="text-red-500 text-sm">Database Name is required
+                    </div>
+                </div>
+
+                <div class="flex-1">
+                    <label class="text-black" for="state">Address</label>
+                    <input placeholder="Address" class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1"
+                        formControlName="address" id="Address" type="text">
+                    <div *ngIf="f.address.invalid && submitted" class="text-red-500 text-sm">Address is required</div>
+
+                </div>
+            </div>
+
+            <div class="mt-4 flex flex-row space-x-2">
+                <div class="flex-1">
+                    <label class="text-black" for="city">Domain</label>
+                    <input placeholder="Domain" class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1"
+                        formControlName="domain" id="Domain" type="text">
+                    <div *ngIf="f.domain.invalid && submitted" class="text-red-500 text-sm">Domain is required</div>
+                </div>
+
+                <div class="flex-1">
+                    <label class="text-black" for="state">App ID</label>
+                    <input placeholder="App ID" class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1"
+                        formControlName="app_id" id="app_id" type="text">
+                    <div *ngIf="f.app_id.invalid && submitted" class="text-red-500 text-sm">App ID is required</div>
+                </div>
+            </div>
+
+            <div class="mt-4 flex flex-row space-x-2">
+                <div class="flex-1">
+                    <label class="text-black" for="city">Email</label>
+                    <input placeholder="Email" class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1"
+                        formControlName="email" id="city" type="email">
+                    <div *ngIf="f.email.invalid && submitted" class="text-red-500 text-sm">Email is required</div>
+                </div>
+
+                <div class="flex-1">
+                    <label class="text-black" for="state">Server Key</label>
+                    <input placeholder="Server Key"
+                        class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1"
+                        formControlName="server_key" id="state" type="text">
+                    <div *ngIf="f.server_key.invalid && submitted" class="text-red-500 text-sm">Server Key is required
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 flex flex-row space-x-2">
+                <div class="flex-1">
+                    <label class="text-black" for="city">Business Type</label>
+                    <select class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1"
+                        formControlName="busitype" id="country">
+                        <option value="">Please select a type</option>
+                        <option value="Guard">Guard</option>
+                        <option value="Cleaner">Cleaner</option>
+                        <option value="Staff">Staff</option>
+                    </select>
+                    <div *ngIf="f.busitype.invalid && submitted" class="text-red-500 text-sm">Business Type is required
+                    </div>
+                </div>
+
+                <div class="flex-1">
+                    <label for="formFileMultiple" class="form-label">File</label>
+                    <input class="form-control" type="file" (change)="uploadAboutFile($event)">
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <label class="text-black" for="address">About Company</label>
+                <textarea placeholder="About Company"
+                    class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="about_company"
+                    formControlName="about_company"></textarea>
+            </div>
+
+            <section class="custom-pricing">
+                <h3>Select a plan</h3>
+                <div class="cards">
+                    <div class="card" *ngFor="let card of cards" (click)="setActiveCard(card)"
+                        [ngClass]="{'active': card.id == activeCardIndex}">
+                        <div class="card__outer">
+                            <div class="card__inner">
+                                <span class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                        class="w-6 h-6">
+                                        <path fill-rule="evenodd"
+                                            d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm4.5 7.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0v-2.25a.75.75 0 0 1 .75-.75Zm3.75-1.5a.75.75 0 0 0-1.5 0v4.5a.75.75 0 0 0 1.5 0V12Zm2.25-3a.75.75 0 0 1 .75.75v6.75a.75.75 0 0 1-1.5 0V9.75A.75.75 0 0 1 13.5 9Zm3.75-1.5a.75.75 0 0 0-1.5 0v9a.75.75 0 0 0 1.5 0v-9Z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <p class="title">{{ card.name }}</p>
+                                <p class="price"><span class="price price--number"><span
+                                            class="price price--dolar">$</span>{{
+                                        card.price }}</span></p>
+
+                                <ul>
+                                    <!-- <li *ngFor="let advantage of card.advantages">{{ advantage }}</li> -->
+                                </ul>
+                            </div>
+                            <a [routerLink]="'packege-detail'+card.id">get started now <svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                    class="w-6 h-6">
+                                    <path fill-rule="evenodd"
+                                        d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <button type="submit" class="fuse-mat-button-large w-25 mt-6 float-right m-auto" mat-flat-button
+                [color]="'primary'" [disabled]="createbusiness.disabled" (click)="onSubmit()">
+                <span *ngIf=" !createbusiness.disabled">
+                    {{ business_id?'Update':'Submit' }}
+                </span>
+                <mat-progress-spinner *ngIf="createbusiness.disabled" [diameter]="24"
+                    [mode]="'indeterminate'"></mat-progress-spinner>
+            </button>
+        </div>
+    </form>
+</div>

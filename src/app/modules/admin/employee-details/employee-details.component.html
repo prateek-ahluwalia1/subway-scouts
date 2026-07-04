@@ -1,0 +1,627 @@
+<div class="row" *ngIf="fromParent">
+    <div class="col-12">
+     <button type="button" (click)="close()" style="float: right; margin-right: 3rem; margin-top: 3rem;">
+         <mat-icon>cancel</mat-icon>
+     </button>
+    </div> 
+ </div>
+<div class="wrap_form">
+    <div class="form_border" id="employment-pdf">
+        <div class="logo ">
+            <img src="assets/images/logo/scouts.png" alt="">
+        </div>
+        <div class="w-100 text-center title mb-3">
+            <h3 class="text-break">NEW EMPLOYMENT/CONTRACTOR DETAILS</h3>
+        </div>
+        <div class="bar mb-1"></div>
+        <div class="bar text-center text-light">
+            <h5>Contact Details</h5>
+        </div>
+        <form [formGroup]="AddDetails">
+            <div class="form-1 mb-4">
+                <div class="body w-100 d-flex">
+                    <div class="form-body pb-2 w-50 d-flex ">
+                        <label>Surname:</label>
+                        <input type="text" formControlName="surname" class="border-secondary ps-2 border-bottom w-75 ">
+                    </div>
+                    <div class="form-body pb-2 w-50 d-flex ">
+                        <label class="text-right">Given Name: </label>
+                        <input type="text" formControlName="given_name" class="border-secondary ps-2 border-bottom w-75">
+                    </div>
+                </div>
+    
+                <div class="body w-100 d-flex">
+                    <div class="form-body pb-2 w-50 d-flex ">
+                        <label>Date Of Birth:</label>
+                        <input type="date" formControlName="date_of_birth" class="border-secondary  ps-2 border-bottom w-75 ">
+                    </div>
+                    <div class="form-body pb-2 w-50 d-flex ">
+                        <label class="text-center">Home Phone: </label>
+                        <input type="number" formControlName="home_phone" class="border-secondary ps-2  border-bottom w-75 no-spin-box">
+                    </div>
+                </div>
+    
+                <div class="body w-100 d-flex">
+                    <div class="form-body pb-2 w-50 d-flex ">
+                        <label>Mobile</label>
+                        <input type="string" formControlName="mobile" class="border-secondary  ps-2 border-bottom w-75 no-spin-box">
+                    </div>
+                    <div class="form-body pb-2 w-50 d-flex ">
+                        <label class="text-center">Email Add: </label>
+                        <input type="email" formControlName="email" class="border-secondary ps-2  border-bottom w-75">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="bar text-center text-light">
+                <h5>Particulars</h5>
+            </div>
+    
+            <div class="form-2">
+                <div class="body w-100 d-flex justify-content-between">
+                    <div class="form-body pb-2 w-75 d-flex ">
+                        <label>Tax File Number(TFN):</label>
+                        <input type="number" formControlName="TFN" class="border-secondary  ps-2 border-bottom w-100 no-spin-box">
+                    </div>
+                    <div class="form-body pb-2 w-25 d-flex justify-content-end align-items-center ">
+                        <span class="ms-3 text-muted">(Must be 9 digits)</span>
+                    </div>
+                </div>
+    
+                <div class="body w-100 d-flex justify-content-between">
+                    <div class="form-body pb-2 w-75 d-flex ">
+                        <label>Australian Bussiness Number (ABN):</label>
+                        <input type="number" formControlName="ABN" class="border-secondary  ps-2 border-bottom w-100 no-spin-box">
+                    </div>
+                    <div class="form-body pb-2 w-25 d-flex justify-content-end align-items-center ">
+                        <span class="ms-3 text-muted">(Must be 9 digits)</span>
+                    </div>
+                </div>
+        
+                <div class="form-body d-flex justify-content-between">
+                    <p>Abn Type</p>
+                    <div class="checkbox h-10 d-flex">
+                        <div class="border border-secondary rounded me-2 p-1" role="button"
+                            *ngFor="let abn of abns; let i = index" (click)="selectDiv(abn)" [id]="abn.id" 
+                            [ngClass]="{'selected': isSelected(abn)}">
+                            <p>{{abn.name}}</p>
+                        </div>
+                    </div>
+        
+                    <p class="ms-3 text-muted">(Must be Check applicable)</p>
+        
+                </div>
+        
+                <div class="form-body d-flex justify-content-between mt-3 mb-2">
+                    <Label>GST Status</Label>
+                    <div class="radio d-flex">
+                        <div class="border border-secondary rounded me-2 p-1" role="button"
+                            *ngFor="let registration of registrations; let i = index" [class.active]="AddDetails.get('gst_status')?.value === registration.name"
+                            (click)="setir(i)">
+                            <span>{{registration.name}}</span>
+                        </div>
+                    </div>
+        
+                    <p class="ms-3 text-muted">(Must be Check applicable)</p>
+                </div>
+        
+                <div class="body w-100 d-flex justify-content-between mb-5">
+                    <div class="form-body pb-2 w-75 d-flex ">
+                        <label>Day of Commencement of Work: </label>
+                        <input type="text" formControlName="commencement_of_work" class="border-secondary  ps-2 border-bottom w-100 ">
+                    </div>
+                    <div class="form-body pb-2 w-25 d-flex justify-content-end align-items-center ">
+                        <span class="ms-3 text-muted">(Expected Day)</span>
+                    </div>
+                </div>
+        
+                <div class="bar text-center text-light">
+                    <h5>Personal Address</h5>
+                </div>
+            </div>
+    
+            <div class="form-3">
+                <div class="body w-100 d-flex justify-content-between">
+                    <div class="form-body pb-2 w-100 d-flex ">
+                        <label>Residential Address:</label>
+                        <input type="text" formControlName="address" class="border-secondary  ps-2 border-bottom w-75 ">
+                    </div>
+                </div>
+        
+                <div class="body w-100 d-flex justify-content-between">
+                    <div class="form-body pb-2 w-50 d-flex ">
+                        <label>State:</label>
+                        <input type="text" formControlName="state" class="border-secondary ps-2 border-bottom w-75 ">
+                    </div>
+                    <div class="form-body pb-2 w-50 d-flex ">
+                        <span class="text-center ">p/Code: </span>
+                        <input type="number" formControlName="pcode" class="border-secondary ps-2 border-bottom w-75">
+                    </div>
+                </div>
+        
+                <div class="form-body d-flex" style="margin-bottom: 10px;">
+                    <p style="margin-right: 15px;">Residency Status:</p>
+                    <div class="d-flex radio">
+                        <div class=" d-flex border border-secondary rounded me-2 p-1" role="button"
+                            *ngFor="let status of statuses; let i = index" [class.active]="selectedindex===i"
+                            (click)="seti(i)">
+                            <span>{{status.name}}</span>
+                        </div>
+                    </div>
+                    <!-- <div class="form-body pb-2 w-25 d-flex ">
+                        <span class="text-center ">Other: </span>
+                        <input type="text" formControlName="other"  class="border-secondary ps-2 border-bottom w-75">
+                    </div> -->
+                </div>
+    
+                <!-- <div class="body w-100 d-flex justify-content-between">
+                    <div class="form-body pb-2 w-100 d-flex ">
+                        <label>Contact Details:</label>
+                        <input type="number" formControlName="contact" class="border-secondary  ps-2 border-bottom w-75 ">
+                    </div>
+                </div> -->
+        
+                <div class="body w-100 d-flex">
+                    <div class="form-body pb-2 w-50 d-flex ">
+                        <label>Sec.Lic. NO:</label>
+                        <input type="number" formControlName="sec_lic" class="border-secondary ps-2 border-bottom w-75 ">
+                    </div>
+                    <div class="form-body pb-2 w-50 d-flex ">
+                        <span class="text-center">Expiry Date: </span>
+                        <input type="date" formControlName="exp_date" class="border-secondary ps-2 border-bottom w-75">
+                    </div>
+                </div>
+        
+                <div class="form-body mt-3 d-flex ">
+                    <label class="me-4">Other Qualtifications</label>
+                    <div class=" d-flex checkbox">
+                        <div class="border border-secondary rounded me-2 p-1" role="button"
+                            *ngFor="let otherQualification of otherQualifications" (click)="selectedDiv(otherQualification)"
+                            [id]="otherQualification.id" [ngClass]="{'selected': quaSelected(otherQualification)}">
+                            <label>{{otherQualification.name}}</label>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="form-body mt-3 d-flex justify-content-between">
+                    <label>Do You Have Car?</label>
+                    <div class="d-flex radio h-10">
+                        <div class="border border-secondary rounded me-2 p-1" role="button"
+                            *ngFor="let car of cars; let i = index" [class.active]="active===i" (click)="setcar(i)">
+                            <label>{{car.name}}</label>
+                        </div>
+                    </div>
+                    <div class="form-body  w-25 d-flex ">
+                        <label class="text-center ">Car Registration: </label>
+                        <input type="text" formControlName="car_reg"  class="border-secondary ps-2 border-bottom w-75">
+                    </div>
+                </div>
+    
+                <div class="mb-2">
+                    <p>Availability - Days </p>
+                </div>
+    
+                <div class="d-flex" style="line-height: 1 !important;">
+                    <div *ngFor="let day of days" class="border border-secondary rounded me-2 p-1" role="button"
+                        (click)="selectedday(day)" [id]="day.id" [ngClass]="{'selected': daySelected(day)}">
+                        <label>{{day.name}}</label>
+                    </div>
+                </div>
+
+                <!-- <div class="bar text-center text-light" style="margin-top: 20px;">
+                    <h5>Uniform Details</h5>
+                </div> -->
+        
+            </div>
+
+            <div class="form-4"style="margin-top:20px;">
+
+                <!-- <div class="form-group  justify-content-end d-flex">
+                    <div class=" d-flex w-100">
+                      <div class="w-50 d-flex justify-content-center">
+                        <label for="" >Name</label>
+                        <input type="text" formControlName="name" class="border-bottom ms-2 border-secondary w-75">
+                      </div>
+            
+                      <div class="w-50">
+                        <label for="">Email</label>
+                        <input type="email" formControlName="email" class="border-bottom ms-2 border-secondary w-75">
+                      </div>
+                    </div>
+                </div> -->
+
+                <!-- <div class="form-group justify-content-end d-flex">
+                    <div class="d-flex w-100">
+                      <div class="w-50 d-flex justify-content-center">
+                        <label for="">Date of Issue</label>
+                        <input #dateInput type="date" formControlName="issue_date" class="border-bottom ps-2 border-secondary w-75">
+                      </div>
+            
+                      <div class="w-50">
+                        <label for="">Date of Return</label>
+                        <input #dateInput type="date" formControlName="return_date" class="ps-2 border-bottom border-secondary w-75">
+                      </div>
+                    </div>
+                </div>
+
+                <div class="form-2 ">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Status</th>
+                          <th scope="col">Uniform Type</th>
+                          <th scope="col">Uniform Size</th>
+                          <th scope="col">Uniform Quantity</th>
+                        </tr>
+                      </thead>
+              
+                      <tbody>
+                        <tr class="text-center" *ngFor="let uniformType of uniformTypes; let i = index">
+                          <td><input type="checkbox" name="checkbox" [checked]="uniformType.status" (change)="onCheckboxChange(i)"></td>
+                          <td>{{ uniformType.name }}</td> 
+                          <td><input type="text" [value]="uniformType.size" (input)="uniformType.size = $event.target.value"></td>
+                          <td><input type="text" [value]="uniformType.Qty" (input)="uniformType.Qty = $event.target.value"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+              
+                    <div class="bg-light">
+                      <label for="" class="fw-bold">Note:</label>
+                      <div>
+                        <textarea name="" id="" cols="143" rows="3" formControlName="note"></textarea>
+                      </div>
+                    </div>
+                </div> -->
+
+                <div class="bar text-center text-light" style="margin-top: 20px;">
+                    <h5>Emergency Contact Details</h5>
+                </div>
+
+            </div>
+
+
+            <div class="form-5"style="margin-top:20px;">
+
+                <div class="body mb-2 w-100 d-flex">
+                    <div class="form-body w-50 d-flex ">
+                        <label class="">Name:</label>
+                        <input type="text" formControlName="emergency_name" class="border-secondary ps-2 border-bottom w-75 "> 
+                    </div>
+                    <div class="form-body w-50 d-flex ">
+                        <label class="text-center">Contact No: </label>
+                        <input type="number" formControlName="emergency_contact" class="border-secondary ps-2 border-bottom w-75">
+                    </div>
+                </div>
+    
+                <div class="form-body   w-50 d-flex ">
+                    <label>Relationship:</label>
+                    <input type="text" formControlName="relation" class="border-secondary ps-2 border-bottom w-75 ">
+                </div>
+    
+                <div class="bar text-center text-light mt-5">
+                    <h5>Financial Institution Details</h5>
+                </div>
+    
+                <div class="form-2 mt-3">
+                    <div class="body w-100 d-flex justify-content-between">
+                        <div class="form-body mt- 2 w-100 d-flex ">
+                            <label >Bank Name</label>
+                            <input type="text" formControlName="bank_name" class="border-secondary  ps-2 border-bottom w-75 ">
+                        </div>
+                    </div>
+    
+                    <!-- <div class="body w-100 d-flex ">
+                        <div class="form-body mt-2 w-100 d-flex ">
+                            <label >Account Name (S):</label>
+                            <input type="text" formControlName="acc_name" class="border-secondary  ps-2 border-bottom w-75 ">
+                        </div>
+                    </div> -->
+    
+                    <div class="form-body mt-4 d-flex justify-content-between mt-1 mb-2">
+                        <label>Account Type</label>
+                        <div class="radio d-flex me-2">
+                            <div class="border border-secondary  rounded me-2 p-1" role="button" *ngFor="let accType of accTypes; let i = index"  [class.active]="AddDetails.get('accountType')?.value === accType.name" (click)="setacc(i)">
+                                <p >{{accType.name}}</p>
+                            </div>
+                        </div>
+                    
+                        <p class="ms-3 text-muted">(Mark Circle Applicable)</p>
+                    </div>
+    
+                    <div class="body mb-2 w-100 d-flex">
+                        <div class="form-body w-50 d-flex ">
+                            <label class="">BSB:</label>
+                            <input type="text" formControlName="bsb" class="border-secondary ps-2 border-bottom w-75 ">
+                        </div>
+                        <div class="form-body w-50 d-flex ">
+                            <label class="text-center">Account No: </label>
+                            <input type="number" formControlName="acc_no" class="border-secondary ps-2 border-bottom w-75">
+                        </div>
+                    </div> 
+                                                                 
+                    <!-- <div class="body mb-2 w-100 d-flex">
+                        <div class="form-body w-50 d-flex ">
+                            <label class="">Tax File No:</label>
+                            <input type="number" formControlName="tax_file" class="border-secondary ps-2 border-bottom w-75 ">
+                        </div>
+                    </div> -->
+    
+                    <div class="body mb-2 w-100 d-flex">
+                        <div class="form-body w-50 d-flex ">
+                            <label class="">Super Fund Name:</label>
+                            <input type="text" formControlName="fund_name" class="border-secondary ps-2 border-bottom w-75 ">
+                        </div>
+                    </div>
+    
+                    <div class="body mb-2 w-100 d-flex">
+                        <div class="form-body w-50 d-flex ">
+                            <label class="">Superannuation Membership number:</label>
+                            <input type="text" formControlName="superannuation" class="border-secondary ps-2 border-bottom w-75 ">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bar text-center text-light mt-5">
+                    <h5>Criminal History </h5>
+                </div>
+                <div class="form-3">
+                    <p>If you answer YES to any of these questions, please discuss them before continuing with this form.
+                        Have you ever been convicted of any criminal offence in Australia or overseas? This does not include
+                        traffic /parking fines but does include drunk driving offences. YES/ NO
+                        If YES, please describe the details: -
+                    </p>
+    
+                    <div class="body w-100 d-flex ">
+                        <div class="form-body  w-100 d-flex ">
+                            <label >Offence:</label>
+                            <input type="text" formControlName="offence_one" class="border-secondary  ps-2 border-bottom w-50 ">
+                        </div>
+                    </div>
+    
+                    <div class="body w-100  mt-3 d-flex ">
+                        <div class="form-body w-100 d-flex ">
+                            <label >Results:</label>
+                            <input type="text" formControlName="result_one" class="border-secondary  ps-2 border-bottom w-75 ">
+                        </div>
+                    </div>
+    
+                    <div class="body w-100 mt-2 d-flex ">
+                        <div class="form-body w-100 d-flex ">
+                            <label >Offence:</label>
+                            <input type="text" formControlName="offence_two" class="border-secondary  ps-2 border-bottom w-50 ">
+                        </div>
+                    </div>
+                                            
+                    <div class="body  mt-3 w-100 d-flex ">
+                        <div class="form-body w-100 d-flex ">
+                            <label >Results:</label>
+                            <input type="text" formControlName="result_two" class="border-secondary  ps-2 border-bottom w-75 ">
+                        </div>
+                    </div> 
+                                            
+                </div>
+
+                <div class="bar text-center text-light" style="margin-top: 20px;">
+                    <h5>References Form</h5>
+                </div>
+
+            </div>
+
+
+            <div class="form-5"style="margin-top:20px;">
+
+                <div>
+                    <p>Do you have any pending charges or are you currently under investigation for any criminal offences
+                        in Australia or overseas? Does not include traffic offences but does include drunk driving offences.
+                        YES/NO
+                    </p>
+                             
+                    <div class="body w-100  mt-3 d-flex ">
+                        <div class="form-body w-100 d-flex ">
+                            <label >If YES, please describe: </label>
+                            <input type="text" [formControl]="describeFormControl" class="border-secondary  ps-2 border-bottom w-75 ">
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mt-3 font-italic">Health</h5>
+                <p>If you answer YES to any of the below questions, please provide details in the blank space provided including
+                    dates of injuries and attention required.
+                </p>
+
+                <ul>
+                    <li class="d-flex">Have you ever suffered from, and physical disability eq. slipped disc, hernia etc? <div  class="d-flex p-2 ms-2 border border-secondary "role="button"*ngFor="let option1 of options1 let i = index" [class.active]="active1===i" (click)="setcar1(i)">{{option1.name}}</div></li>
+                    <li class="d-flex">Do you suffer from epilepsy or any nervous system disorder?<div class="d-flex p-2 ms-2 border border-secondary "role="button"*ngFor="let option2 of options2 let i = index" [class.active]="active2===i" (click)="setcar2(i)">{{option2.name}}</div> </li>
+                    <li class="d-flex">Have you ever suffered from bronchitis, asthma, or diabetes? <div class="d-flex p-2 ms-2 border border-secondary "role="button"*ngFor="let option3 of options3 let i = index" [class.active]="active3===i" (click)="setcar3(i)">{{option3.name}}</div></li>
+                    <li class="d-flex">Have you ever been hospitalised for a medical condition? <div class="d-flex p-2 ms-2 border border-secondary "role="button"*ngFor="let option4 of options4 let i = index" [class.active]="active4===i" (click)="setcar4(i)">{{option4.name}}</div> </li>
+                    <li class="d-flex">Have you ever claimed compensation for any work-related injury or illness? <div class="d-flex p-2 ms-2 border border-secondary "role="button"*ngFor="let option5 of options5 let i = index" [class.active]="active5===i" (click)="setcar5(i)">{{option5.name}}</div></li>
+                    <li class="d-flex">Do you smoke? <div class="d-flex ms-2 border border-secondary p-2 "role="button"*ngFor="let option6 of options6 let i = index" [class.active]="active6===i" (click)="setcar6(i)">{{option6.name}}</div></li>
+                </ul>
+                <input type="hidden" [value]="option1" />
+                <input type="hidden" [value]="option2" />
+                <input type="hidden" [value]="option3" />
+                <input type="hidden" [value]="option4" />
+                <input type="hidden" [value]="option5" />
+                <input type="hidden" [value]="option6" />
+        
+                <div class="bar text-center text-light" style="margin-top: 20px;">
+                    <h5>References Details</h5>
+                </div>
+
+                <p>A company requirement and insurance condition require that satisfactory work references be obtained for up to
+                    a minimum of 5 years. You must supply 2 business and 1 personal reference with all contact details. Family and
+                    relatives are not acceptable as work history references.
+                </p>
+        
+                <h5 class="mt-3 font-italic text-decoration-underline">Business / Work History References:</h5>
+        
+                <div class="form-group mt-3 justify-content-end d-flex">
+                    <div class="d-flex w-100">
+                        <div class=" d-flex employer">
+                            <label for="">Employer Company Name</label>
+                            <input type="text" formControlName="comp_name_one" class="border-bottom text-break ps-2 ms-2 border-secondary " style="word-break: break-all;">
+                        </div>
+                        <div class=" d-flex contactPerson">
+                            <label for="">Contact Person</label>
+                            <input type="number" formControlName="contact_per_one" class="border-bottom ps-2 ms-2 border-secondary no-spin-box">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex mt-2 w-100">
+                    <label for="">Phone</label>
+                    <input type="number" formControlName="phone_one" class="border-bottom ps-2 ms-2 border-secondary w-25 no-spin-box">
+                </div>
+        
+                <div class="d-flex from mt-2 w-100">
+                    <label for="">From</label>
+                    <input type="date" formControlName="from_date_one" class="border-bottom ps-2 ms-2 border-secondary w-25">
+                    <label for="">to</label>
+                    <input type="date" formControlName="to_date_one" class="border-bottom ps-2 ms-2 border-secondary w-25">
+                    <label for="">Position</label>
+                    <input type="text" formControlName="position_one" class="border-bottom ps-2 ms-2 border-secondary w-25">
+                </div>
+        
+                <div class="d-flex mt-2 w-100">
+                    <label for="">Duties</label>
+                    <input type="text" formControlName="duties_one" class="border-bottom ps-2 ms-2 border-secondary w-75">
+                </div>
+
+                <div class="form-group mt-3 justify-content-end d-flex">
+                    <div class="d-flex w-100">
+                        <div class=" d-flex employer">
+                            <label for="">Employer Company Name</label>
+                            <input type="text" formControlName="comp_name_two" class="border-bottom text-break ps-2 ms-2 border-secondary " style="word-break: break-all;">
+                        </div>
+        
+                        <div class=" d-flex contactPerson">
+                            <label for="">Contact Person</label>
+                            <input type="number" formControlName="contact_per_two" class="border-bottom ps-2 ms-2 border-secondary no-spin-box">
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="d-flex mt-2 w-100">
+                    <label for="">Phone</label>
+                    <input type="number" formControlName="phone_two" class="border-bottom ps-2 ms-2 border-secondary w-25 no-spin-box">
+                </div> 
+        
+                <div class="d-flex from mt-2 w-100">
+                    <label for="">From</label>
+                    <input type="date" formControlName="from_date_two" class="border-bottom ps-2 ms-2 border-secondary w-25">
+                    <label for="">to</label>
+                    <input type="date" formControlName="to_date_two" class="border-bottom ps-2 ms-2 border-secondary w-25">
+                    <label for="">Position</label>
+                    <input type="text" formControlName="position_two" class="border-bottom ps-2 ms-2 border-secondary w-25">
+                </div>
+        
+                <div class="d-flex mt-2 w-100">
+                    <label for="">Duties</label>
+                    <input type="text" formControlName="duties_two" class="border-bottom ps-2 ms-2 border-secondary w-75">
+                </div>
+                
+                <div class="bar text-center text-light" style="margin-top: 20px;">
+                    <h5>Personal References Form</h5>
+                </div>
+
+            </div>
+
+
+            <div class="form-5"style="margin-top:20px;">
+
+                <div class="form-1 mb-4">
+                    <div class="body w-100 d-flex">
+                        <div class="form-body pb-2 w-50 d-flex ">
+                            <label>Name:</label>
+                            <input type="text" formControlName="ref_name" class="border-secondary ps-2 border-bottom w-75 ">
+                        </div>
+                        <div class="form-body pb-2 w-50 d-flex ">
+                            <label class="text-center">Relationship: </label>
+                            <input type="text" formControlName="relationship" class="border-secondary ps-2 border-bottom w-75">
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="d-flex mt-2 w-100">
+                    <label for="">Contact Number</label>
+                    <input type="number" formControlName="contact" class="border-bottom ps-2 ms-2 border-secondary w-25 no-spin-box">
+                </div>
+
+                <div class="form-1 mt-2 mb-4">
+                    <div class="body w-100 d-flex">
+                        <div class="form-body  w-50 d-flex ">
+                            <label>Print full name:</label>
+                            <input type="text" formControlName="ref_fullname" class="border-secondary ps-2 border-bottom w-75 ">
+                        </div>
+        
+                        <div class="form-body  w-50 d-flex ">
+                            <label class="text-center">Date: </label>
+                            <input type="date" formControlName="ref_date" class="border-secondary ps-2 border-bottom w-75">
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="d-flex mt-2 w-100">
+                    <label for="">Checked and interviewed by:</label>
+                    <input type="text" formControlName="checkedBy" class="border-bottom ps-2 ms-2 border-secondary w-50">
+                </div> 
+        
+                <p class="mt-4 fw-bold">Please send your compliance documents to 
+                    <span role="button" class="link">app.thescouts.com.au</span>
+                </p>
+
+                <div class="d-flex w-75 justify-content-between fw-bold">
+                    <div>
+                        <ul>
+                            <li>Security Licence</li>
+                            <li>Driver Licence • First aid Cert</li>
+                            <li>Covid Vaccination Cert</li> 
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>Proof of citizenship</li>
+                            <li>WWCC / White Card</li>
+                            <li>Visa Copy OR - Security Certs</li> 
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bar text-center text-light" style="margin-top: 20px;">
+                    <h5>Before Submission</h5>
+                </div>
+            </div>
+
+
+            <div class="form-5"style="margin-top:20px;">
+                <label class="mt-2">Applicant’s signature:</label>
+                <ng-template #noSign>
+                    <div class="signature-container">
+                        <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+                    </div>
+                </ng-template>
+                <div *ngIf="fromParent; else noSign">
+                    <img style="height:100px; width:100px" [src]="getSign" />
+                </div>
+
+                <div class="buttons">
+                    <button  *ngIf="staffId" class="button" (click)="clearSignature()">Clear signature pad</button>&nbsp;
+                    <button  *ngIf="staffId" class="button" (click)="savePad()">Save signature</button>
+                </div>
+                  
+            </div>
+
+
+        </form>
+    </div>
+
+    <div class="flex justify-content-center" style="margin-top: 5rem; margin-bottom: 2rem;">
+        <!-- <button type="button" class="btn btn-success m-1" (click)="createPdf()"
+        *ngIf="this.global.admin && this.global.admin.admin_user_type === 'super-admin'">Save pdf</button> -->
+        <button *ngIf="staffId" type="button" class="btn btn-success m-1" (click)="Submit()"
+          >Submit</button>
+        <button type="button" class="btn btn-success m-1" (click)="makePdf()"
+            *ngIf="this.global.admin && this.global.admin.admin_user_type === 'super-admin'">Save pdf</button>
+        <!-- <button type="button" class="btn btn-success m-1" (click)="close()">Close</button> -->
+    </div>
+</div>

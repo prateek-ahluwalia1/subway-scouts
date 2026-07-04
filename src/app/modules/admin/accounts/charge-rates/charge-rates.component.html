@@ -1,0 +1,95 @@
+<div class="main p-6 w-100 main-body-watermark">
+  <h3>Charge Rates Lists </h3>
+
+  <div class="row">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+      <div class="searchbar_main">
+        <input type="text" placeholder="Search here.." class="searchbar" [(ngModel)]="searchTerm" (input)="filterChargeList()">
+        <mat-icon>search</mat-icon>
+      </div>
+      <button *ngIf="adminPermission && adminPermission.create" class="btn btn-border-3" (click)="openTemplateModal()">
+        Add Charge Rate
+      </button>
+    </div>
+
+    <!-- tabs list -->
+    <!-- <div class="tabs-row p-1">
+      <div class="tab active-tab" [ngClass]="{ 'active-tab': tab.name == this.activeTab }" *ngFor="let tab of tabs"
+        (click)="getTab(tab)">
+        <div class="tab-inner">
+          <div class="content d-flex align-content-center justify-content-center m-auto">
+            <mat-icon>{{ tab.icon }}</mat-icon>
+            <span>{{ tab.name }}</span>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- for active tab -->
+    <div class="col-12 " *ngIf="adminPermission && adminPermission.read">
+      <br>
+      <table class="table w-100 table-striped table-responsive table-bordered">
+        <thead class="backg">
+          <tr class="table-row bg-light">
+            <th scope="col" colspan="3">Charged Rate</th>
+            <th scope="col">Job Level</th>
+            <th scope="col">State</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let charge of filteredChargeList" class="row_main">
+            <th scope="row" colspan="3" (click)="editRates(charge,'view')">
+              {{charge.title}}
+            </th>
+            <td>{{charge.level}}</td>
+            <td>{{charge.state}}</td>
+            <td>
+              <div class="actions">
+                <mat-icon *ngIf="adminPermission && adminPermission.update" placement="right"
+                  ngbTooltip="Edit Chargerate!" triggers="mouseenter:mouseleave" style="color: #074677;" class="accent "
+                  svgIcon="heroicons_solid:pencil-alt" (click)="editRates(charge,'edit')">
+                </mat-icon>
+
+                <!-- <mat-icon *ngIf="adminPermission && adminPermission.update" style="color: var(--background-primary);"
+                  placement="right" ngbTooltip="Archive Chargerate!" triggers="mouseenter:mouseleave" class="accent "
+                  (click)="archive(charge)">archive</mat-icon> -->
+
+                <!-- <mat-icon color="primary" (click)="archive(payrate)">archive</mat-icon> -->
+                <!-- <mat-icon  style="color:red" (click)="editRates(payrate,'edit')">restore_from_trash</mat-icon> -->
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- for archive tab -->
+    <div class="col-12 " *ngIf="this.activeTab=='Archive' && adminPermission && adminPermission.read">
+      <br>
+      <table class="table w-100 table-striped table-responsive table-bordered">
+        <thead class="backg">
+          <tr class="table-row bg-light">
+            <th scope="col" colspan="3">Charged Rate</th>
+            <th scope="col">State</th>
+            <th scope="col">Job Level</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let charge of archiveChargeList " class="row_main">
+            <th scope="row" colspan="3">
+              {{charge.title}}
+            </th>
+            <td>{{charge.state}}</td>
+            <td>{{charge.level}}</td>
+            <td (click)="editRates(charge,'view')">
+              <mat-icon placement="right" ngbTooltip="View Chargerate!" triggers="mouseenter:mouseleave">
+                remove_red_eye
+              </mat-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

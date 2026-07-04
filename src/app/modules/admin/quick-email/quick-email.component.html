@@ -1,0 +1,360 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <div class="flex-auto p-6">
+        <div class="rounded-2xl">
+            <div class="email-main">
+                <div class="row p-4">
+                    <div class="col-7">
+                        <h5>Quick Email</h5>
+                        <form #quickEmail="ngForm" (ngSubmit)="onSubmit(quickEmail)">
+                            <div class="row mt-4" style="padding-left: 10px; padding-top: 30px;">
+                                <div class="col-md-2">
+                                    <div class="row">
+                                        <label for="inputFrom" class="col-form-label">To</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 pr-4">
+                                    <div class="row">
+                                        <app-select-multiple-guards (selectedUsers)="receiveDataFromChildGuards($event)"
+                                            class="select_job_roster" [dataArray]="guardsList"
+                                            [placeholderText]="'Select Staff'"
+                                            style="padding: 0;"></app-select-multiple-guards>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 sms">
+                                    <button type="button" class="btn btn-border-3" [autoClose]="false"
+                                        #myPopover="ngbPopover" [ngbPopover]="popContent" [popoverTitle]="popTitle"
+                                        placement="bottom">Filters</button>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left: 10px; margin-top: 20px;" *ngIf="customerch">
+                                <div class="col-2">
+                                    <div class="row">
+                                        <label for="inputTo" class="col-form-label">Customers</label>
+                                    </div>
+                                </div>
+                                <div class="col-10 p-0 pr-4">
+                                    <div class="row width-100 m-auto">
+                                        <app-select-multiple-customer (selectedCustomer)="receiveDataFromChilds($event)"
+                                            class="select_job_roster" [dataArray]="otherCustomers"
+                                            style="padding: 0;"></app-select-multiple-customer>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left: 10px; margin-top: 20px;" *ngIf="contractorch">
+                                <div class="col-2">
+                                    <div class="row">
+                                        <label for="inputTo" class="col-form-label">Contractors</label>
+                                    </div>
+                                </div>
+                                <div class="col-10 p-0 pr-4">
+                                    <div class="row width-100 m-auto">
+                                        <app-select-multiple-customer (selectedCustomer)="receiveDataFromChilds1($event)"
+                                            class="select_job_roster" [dataArray]="otherContractor"
+                                            style="padding: 0;"></app-select-multiple-customer>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left: 10px; margin-top: 20px;" *ngIf="isNewGuard">
+                                <div class="col-2">
+                                    <div class="row">
+                                        <label for="inputTo" class="col-form-label">New</label>
+                                    </div>
+                                </div>
+                                <div class="col-10 p-0 pr-4">
+                                    <div class="row">
+                                        <mat-form-field class="example-chip-list">
+                                            <mat-chip-list #chipList>
+                                                <mat-chip *ngFor="let newStaff of newStaff" [selectable]="selectable"
+                                                    [removable]="removable" (removed)="remove(newStaff,'newStaff')">
+                                                    {{newStaff.email}}
+                                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                </mat-chip>
+                                                <input placeholder="New Staff..." [matChipInputFor]="chipList"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    [matChipInputAddOnBlur]="addOnBlur"
+                                                    (matChipInputTokenEnd)="add($event,'newStaff')">
+                                            </mat-chip-list>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left: 10px; margin-top: 20px;">
+                                <div class="col-2">
+                                    <div class="row">
+                                        <label for="inputTo" class="col-form-label">Cc</label>
+                                    </div>
+                                </div>
+                                <div class="col-10 p-0 pr-4">
+                                    <div class="row">
+                                        <mat-form-field class="example-chip-list">
+                                            <mat-chip-list #chipList1>
+                                                <mat-chip *ngFor="let cc of cc" [selectable]="selectable"
+                                                    [removable]="removable" (removed)="remove(cc,'cc')">
+                                                    {{cc.email}}
+                                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                </mat-chip>
+                                                <input placeholder="New cc..." [matChipInputFor]="chipList1"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    [matChipInputAddOnBlur]="addOnBlur"
+                                                    (matChipInputTokenEnd)="add($event,'cc')">
+                                            </mat-chip-list>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left: 10px; margin-top: 20px;">
+                                <div class="col-2">
+                                    <div class="row">
+                                        <label for="inputTo" class="col-form-label">Bcc</label>
+                                    </div>
+                                </div>
+                                <div class="col-10 p-0 pr-4">
+                                    <div class="row">
+                                        <mat-form-field class="example-chip-list">
+                                            <mat-chip-list #chipList2>
+                                                <mat-chip *ngFor="let bcc of bcc" [selectable]="selectable"
+                                                    [removable]="removable" (removed)="remove(bcc,'bcc')">
+                                                    {{bcc.email}}
+                                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                </mat-chip>
+                                                <input placeholder="New bcc..." [matChipInputFor]="chipList2"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    [matChipInputAddOnBlur]="addOnBlur"
+                                                    (matChipInputTokenEnd)="add($event,'bcc')">
+                                            </mat-chip-list>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row" style="padding-left: 10px; margin-top: 20px;">
+                                <div class="col-2">
+                                    <div class="row">
+                                        <label for="inputTo" class="col-form-label">Bcc</label>
+                                    </div>
+                                </div>
+                                <div class="col-10 pr-4">
+                                    <div class="row">
+                                        <input type="name" class="form-control" name="bcc" [(ngModel)]="user.bcc" />
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="row" style="padding-left: 10px; margin-top: 20px;">
+                                <div class="col-2">
+                                    <div class="row">
+                                        <label for="inputTo" class="col-form-label">Subject</label>
+                                    </div>
+                                </div>
+                                <div class="col-10 pr-4">
+                                    <div class="row">
+                                        <input type="name" class="form-control" name="subject"
+                                            [(ngModel)]="user.subject" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--  -->
+                            <div class="row">
+                                <div class="col-2"></div>
+                                <div class="col-10">
+                                    <div class="section over-hide z-bigger pt-3">
+                                        <div class="row justify-content-center" *ngIf="quickPermissions && quickPermissions.read">
+                                            <div class="col-12 ">
+                                                <h5 class="mb-4">Which Email You Want?</h5>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <!--
+                                                --><input class="checkbox-tools" type="radio" name="tools" id="tool-4"
+                                                            (click)="getTmpplate('custom')">
+                                                        <label class="for-checkbox-tools" for="tool-4">
+                                                            <!-- <i class='uil uil-crop-alt'></i> -->
+                                                            Custom Email
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <!--
+                                                --><input class="checkbox-tools" type="radio" name="tools" id="tool-5"
+                                                            (click)="getTmpplate('signature')">
+                                                        <label class="for-checkbox-tools" for="tool-5">
+                                                            <!-- <i class='uil uil-brush-alt'></i> -->
+                                                            Email Signature
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <!--
+                                                --><input class="checkbox-tools" type="radio" name="tools" id="tool-6"
+                                                            (click)="getTmpplate('email')">
+                                                        <label class="for-checkbox-tools" for="tool-6">
+                                                            <!-- <i class='uil uil-image-resize-landscape'></i> -->
+                                                            Email Template
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--  -->
+
+                            <div class="row" style="padding-left: 10px; margin-top: 20px;" *ngIf="emailTemp=='custom'">
+                                <div class="col-2">
+                                    <label for="inputTo" class="col-form-label">Message</label>
+                                </div>
+                                <div class="col-10">
+                                    <app-ck-editor name="message" [(ngModel)]="user.message"></app-ck-editor>
+
+                                </div>
+                            </div>
+
+                            <div class="row" style="padding-left: 10px; margin-top: 20px;"
+                                *ngIf="emailTemp=='signature'">
+                                <div class="col-2">
+                                </div>
+                                <div class="col-10 pr-4">
+                                    <mat-form-field appearance="outline" class="w-100 mb-2">
+                                        <mat-label>Email Signature</mat-label>
+                                        <mat-select [(value)]="selected"
+                                            (selectionChange)="onEmailSignatureSelectionChange($event)">
+                                            <mat-option>None</mat-option>
+                                            <mat-option *ngFor="let sig of signature" [value]="sig">{{ sig.title
+                                                }}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <app-ck-editor name="message" [(ngModel)]="user.message"></app-ck-editor>
+                                </div>
+                            </div>
+
+                            <div class="row" style="padding-left: 10px; margin-top: 20px;" *ngIf="emailTemp=='email'">
+                                <div class="col-2">
+                                </div>
+                                <div class="col-10 pr-4">
+                                    <mat-form-field appearance="outline" class="w-100 mb-2">
+                                        <mat-label>Email Template</mat-label>
+                                        <mat-select (selectionChange)="onEmailTemplateSelectionChange($event)">
+                                            <mat-option>None</mat-option>
+                                            <mat-option *ngFor="let sig of emails" [value]="sig">{{ sig.title
+                                                }}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <app-ck-editor name="message" [(ngModel)]="user.message"></app-ck-editor>
+                                </div>
+                            </div>
+
+                            <div *ngIf="emailTemp=='signature'; else elseEmail">
+                                <div class="row">
+                                    <div class="col-2"></div>
+                                    <div class="col-10">
+                                        <div class="views_template" [innerHTML]="user.signature_view"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-template #elseEmail>
+                                <div class="row">
+                                    <div class="col-2"></div>
+                                    <div class="col-10">
+                                        <div class="views_template" [innerHTML]="user.email_view"></div>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <div class="row btn-send_email" style="float:right; height: 40px;">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-border-3" *ngIf="quickPermissions && quickPermissions.create">Send</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                    <div class="col-5">
+                        <div class="laptop">
+                            <div class="content">
+                                <div class="row laptop_row">
+                                    <div class="col">
+                                        <img src="assets/images/logo/scouts.png"
+                                            style="height:20px; width: 25px; float: left; margin-bottom: 4px; margin-left: 10px; margin-top: 3px;">
+                                        <p class="company_name">The Scouts</p>
+                                    </div>
+                                </div>
+                                <div class="geek2">
+                                    <div>
+                                        <div [innerHTML]="user.message"></div>
+                                    </div>
+                                    <!-- <p name="message">{{user.message}}</p> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<ng-template #popContent>
+    <mat-icon class="close" (click)="closePopover()">close</mat-icon>
+   
+            <!-- <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked>
+                <label class="form-check-label" for="inlineCheckbox1">Only System Guards</label>
+            </div> -->
+            <section class="example-section quick-email">
+                <mat-checkbox class="example-margin" [(ngModel)]="checked">Only System Staff</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="isNewGuard">New Staff</mat-checkbox>
+              </section>
+              <section class="example-section">
+                <mat-checkbox class="example-margin" [(ngModel)]="customerch">Customers</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="contractorch">Contractors</mat-checkbox>
+              </section>
+        
+    <form #addForm="ngForm" *ngIf="checked">
+        <div class="row" style="margin-top: 30px; margin-left: 1px; margin-right: 1px;">
+            <div class="col-6">
+                <div class="textOnInput">
+                    <label for="inputText" class="label-color">Customer</label>
+                    <app-select-multiple-customer (selectedCustomer)="receiveDataFromChild($event)"
+                        class="select_job_roster" [dataArray]="customers"
+                        style="padding: 0;"></app-select-multiple-customer>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="textOnInput">
+                    <label for="inputText" class="label-color">Select Staff
+                        Status</label>
+                    <mat-form-field class="w-100 p-0">
+                        <mat-select class="ps-2 pe-5 single-select" matNativeControl required name="guard_status"
+                            [(ngModel)]="guard_status">
+                            <mat-option class="w-100 ">Select status</mat-option>
+                            <mat-option value="active" class="w-100 ">Active</mat-option>
+                            <mat-option value="inactive" class="w-100 ">Inactive</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 30px; margin-left: 1px; margin-right: 1px;">
+            <div class="col-12">
+                <div class="textOnInput">
+                    <label for="inputText" class="label-color">Locations</label>
+                    <app-select-multiple-site (selectedSite)="receiveDataFromChildSite($event)"
+                        class="select_job_roster site-job-new-roster" [type]="type"
+                        [dataArray]="sitesList"></app-select-multiple-site>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 30px;">
+            <div class="col" style="text-align: center;">
+                <button type="button" class="btn btn-border-3"
+                    (click)="applyFilters(addForm.value,myPopover.close())">Apply</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<ng-template #popTitle>
+    <div class="popover-header-date">
+    </div>
+</ng-template>

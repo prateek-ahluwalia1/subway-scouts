@@ -1,0 +1,51 @@
+<div class="modal-body">
+    <ng-container *ngIf="dialogBelonging.customData.type === 'confirm'; else otherContent">
+        <table class="table">
+            <thead style="background-color: #DDF4EF;">
+                <th>#</th>
+                <th>Image</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let staff of dialogBelonging?.customData?.ConfirmstaffData; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                        <img class="w-10 h-10 rounded-full mx-1"
+                            [src]="'https://apis.thescouts.com.au/guard/' + staff?.profile_image"
+                            (error)="handleBrokenImage($event)" [matTooltip]="staff.first_name + ' ' + staff.last_name"
+                        style="cursor: pointer; object-fit: cover;">
+                    </td>
+                    <td>{{staff.first_name}}</td>
+                    <td>{{staff.last_name}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+
+    <ng-template #otherContent>
+        <table class="table">
+            <thead style="background-color: #DDF4EF;">
+                <th>#</th>
+                <th>Image</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Job Status</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let staff of dialogBelonging?.customData?.UnConfirmStaffdata; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                        <img class="w-10 h-10 rounded-full mx-1"
+                            [src]="'https://apis.thescouts.com.au/guard/' + staff?.profile_image"
+                            (error)="handleBrokenImage($event)" [matTooltip]="staff.first_name + ' ' + staff.last_name"
+                        style="cursor: pointer; object-fit: cover;">
+                    </td>
+                    <td>{{staff.first_name}}</td>
+                    <td>{{staff.last_name}}</td>
+                    <td>{{staff.job_status}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-template>
+</div>

@@ -1,0 +1,33 @@
+<div class="row w-100 p-6 ">
+  <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+
+  <br>
+  <br>
+  <div class="message bg-white p-6 ">
+    <h1>Add New Template</h1>
+    <br>
+    <form [formGroup]="templateForm" (ngSubmit)="onFormSubmit(templateForm.value)">
+      <mat-form-field class=" w-100">
+        <mat-label>Heading</mat-label>
+        <input type="email" formControlName="heading" matInput placeholder="Some Heading">
+      </mat-form-field>
+      <div *ngIf="submitted && errorControl.heading.errors" class="custom-error">
+        <div *ngIf="errorControl.heading.errors.required">Heading is required</div>
+      </div>
+      <br>
+      <br>
+      <mat-form-field class=" w-100">
+        <mat-label>Body</mat-label>
+        <textarea rows="6" formControlName="body" matInput placeholder="Message body"></textarea>
+      </mat-form-field>
+      <div *ngIf="submitted && errorControl.body.errors" class="custom-error">
+        <div *ngIf="errorControl.body.errors.required">Body is required</div>
+      </div>
+
+      <div class="send_button w-100 d-flex  justify-content-end align-items-center ">
+        <br>
+        <button class="btn btn-primary" type="submit">Save Template</button>
+      </div>
+    </form>
+  </div>
+</div>

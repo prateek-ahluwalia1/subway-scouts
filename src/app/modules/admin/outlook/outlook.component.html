@@ -1,0 +1,314 @@
+<div class="absolute inset-0 flex flex-col overflow-hidden main-body-watermark w-100">
+  <div class="p-6 rounded-2xl overflow-auto common-admin-customer-contractor">
+    <div class="row w-100 m-0" *ngIf="isAuthenticated">
+      <div class="col-lg-12 p-0">
+        <div class="mail-box">
+          <aside class="sm-side">
+            <div class="user-head">
+              <a class="inbox-avatar cursor-pointer" [matMenuTriggerFor]="menu">
+                <img [src]="profilePic" alt="Profile Picture" class="img-responsive">
+              </a>
+              <div class="user-name">
+                <h5><a>{{ user?.displayName }}</a></h5>
+                <span><a>{{ user?.mail }}</a></span>
+              </div>
+            </div>
+
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="logout()">
+                <mat-icon aria-hidden="false" aria-label="Logout icon">exit_to_app</mat-icon>
+                Logout
+              </button>
+            </mat-menu>
+
+            <div class="inbox-body">
+              <a class="btn btn-compose" (click)="sendEmailModel(sendMeail)">
+                Compose
+              </a>
+            </div>
+
+            <ul class="inbox-nav inbox-divider">
+              <li *ngFor="let item of listValue" [ngClass]="{active: item.value === selectedTab}"
+                (click)="onTabClick(item)">
+                <i [ngClass]="getIconClass(item.value)"></i> {{ item.label }}<span class="badge badge-success p-1 ml-1"
+                  style="font-size: 10px;">({{ item.count }})</span>
+              </li>
+            </ul>
+
+          </aside>
+          <aside class="lg-side">
+            <div class="inbox-head">
+              <h3>{{ title }}</h3>
+              <div class="input-append">
+                <input type="text" placeholder="Search Mail" name="'search" class="sr-input" #searchQuery>
+                <button type="button" class="btn sr-btn" (click)="searchEmails(searchQuery.value)"><i
+                    class="fa fa-search"></i></button>
+              </div>
+            </div>
+            <div class="inbox-body" *ngIf="!isDetailShow">
+              <div class="mail-option">
+                <ul class="unstyled inbox-pagination">
+                  <li><span>{{ (currentPage - 1) * itemsPerPage + 1 }}-{{ getMinValue(currentPage * itemsPerPage,
+                      totalEmails) }} of {{ totalEmails }}</span></li>
+                  <li>
+                    <a class="np-btn" (click)="goToPage(currentPage - 1)"><i
+                        class="fa fa-angle-left pagination-left"></i></a>
+                  </li>
+                  <li>
+                    <a class="np-btn" (click)="goToPage(currentPage + 1)"><i
+                        class="fa fa-angle-right pagination-right"></i></a>
+                  </li>
+                </ul>
+              </div>
+              <table class="table table-inbox table-hover">
+                <tbody>
+                  <table class="table table-inbox table-hover">
+                    <tbody>
+                      <tr [ngClass]="{'unread': !email.isRead}" *ngFor="let email of emails"
+                        (mouseenter)="hoveredEmailId = email.id" (mouseleave)="hoveredEmailId = null">
+                        <td class="inbox-small-cells">
+                          <input type="checkbox" name="read" class="mail-checkbox">
+                        </td>
+                        <!-- <td (click)="getEmailDetails(email.id)" class="inbox-small-cells"><i class="fa fa-star"></i>
+                        </td> -->
+                        <td (click)="getEmailDetails(email.id)" class="view-message dont-show">{{ email.subject |
+                          truncate: 10 }}</td>
+                        <td (click)="getEmailDetails(email.id)" class="view-message">{{ email.bodyPreview | truncate: 10
+                          }}</td>
+                        <td class="view-message inbox-small-cells">
+                          <i class="fa fa-paperclip" *ngIf="email.hasAttachments"></i>
+                        </td>
+                        <td (click)="getEmailDetails(email.id)" class="view-message text-right">{{ email.timestamp }}
+                        </td>
+                        <td class="view-message inbox-small-cells">
+                          <i class="fa fa-trash" (click)="deleteEmail(email.id)"
+                            *ngIf="hoveredEmailId === email.id"></i>
+                        </td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </tbody>
+              </table>
+
+            </div>
+
+            <div *ngIf="isDetailShow" class="email-details">
+              <div class="email-header">
+                <button mat-icon-button class="back-icon" (click)="goBack()">
+                  <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <div>
+                  <h4 class="email-subject">{{ selectedEmailDetails?.subject }}</h4>
+                  <p class="email-date">{{ selectedEmailDetails?.sentDateTime | date:'medium' }}</p>
+                </div>
+              </div>
+              <div class="email-sender-info">
+                <p class="email-sender flex align-items-center">From: {{
+                  selectedEmailDetails?.sender?.emailAddress?.name }}
+                  <mat-icon class="arrow-icon" [matMenuTriggerFor]="menu">keyboard_arrow_down</mat-icon>
+                </p>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>
+                    <p>From: {{ selectedEmailDetails?.sender?.emailAddress?.address }}</p>
+                  </button>
+                  <ng-container *ngIf="selectedEmailDetails?.ccRecipients?.length>0">
+                    <button mat-menu-item *ngFor="let ccRecipient of selectedEmailDetails?.ccRecipients">
+                      <p>CC: {{ ccRecipient.emailAddress?.name }} &lt;{{ ccRecipient.emailAddress?.address }}&gt;</p>
+                    </button>
+                  </ng-container>
+                  <ng-container *ngIf="selectedEmailDetails?.bccRecipients?.length>0">
+                    <button mat-menu-item *ngFor="let bccRecipient of selectedEmailDetails?.bccRecipients">
+                      <p>BCC: {{ bccRecipient.emailAddress?.name }} &lt;{{ bccRecipient.emailAddress?.address }}&gt;</p>
+                    </button>
+                  </ng-container>
+                </mat-menu>
+              </div>
+              <div class="email-body" [innerHTML]="renderEmailBody(selectedEmailDetails?.body?.content)"></div>
+              <div class="row email-attachments" *ngIf="selectedEmailDetails?.attachments">
+                <div class="col-md-4 attachment" *ngFor="let attachment of selectedEmailDetails?.attachments">
+                  <img [src]="getAttachmentIcon(attachment['@odata.mediaContentType'])" alt="" class="attachment-img">
+                  <div>
+                    <p class="attachment-file">{{ attachment.name }}</p>
+                    <button class="attachment-action" (click)="getAttachmentUrl(attachment)">
+                      <mat-icon>download</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- end here -->
+              <div class="email-actions">
+                <button mat-icon-button ngbTooltip="Reply this mail" *ngIf="!selectedEmailDetails.isDraft"
+                  (click)="replyForwardToEmail(selectedEmailDetails,sendMeail,'reply')">
+                  <mat-icon>reply</mat-icon>
+                </button>
+                <button ngbTooltip="Forward this mail" mat-icon-button *ngIf="!selectedEmailDetails.isDraft"
+                  (click)="replyForwardToEmail(selectedEmailDetails,sendMeail,'forward')">
+                  <mat-icon>forward</mat-icon>
+                </button>
+                <button ngbTooltip="Send this draft mail" *ngIf="selectedEmailDetails.isDraft" mat-icon-button
+                  (click)="replyForwardToEmail(selectedEmailDetails,sendMeail,'draft')">
+                  <mat-icon>forward</mat-icon>
+                </button>
+              </div>
+
+            </div>
+
+          </aside>
+        </div>
+      </div>
+    </div>
+    <div class="not-login" *ngIf="!isAuthenticated">
+      <a class="card">
+        <img src="assets/images/nav-images/images.jpg" alt="balloon with an emoji face" class="card__img">
+        <span class="card__footer">
+          <span>Oops, currently you are not logged in</span>
+          <!-- <div class="btn btn-border-3">Login</div> -->
+        </span>
+        <span class="card__action" ngbTooltip="Log in" (click)="login()">
+          <svg viewBox="0 0 448 512" title="play">
+            <path
+              d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z" />
+          </svg>
+        </span>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+  <p style="color: white">Please wait a moment...</p>
+</ngx-spinner>
+
+
+<ng-template #sendMeail let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Send Email</h4>
+    <button type="button" class="btn-close m-0" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body" ngbAutofocus>
+    <form class="flex flex-col pb-10 bg-card overflow-auto divide-y divide-slate-200 outlook-email"
+      [formGroup]="addEmail">
+      <!-- To -->
+      <div class="m-0 form-group flex align-items-center">
+        <label for="to" class="m-2">To:</label>
+        <mat-form-field class="example-chip-list w-100 ml-2">
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let to of to" [selectable]="selectable" [removable]="removable"
+              (removed)="remove(to,'to')">
+              <img src="https://img.freepik.com/free-icon/user_318-159711.jpg" class="rounded-circle" alt=""
+                style="width: 20px; height: 20px; object-fit: contain; margin-right: 4px;">
+              {{ to.email }}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="New email.." name="to" [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event,'to')">
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+      <!-- Bcc -->
+      <div class="m-0 form-group flex align-items-center" *ngIf="composeType!='reply' || composeType=='forward'">
+        <label for="cc" class="m-2">CC:</label>
+        <mat-form-field class="example-chip-list w-100 ml-2">
+          <mat-chip-list #chipList1>
+            <mat-chip *ngFor="let cc of cc" [selectable]="selectable" [removable]="removable"
+              (removed)="remove(cc,'cc')">
+              <img src="https://img.freepik.com/free-icon/user_318-159711.jpg" class="rounded-circle" alt=""
+                style="width: 20px; height: 20px; object-fit: contain; margin-right: 4px;">
+              {{ cc.email }}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="New email.." name="cc" [matChipInputFor]="chipList1"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event,'cc')">
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+      <!-- CC -->
+      <div class="m-0 form-group flex align-items-center" *ngIf="composeType!='reply' || composeType=='forward'">
+        <label for="cc" class="m-2">Bcc:</label>
+        <mat-form-field class="example-chip-list w-100 ml-2">
+          <mat-chip-list #chipList2>
+            <mat-chip *ngFor="let bcc of bcc" [selectable]="selectable" [removable]="removable"
+              (removed)="remove(bcc,'bcc')">
+              <img src="https://img.freepik.com/free-icon/user_318-159711.jpg" class="rounded-circle" alt=""
+                style="width: 20px; height: 20px; object-fit: contain; margin-right: 4px;">
+              {{ bcc.email }}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="New email.." name="bcc" [matChipInputFor]="chipList2"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event,'bcc')">
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+      <!-- Subject -->
+      <div class="m-0 form-group flex align-items-center p-2">
+        <input type="text" class="border-none" placeholder="Subject" id="subject" formControlName="subject">
+      </div>
+      <!-- <div class="row m-0 p-0 my-2">
+        <div class="col-10 p-0">
+          <mat-form-field appearance="outline" class="w-100" *ngIf="showTemplate" style="height: 58px;">
+            <mat-label>Select Template</mat-label>
+            <mat-select (selectionChange)="onTemplateSelectionChange($event)">
+              <mat-option *ngFor="let item of emailSignaturs" [value]="item.id">{{ item.title }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <div class="flex justify-content-end mt-2" (click)="importTemplate()">
+            <span class="btn-sm btn-primary">Import Template</span>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="flex flex-col gt-xs:flex-row">
+        <app-ck-editor formControlName="body" class="sendoutlook-email"></app-ck-editor>
+      </div>
+
+    </form>
+    <div class="progress" *ngIf="progress">
+      <div class="progress-bar" [style.width]="progress + '%'">{{ progress }}%</div>
+    </div>
+    <div class="row w-100 m-0 p-2 mb-3">
+      <p>Attachments</p>
+      <ng-container *ngIf="attachments.length>0">
+        <div *ngFor="let attachment of attachments; let i = index"
+          class="col-lg-4 col-md-6 col-sm-12 attachment-item mb-1">
+          <div class="crm-email-attachments">
+            <div class="attachment">
+              <div class="row">
+                <!-- <div class="col-2"><mat-icon class="mr-2">insert_drive_file</mat-icon></div> -->
+                <div class="col-10">
+                  <p class="m-0">{{ attachment.name }}</p>
+                </div>
+                <div class="col-2"><mat-icon class="mr-2" (click)="removeAttachment(i)">delete_outline</mat-icon></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="row w-100 p-2 m-0">
+      <input type="file" id="fileInput" name="file" (change)="addAttachments($event)" multiple style="display: none" />
+      <label for="fileInput" class="btn-sm btn-primary w-25 cursor-pointer">Add Attachments</label>
+    </div>
+  </div>
+  <div class="modal-footer flex justify-content-between align-items-center">
+    <button type="button" class="btn btn-primary" *ngIf="!composeType" (click)="sendEmail()">Send Email</button>
+    <button type="button" class="btn btn-primary" *ngIf="composeType=='reply'"
+      (click)="replyForwardEmail('reply')">Reply</button>
+    <button type="button" class="btn btn-primary" *ngIf="composeType=='forward'"
+      (click)="replyForwardEmail('forward')">Forward</button>
+    <button type="button" class="btn btn-primary" *ngIf="composeType=='draft'"
+      (click)="replyForwardEmail('draft')">Send</button>
+    <section class="example-section">
+      <mat-checkbox class="example-margin" [(ngModel)]="includeSignature">Include Signature</mat-checkbox>
+    </section>
+  </div>
+  <!-- <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div> -->
+</ng-template>

@@ -1,0 +1,122 @@
+<div class="modal-header">
+    <h4 class="modal-title">Staff Detail</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="close('dismiss')"></button>
+</div>
+<div class="modal-body">
+    <div class="row px-0">
+        <div class="col-2 p-0" style="text-align: -webkit-center;">
+            <div *ngIf="fromRoster && fromRoster[0]?.profile_image; else noImage">
+                <img class="center" [src]="fromRoster[0]?.profile_image" alt="staff image" />
+            </div>
+            <ng-template #noImage>
+                <img src="assets/images/logo/scou_1.png" alt="the scouts logo" style="width: 70%;" />
+            </ng-template>
+        </div>
+        <div class="col-10 p-0">
+            <h5 style="margin-bottom: 0.1rem; margin-top: 15px;">{{ fromRoster[0].first_name }} {{
+                fromRoster[0].middle_name }} {{ fromRoster[0].last_name }}</h5>
+            <p style="margin-bottom: 0.1rem;">{{fromRoster[0].email}}</p>
+        </div>
+    </div>
+    <div class="row px-3">
+        <div class="col-6">
+            <table class='table borderless'>
+                <tbody>
+                    <tr>
+                        <th class="col_head">Internal ID</th>
+                        <td>{{fromRoster[0].internal_id}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col_head">Phone</th>
+                        <td>{{fromRoster[0].phone}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <table class='table borderless'>
+                <tbody>
+                    <!-- <tr>
+                        <th class="col_head">VIC Security Licence</th>
+                        <td>
+                            <p>{{security?security.document_no:'Not Uploaded Yet'}}</p>
+                        </td>
+                    </tr> -->
+                    <!-- <tr>
+                        <th class="col_head">Expiry Date</th>
+                        <td>
+                            <p>{{security?security.document_expire:'Not Uploaded Yet'}}</p>
+                        </td>
+                    <tr>
+                        <th class="col_head">Visa</th>
+                        <td>
+                            <p>{{visa?visa.document_no:'Not Uploaded Yet'}}</p>
+                        </td>
+                    </tr> -->
+                    <!-- <tr>
+                        <th class="col_head">Visa Exp</th>
+                        <td>
+                            <p>{{visa?visa.document_expire:'Not Uploaded Yet'}}</p>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row px-3">
+        <h6>External ID's</h6>
+        <div class="col-12">
+            <table class='table table-striped'>
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>External ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ids of fromRoster[0].guardExternalIds">
+                        <td>{{ ids.customer_name }}</td>
+                        <td>{{ ids.external_id }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-6">
+            <h5>Guard Shift Details</h5>
+        </div>
+        <div class="col-6">
+            <h6 style="float: right;">Total Hours ({{ total_hours }})</h6>
+        </div>
+    </div>
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th class="two-weeks-th" *ngFor="let day of activityWeek">
+                    {{day}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="tdoftable p-0" *ngFor="let day of activityWeek" [id]="day">
+                    <ng-container *ngFor="let detail of fromRoster[0].guardJobRoster">
+                        <div *ngIf="day==detail.date" class="my-2 shift-time-name">
+                            <p>{{ detail.start }}</p>
+                            <p>{{ detail.end }}</p>
+                            <p>{{ detail.site }}</p>
+                            <p class="text-dark font-weight-bold">
+                                ( {{ detail.hours }} hrs )
+                            </p>
+                        </div>
+                    </ng-container>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn" (click)="close('dismiss')">Close</button>
+</div>

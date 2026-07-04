@@ -1,0 +1,536 @@
+<div class="row modal-creat-shift-rosters">
+    <div class="col-3">
+        <h6 class="mb-5 text-center text-danger">
+            {{ addShiftAdvanceForm.get('public_holidays')?.value? 'It\'s a holiday shift':'' }}
+        </h6>
+        <img src="{{ selectedStaffPic }}" alt="" style="width: 70px; height: 70px" class="rounded-circle guard-image" (error)="handleImageError()" />
+        <div class="select-guard-detail pb-2">
+            <h4>{{ selectedStaffName }}</h4>
+        </div>
+        <div class="roster-stat pb20">
+            <div class="modal-side-element">
+                <fa-icon [icon]="calenderIcon"></fa-icon>
+                <div class="shitplushor">
+                    <p><b>0</b></p>
+                    <p>Shift Weekly Hours</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="roster-stat pb20">
+            <div class="modal-side-element">
+                <fa-icon [icon]="faClock"></fa-icon>
+                <div class="shitplushor">
+                    <p><b>{{ shiftLength }}</b></p>
+                    <p>Shift Length</p>
+                </div>
+            </div>
+        </div>
+        <div class="roster-stat pb20">
+            <div class="modal-side-element">
+                <fa-icon [icon]="faUser"></fa-icon>
+                <div class="shitplushor">
+                    <p><b>0</b></p>
+                    <p>Shift Cost</p>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="roster-stat pb20">
+            <mat-slide-toggle [(ngModel)]="on_call_job" [checked]="on_call_job==1" [disabled]="on_call_job==1">
+                ASAP!
+            </mat-slide-toggle>
+        </div>
+        <div class="roster-stat pb20">
+            <mat-slide-toggle [(ngModel)]="admin_confirm" (change)="admin_confirm = $event.checked ? 1 : 0">
+                Confirm Shift
+            </mat-slide-toggle>
+        </div> -->
+    </div>
+    <div class="col-9">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                {{ shiftEdited ? 'Update Shift on ' + clickedboxDate1 : 'New Shift on ' + clickedboxDate1 }}
+            </h4>
+            <button type="button" class="btn-close m-0" aria-label="Close" (click)="close('dismiss')"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="addShiftAdvanceForm">
+                <div class="row pb-1">
+                    <div class="col-lg-6">
+                        <mdb-form-control *ngIf="calenderType!='staff'">
+                            <label mdbLabel class="form-label" for="form1">Branch Name</label>
+                            <input mdbInput class="form-control disabled-input" formControlName="site_name" id="site_id"
+                                type="text" aria-label="readonly input example" [readonly]="true" [value]="site_id" />
+                        </mdb-form-control>
+                        <mdb-form-control *ngIf="calenderType=='staff'">
+                            <label mdbLabel class="form-label" for="form1">Staff Name</label>
+                            <input mdbInput class="form-control disabled-input" formControlName="guard_name"
+                                id="guard_id" type="text" aria-label="readonly input example" [readonly]="true"
+                                [value]="guard_id" />
+                        </mdb-form-control>
+                    </div>
+                    <div class="col-lg-6 flex flex-col" *ngIf="calenderType=='staff'">
+                        <div class="flex justify-content-between align-items-center">
+                            <label mdbLabel class="form-label" for="form1">Where is working?</label>
+                            <a ngbTooltip="Make This Shift Uncover" class="remove-staff-from-shift" (click)="clearSelection()">
+                                <mat-icon>clear</mat-icon>
+                            </a>
+                        </div>
+                        <app-select-multiple-site signleDouble="no" style="position: relative;"
+                            (selectedSite)="receiveDataFromChildSi($event)" class="select_job_roster w-100"
+                            [dataArray]="guards" [placeholderText]="'Select Branch'">
+                        </app-select-multiple-site>
+                        <div *ngIf="submitButtonClicked" class="text-danger mt-2">Please select a branch.</div>
+                    </div>
+                    <div class="col-lg-6 flex flex-col" *ngIf="calenderType=='location'">
+                        <div class="flex justify-content-between align-items-center">
+                            <label mdbLabel class="form-label" for="form1">Who is working?</label>
+                            <a ngbTooltip="Make This Shift Uncover" class="remove-staff-from-shift" (click)="clearSelection()">
+                                <mat-icon>clear</mat-icon>
+                            </a>
+                        </div>
+                        <app-select-multiple-guards signleDouble="no" style="position: relative;"
+                            (selectedUsers)="receiveDataFromChildSingle($event)" class="select_job_roster w-100"
+                            [dataArray]="guards" [placeholderText]="'Select a staff'" #selectGuards>
+                        </app-select-multiple-guards>
+                    </div>
+                </div>
+                <div class="row pb-1 mt-2">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="select_guard">Start Time</label>
+                            <div class="ngx-timepicker-field-example">
+                                <ngx-timepicker-field [controlOnly]="true" formControlName="start_time" [format]="24"
+                                    (timeChanged)="onChangeHour('start',$event)" [defaultTime]="'00:00'"
+                                    [disabled]="(signin_status ==1 || job_status=='completed') && (permissions && !permissions.onGoingCompletedUpdate)">
+                                </ngx-timepicker-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="select_guard">End Time</label>
+                            <div class="ngx-timepicker-field-example">
+                                <ngx-timepicker-field [controlOnly]="true" formControlName="end_time" [format]="24"
+                                    (timeChanged)="onChangeHour('end',$event)" [defaultTime]="'00:00'"
+                                    [disabled]="(signin_status ==1 || job_status=='completed') && (permissions && !permissions.onGoingCompletedUpdate)">
+                                </ngx-timepicker-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row pb-1 mt-1">
+                    <div class="col-lg-6" *ngIf="!addShiftAdvanceForm.get('guard_id')?.value">
+                        <div class="form-group">
+                            <label mdbLabel class="form-label" for="form1">Unprofiled Name</label>
+                            <input mdbInput class="form-control" type="text" formControlName="unprofile_name" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label mdbLabel class="form-label" for="form1">P.O/W.O</label>
+                            <input mdbInput class="form-control" type="text" formControlName="po_wo" />
+                        </div>
+                    </div>
+                </div> -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label mdbLabel class="form-label" for="form1">Job Instruction</label>
+                            <input mdbInput class="form-control" type="text" formControlName="job_instruction_text" />
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row pb-1 mt-1" *ngIf="!fileuploaded">
+                    <button mat-button color="primary" (click)="handleFileInput()">
+                        <mat-icon svgIcon="mat_outline:upload_file"></mat-icon> Upload Job Instruction File
+                    </button>
+                </div> -->
+
+                <!-- <div class="row pb-1">
+                    <button mat-button color="primary" (click)="checkStaffAvailbility()">Available Staff</button>
+                </div> -->
+
+                <!-- <div class="row" *ngIf="isShiftEdit">
+                    <button mat-button color="warn" (click)="addLeave()">Staff on leave</button>
+                    <div class="row align-items-center" *ngIf="addLeaveGuard">
+                        <div class="col-8">
+                            <mat-form-field class="w-100 mt-2 guard-leave-type">
+                                <mat-label>Leave type</mat-label>
+                                <mat-select formControlName="reason">
+                                    <mat-option value="annual">Annual</mat-option>
+                                    <mat-option value="sick">Sick</mat-option>
+                                    <mat-option value="other">Other</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-border-3 mt-4" (click)="applyLeave()">Apply</button>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- <div class="row pb-1 mt-1 d-flex" *ngIf="fileuploaded">
+                    <div class="col-8">
+                        <button (click)="viewFile()" mat-button color="accent">
+                            <mat-icon svgIcon="mat_outline:attach_file"></mat-icon>
+                            {{ shift_file_name }}
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <mat-icon (click)="handleFileInput()" style="width:25px;height:25px" svgIcon="mat_outline:drive_file_rename_outline"></mat-icon>
+                    </div>
+                </div> -->
+
+                <!-- <p class="hideShowBreakP" (click)=toggleDisplayDivIf()>
+                    <mat-icon *ngIf="!isShowbreak" svgIcon="mat_solid:keyboard_arrow_down"></mat-icon>
+                    <mat-icon *ngIf="isShowbreak" class="date_left_right">keyboard_arrow_right</mat-icon>
+                    Shift Details
+                </p> -->
+                <!-- <div class="row px-4" *ngIf="!isShowbreak">
+                    <div class="col-lg-6">
+                        <p>Shift Payable</p>
+                        <div class="yes-no">
+                            <p>
+                                <input type="radio" name="shift_payable" formControlName="shift_payable" value="yes">
+                                <label for="test1">Yes</label>
+                            </p>
+                            <p>
+                                <input type="radio" name="shift_payable" formControlName="shift_payable" value="no">
+                                <label for="test2">No</label>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>Shift Chargeable</p>
+                        <div class="yes-no">
+                            <p>
+                                <input type="radio" name="shift_chargeable" formControlName="shift_chargeable" value="yes">
+                                <label for="test3">Yes</label>
+                            </p>
+                            <p>
+                                <input type="radio" name="shift_chargeable" formControlName="shift_chargeable" value="no">
+                                <label for="test4">No</label>
+                            </p>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- <p class="hideShowCustomP" (click)=toggleCustomRates()>
+                    <mat-icon *ngIf="!isShowCustomRates" svgIcon="mat_solid:keyboard_arrow_down"></mat-icon>
+                    <mat-icon *ngIf="isShowCustomRates" class="date_left_right">keyboard_arrow_right</mat-icon>
+                    Custom Rates
+                </p>
+                <div class="row px-4" *ngIf="!isShowCustomRates">
+                    <div class="col-6">
+                        <mat-card-content>
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="custome_rate">Enable</mat-checkbox>
+                            </section>
+                        </mat-card-content>
+                    </div>
+                </div> -->
+                <!-- <div class="row px-4" *ngIf="addShiftAdvanceForm.get('custome_rate').value">
+                    <div class="col-6">
+                        <mat-card-content>
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="custome_payrate">Manual Custom Payrate</mat-checkbox>
+                            </section>
+                        </mat-card-content>
+                    </div>
+                    <div class="col-6">
+                        <mat-card-content>
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="custome_chagerate">Manual Custom Chargerate</mat-checkbox>
+                            </section>
+                        </mat-card-content>
+                    </div>
+                </div> -->
+
+                <!-- <div class="manual-rates mt-2">
+                    <div class="content w-100">
+                        <div class="tab4-field1">
+                            <div class="row justify-content-between">
+                                <div class="col-12" *ngIf="addShiftAdvanceForm.get('custome_payrate').value && addShiftAdvanceForm.get('custome_rate').value">
+                                    <h6>Manual Payrate</h6>
+                                    <table class="table w-100">
+                                        <thead class="backg">
+                                            <tr class="table-row bg-light">
+                                                <th scope="col" class="text-center">Time Slots</th>
+                                                <th scope="col">Rates</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let charge of this.global.manualPayRate" class="row_main">
+                                                <td scope="row" class="text-center">{{charge.date}}</td>
+                                                <td scope="row">
+                                                    <mat-form-field class="w-100 text-center bg_light">
+                                                        <input matInput [(ngModel)]="charge.regional" [ngModelOptions]="{standalone: true}"
+                                                            name={{charge.payrateName}} type="number" placeholder="0"
+                                                        min="0" (keydown)="onDiscountKeyDown($event)">
+                                                    </mat-form-field>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-12" *ngIf="addShiftAdvanceForm.get('custome_chagerate').value && addShiftAdvanceForm.get('custome_rate').value">
+                                    <h6>Manual Chargerate</h6>
+                                    <table class="table w-100">
+                                        <thead class="backg">
+                                            <tr class="table-row bg-light">
+                                                <th scope="col" class="text-center">Time Slots</th>
+                                                <th scope="col">Rates</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let charge of this.global.manualChargeRate" class="row_main">
+                                                <td scope="row" class="text-center">{{charge.date}}</td>
+                                                <td scope="row">
+                                                    <mat-form-field class="w-100 text-center bg_light">
+                                                        <input matInput [(ngModel)]="charge.regional" [ngModelOptions]="{standalone: true}" name={{charge.chargerateName}} type="number" placeholder="0" min="0" (keydown)="onDiscountKeyDown($event)">
+                                                    </mat-form-field>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row px-4 custome-rates" *ngIf="(!addShiftAdvanceForm.get('custome_payrate').value && !addShiftAdvanceForm.get('custome_chagerate').value) && addShiftAdvanceForm.get('custome_rate').value">
+                    <div class="col-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Payrates Level</mat-label>
+                            <mat-select formControlName="payrate_level" name="payrate_level">
+                                <mat-option>None</mat-option>
+                                <mat-option value="1">1</mat-option>
+                                <mat-option value="2">2</mat-option>
+                                <mat-option value="3">3</mat-option>
+                                <mat-option value="4">4</mat-option>
+                                <mat-option value="5">5</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Payrates</mat-label>
+                            <mat-select formControlName="payrate" name="payrate">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let payrate of payRate" [value]="payrate.id">{{ payrate.title }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <p class="hideShowTask" (click)=toggleTask()>
+                    <mat-icon *ngIf="!isShowShiftTask" svgIcon="mat_solid:keyboard_arrow_down"></mat-icon>
+                    <mat-icon *ngIf="isShowShiftTask" class="date_left_right">keyboard_arrow_right</mat-icon>
+                    Shift Task
+                </p>
+                <div class="shift-tasks-container" *ngIf="!isShowShiftTask">
+                    <div class="tasks-rows-container" formArrayName="job_roster_tasks">
+                        <div *ngFor="let input of job_roster_tasks?.controls; let i = index" [formGroupName]="i">
+                            <fa-icon [icon]="faTrash" (click)="removeTextArea(input.value,i)"></fa-icon>
+                            <input type="hidden" formControlName="id">
+                            <div class="row py-1">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="select_guard" class="py-2">Start Time</label>
+                                        <div class="ngx-timepicker-field-example">
+                                            <ngx-timepicker-field [controlOnly]="true" formControlName="task_start"
+                                                [format]="24" [defaultTime]="'00:00'">
+                                            </ngx-timepicker-field>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="select_guard" class="py-2">End Time</label>
+                                        <div class="ngx-timepicker-field-example">
+                                            <ngx-timepicker-field [controlOnly]="true" formControlName="task_end"
+                                                [format]="24" [defaultTime]="'00:00'">
+                                            </ngx-timepicker-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row px-2">
+                                <div class="form-group">
+                                    <label for="select_guard" class="py-2">Task</label>
+                                    <input type="text" class="form-control" formControlName="task" placeholder="" />
+                                    <div class="text-danger" *ngIf="input.get('task')?.touched && input.get('task')?.invalid">
+                                        Task description is required.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div [ngClass]="!job_roster_tasks?.controls? 'btn-90' : 'btn-40'" class="flex-row-centered flex-justify-content-center mb-4">
+                        <div class="no-shift-tasks-placeholder"> -->
+                            <!-- <div *ngIf="task!=0" cass="title">No tasks to display</div> -->
+                            <!-- <div class="flex-row-centered flex-justify-content-center py-5">
+                                <div class="width-100-percent height-100-percent">
+                                    <div class="custom-cta-btn" (click)="addTask()">
+                                        <span>+ Add new task</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="hideShowOthers" (click)=toggleOthers()>
+                    <mat-icon *ngIf="!isShowOthersDetail" svgIcon="mat_solid:keyboard_arrow_down"></mat-icon>
+                    <mat-icon *ngIf="isShowOthersDetail" class="date_left_right">keyboard_arrow_right</mat-icon>
+                    Other Details
+                </p>
+                <div class="row px-4 otherDetailDiv" *ngIf="!isShowOthersDetail"> -->
+                    <!-- <div class="col-12">
+                        <mat-card-content>
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="un_published_shift">Un-published
+                                    Shift
+                                </mat-checkbox>
+                            </section>
+                        </mat-card-content>
+                    </div> -->
+                    <!-- <div class="col-12">
+                        <mat-card-content>
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="public_holidays" name="public_holidays">
+                                    Public Holidays
+                                </mat-checkbox>
+                                <mat-checkbox class="example-margin" formControlName="un_published_shift">
+                                    Un-published Shift
+                                </mat-checkbox> -->
+                                <!-- <mat-checkbox class="example-margin" formControlName="covid_marshal"
+                                    name="covid_marshal">Covid Marshal
+                                </mat-checkbox> -->
+                            <!-- </section>
+                        </mat-card-content>
+                    </div>
+                    <div class="col-12">
+                        <mat-card-content>
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="training" id="training">
+                                    Training
+                                </mat-checkbox> -->
+                                <!-- <mat-checkbox class="example-margin" formControlName="continuation" id="continuation">
+                                    Continuation
+                                </mat-checkbox> -->
+                                <!-- <mat-checkbox class="example-margin" formControlName="travel_time">
+                                    Travel Time
+                                </mat-checkbox>
+                            </section>
+                        </mat-card-content>
+                    </div>
+                    <div class="col-12">
+                        <mat-card-content>
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="over_time" id="overtime_enabled">
+                                    OverTime
+                                </mat-checkbox> -->
+                                <!-- <mat-checkbox class="example-margin" formControlName="travel_time">
+                                    Travel Time
+                                </mat-checkbox> -->
+                                <!-- <mat-checkbox class="example-margin" formControlName="adhoc_shift">
+                                    Adhoc
+                                </mat-checkbox>
+                            </section>
+                        </mat-card-content>
+                    </div>
+                    <div class="col-12">
+                        <mat-card-content>
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" formControlName="reimbursement" id="reimbursement">
+                                    Reimbursement
+                                </mat-checkbox> -->
+
+                                <!-- <mat-checkbox class="example-margin" formControlName="adhoc_shift">
+                                    Adhoc
+                                </mat-checkbox> -->
+                            <!-- </section>
+                        </mat-card-content>
+                    </div>
+                    <div class="row mt-2" *ngIf="addShiftAdvanceForm.get('public_holidays').value">
+                        <div class="col-12 d-flex justify-content-between">
+                            <label id="example-radio-group-label">Public Holiday</label>
+                            <mat-radio-group aria-label="Select an option">
+                                <mat-radio-button class="ml-4" value="1">All Shift</mat-radio-button>
+                                <mat-radio-button class="ml-4" value="2" [checked]="true">Start day only</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-2 d-flex p-0">
+                        <div class="col-md-6" *ngIf="addShiftAdvanceForm.get('over_time').value">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Overtime Value</mat-label>
+                                <mat-select formControlName="over_time_value" id="over_time_value">
+                                    <mat-option value="">Select</mat-option>
+                                    <mat-option value="1.5">1.5x</mat-option>
+                                    <mat-option value="2">2x</mat-option>
+                                    <mat-option value="2.5">2.5x</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-6" *ngIf="addShiftAdvanceForm.get('travel_time').value">
+                            <mat-form-field class="w-100 text-center bg_light" (input)="validateNumber($event)">
+                                <input matInput type="number" formControlName="travel_time_value" placeholder="0">
+                            </mat-form-field>
+                            <small>*only number and decimal values</small>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2" *ngIf="addShiftAdvanceForm.get('reimbursement').value">
+                        <div class="col-md-6">
+                            <mat-form-field class="w-100 text-center bg_light">
+                                <input matInput type="text" formControlName="reimbursement_text" placeholder="Please enter text">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field class="w-100 text-center bg_light">
+                                <input matInput type="number" formControlName="reimbursement_value" placeholder="Please enter value $0" min="0">
+                            </mat-form-field>
+                        </div>
+                    </div> -->
+
+                <!-- </div> -->
+            </form>
+        </div>
+        <div class="modal-footer">
+            <ng-container *ngIf="addShiftAdvanceForm.get('guard_id')?.value">
+                <button type="button" class="btn btn-warning" (click)="submitShiftAdvanceForm()" [disabled]="!permissions || !permissions.updateShift || !checkWeek(permissions.lockPreweek)">
+                    Update Without Notify
+                </button>
+                <button type="button" class="btn btn-warning" [disabled]="!permissions || !permissions.updateShift || !checkWeek(permissions.lockPreweek)" (click)="submitShiftAdvanceForm('publish')">
+                    Publish
+                </button>
+            </ng-container>
+            <button type="button" class="btn btn-border-3" (click)="submitShiftAdvanceForm()" [disabled]="!permissions || !permissions.updateShift || !checkWeek(permissions.lockPreweek)">
+                {{ addShiftAdvanceForm.get('id').value ? 'Update' : 'Submit' }}
+            </button>
+            <button type="button" class="btn btn-light" aria-label="Close" (click)="close('dismiss')">Close</button>
+        </div>
+    </div>
+</div>
+
+<ng-template #sendOtp let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Verification Required</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+
+  <div class="modal-body">
+    <p class="text-warning mb-3">{{ otpModalmessage }}</p>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Enter OTP</mat-label>
+      <input matInput [(ngModel)]="otpValue" name="otp" type="text" autocomplete="off" />
+    </mat-form-field>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.dismiss('Cancel')">Cancel</button>
+    <button type="button" class="btn text-white button-back" (click)="onSendOtp()">Send</button>
+  </div>
+</ng-template>

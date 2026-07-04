@@ -1,0 +1,200 @@
+.row-center {
+    width: 50%;
+    margin: auto;
+    background-color: hsl(0, 0%, 100%);
+   
+}
+
+.form-builder-header {
+    width: 100%;
+    
+    .form-builder-logo {
+        width: 30%;
+        min-width: 30%;
+        height: 50%;            
+        margin-top: 15px;
+
+        .logo {
+           
+            object-fit: contain;
+        }
+    }
+
+    .form-builder-title {
+        width: 70%;
+        text-align: center;
+    }
+
+}
+
+.form-builder-form {
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+.buttons-signature {
+    text-align: end;
+    margin: 10px;
+
+    mat-icon {
+        margin: 2px;
+        cursor: pointer;
+    }
+}
+
+.footer {
+    background-color: black;
+    color: white;
+    padding: 10px 10px;
+    margin: 20px 0px;
+    p{
+        font-size: 12px;
+    }
+}
+
+.heading {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.location {
+    height: 30px;
+    width: 35px;
+}
+
+.email {
+    height: 20px;
+    width: 30px;
+}
+
+.contact {
+    height: 15px;
+    width: 25px;
+}
+
+.sociallinks {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+
+    .fa-brands {
+        width: 20px;
+        height: 20px;
+        color: white;
+        font-size: 20px;
+        // margin-bottom: 30px;
+    }
+}
+
+
+
+@media (max-width: 850px) {
+    .row-center {
+        margin: 30px 20px;
+    }
+
+    .body {
+        margin: 20px;
+    }
+
+    .form-title {
+        margin-top: 20px;
+    }
+
+    .footer {
+        padding: 10px;
+    }
+
+    .location {
+        height: 20px;
+        width: 25px;
+    }
+
+    .email {
+        height: 15px;
+        width: 20px;
+    }
+
+    .contact {
+        height: 10px;
+        width: 15px;
+    }
+
+
+    .fa-brands {
+        width: 30px;
+        margin-bottom: 20px;
+    }
+
+    .logo {
+        height: 60px;
+        width: 30px;
+    }
+}
+
+/* form.component.scss */
+.container {
+   
+    padding: 20px;
+    background-repeat: repeat;
+    background-size: 70px;
+  
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    input.form-control {
+        border-radius: 0.25rem;
+    }
+
+    button.btn-primary {
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 0.25rem;
+    }
+}
+
+.signature-container {
+    border-style: dashed;
+    border-width: 2px;
+    margin-bottom: 20px;
+    width: 95%;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.is-invalid {
+    border: 1px solid red;
+}
+
+.invalid-feedback {
+    color: red;
+    display: block;
+}
+
+.signature-container {
+    border: 2px dashed grey;
+    height: 200px;
+}
+
+
+.dropdown-arrow {
+    position: absolute;
+    top: 67%;
+    right: 17px; 
+    transform: translateY(-50%);
+    pointer-events: none; 
+  }
+  
+  .dropdown-arrow i {
+    font-size: 14px;
+    color: #888;
+  }

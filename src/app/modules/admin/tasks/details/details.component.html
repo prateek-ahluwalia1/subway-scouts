@@ -1,0 +1,61 @@
+<div class="flex flex-auto">
+    <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto" [formGroup]="taskForm" (ngSubmit)="onFormSubmit()">
+        <div class="flex items-center justify-between -mt-3 -ml-4">
+            <div class="flex items-center justify-center">
+                <span class="ml-2 font-semibold">{{ viewOnly ? 'From: ' + viewData?.created_by : 'Create New Note'}}</span>
+            </div>
+
+            <div class="flex items-center">
+                <a mat-icon-button [routerLink]="['../']">
+                    <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </a>
+            </div>
+        </div>
+
+        <mat-divider class="mt-6 mb-8"></mat-divider>
+
+        <!-- Title -->
+        <ng-container *ngIf="!viewOnly">
+            <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
+                <mat-label>Title</mat-label>
+                <input matInput [formControlName]="'title'">
+                <mat-error *ngIf="taskForm.get('title').hasError('required')">
+                    Title is required.
+                </mat-error>
+            </mat-form-field>
+            <div class="row flex flex-wrap items-center mt-8">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Select Administrator</mat-label>
+                    
+                    <mat-select [formControl]="adminId" #select multiple>
+                        <div class="select-all-admin" style="background-color: #f8f9fa; height:28px">
+                            <input matInput placeholder="Search" (input)="filterAdminList($event.target.value)" style="height: 30px;">
+                        </div>
+                        <div class="select-all-admin">
+                            <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{ standalone: true }" (change)="toggleAllSelection()">Select All</mat-checkbox>
+                        </div>
+                        <mat-option  *ngFor="let topping of filteredAdminList" [value]="topping.id">{{ topping.name }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="mt-8">
+                <app-ck-editor [formControlName]="'note'"></app-ck-editor>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mt-8">
+                <button class="flex-auto" mat-flat-button style="background-color: #01A37E; color: white;">
+                    Send
+                </button>
+            </div>
+        </ng-container>
+
+        <div *ngIf="viewOnly">
+            <h5>Title:</h5>
+            <p>{{ viewData?.title }}</p>
+            <mat-divider class="mt-6 mb-8"></mat-divider>
+            <h5>Sent To: <br> <span class="badge bg-secondary m-1 text-white text-capitalize" *ngFor="let item of adminsNameSent">{{ item.name }}</span></h5>
+            <mat-divider class="mt-6 mb-8"></mat-divider>
+            <h5>Notes: </h5>
+            <div [innerHtml]="sanitizeHtml(viewData?.note)"></div>
+        </div>
+    </form>
+</div>

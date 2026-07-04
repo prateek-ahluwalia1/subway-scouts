@@ -1,0 +1,26 @@
+/* Modal dialog */
+.modal-dialog {
+    /* Set max-height and overflow to allow scrolling */
+    max-height: calc(100vh - 60px);
+    margin: 0;
+    /* Adjust as needed based on header/footer height */
+}
+
+/* Modal content */
+.modal-content {
+    // padding: 15px;
+}
+
+/* Optional: Adjust modal body to fit your requirements */
+.modal-body {
+    /* Add your specific styles for the modal body */
+}
+
+/* Optional: Adjust modal header/footer to fit your requirements */
+.modal-header,
+.modal-footer {
+    /* Add your specific styles for the modal header/footer */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}

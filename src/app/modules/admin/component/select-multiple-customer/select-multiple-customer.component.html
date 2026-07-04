@@ -1,0 +1,15 @@
+<mat-form-field color="accent" class="multiSiteSelect" *ngIf="bankMultiCtrl">
+    <mat-label *ngIf="label">{{label}}</mat-label>
+    <mat-select [formControl]="bankMultiCtrl" [placeholder]="placeholderText" [multiple]="signleDouble=='no'?false:true"
+        #multiSelect (selectedCustomer)="handleSelectionChange($event)">
+        <mat-option>
+            <ngx-mat-select-search [showToggleAllCheckbox]="true" [toggleAllCheckboxIndeterminate]="isIndeterminate"
+                [toggleAllCheckboxChecked]="isChecked" (toggleAll)="toggleSelectAll($event)"
+                [formControl]="bankMultiFilterCtrl" placeholderLabel="Search here"
+                noEntriesFoundLabel="Customer Not Found"></ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let bank of filteredBanksMulti | async; trackBy: trackById; let i = index" [value]="bank">
+            {{bank.name}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>

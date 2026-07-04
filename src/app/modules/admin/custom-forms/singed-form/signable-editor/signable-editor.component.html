@@ -1,0 +1,78 @@
+<!-- Add Form Element Button -->
+<div class="settings-cog cog-form-builder fixed flex items-center justify-center left-0 shadow-lg rounded-r-lg z-90 cursor-pointer bg-opacity-90 print:hidden"
+    [class.lg:left-0]="config?.layout === 'centered' || config?.layout === 'material'"
+    [class.lg:left-28]="config?.layout !== 'centered' && config?.layout !== 'material'" style="top: 250px"
+    (click)="sidenav.toggle()" *ngIf="!opened">
+    <span>Add Form Element</span>
+    <mat-icon class="icon-size-5 text-white animate-spin-slow" [svgIcon]="'heroicons_solid:cog'"></mat-icon>
+</div>
+
+<!-- Main Body -->
+<div class="absolute inset-0 flex flex-col overflow-hidden main-body-watermark">
+    <div class="overflow-auto">
+        <div class="navbar-container">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3 text-center"></div>
+                    <div class="col-md-6 text-center">
+                        <button class="tab-button" (click)="goBack()">Go Back</button>
+                        <button class="tab-button active">Build</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid py-3"
+            style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
+            <div>
+                <div class="drop-zone">
+                    <input type="file" (change)="onFileSelected($event)" />
+                    <div class="pdf-container">
+                        <div id="pdf-canvas-container"></div>
+                        <div class="signature-pad-container" [style.top.px]="signaturePosition.y"
+                            [style.left.px]="signaturePosition.x" [style.width.px]="signatureSize.width"
+                            [style.height.px]="signatureSize.height" cdkDrag cdkResizable
+                            (cdkDragEnded)="onDragEnd($event)" (resized)="onResize($event)">
+                            <signature-pad [options]="signaturePadOptions" (onEnd)="saveSignature()"></signature-pad>
+                        </div>
+                    </div>
+                    <button (click)="savePdf()">Save PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Side Panels -->
+<mat-sidenav-container class="example-container">
+    <mat-sidenav #sidenav mode="side" class="sidenav" [(opened)]="opened">
+        <div class="flex flex-col w-full overflow-auto bg-card">
+            <div class="flex flex-row items-center px-6 h-15 min-h-15 text-white bg-dark">
+                <div class="ml-1 text-1xl">Form Elements</div>
+                <button class="ml-auto" mat-icon-button (click)="sidenav.close()">
+                    <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </button>
+            </div>
+            <mat-nav-list>
+                <a mat-list-item *ngFor="let field of elements" (click)="addFieldToDropZone(field)">
+                    <mat-icon [svgIcon]="field.icon"></mat-icon>
+                    <span class="nav-text text-capitalize">{{ field.name }}</span>
+                </a>
+            </mat-nav-list>
+        </div>
+    </mat-sidenav>
+</mat-sidenav-container>
+
+<mat-sidenav-container class="settings-container">
+    <mat-sidenav #settingsDrawer mode="side" position="end" class="sidenav form-builder-sidenav"
+        [(opened)]="settingsDrawerOpened">
+        <div class="flex flex-row items-center px-6 h-15 min-h-15 text-white bg-dark">
+            <div class="ml-1 text-1xl">Form Setting</div>
+            <button class="ml-auto" mat-icon-button (click)="settingsDrawer.close()">
+                <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </button>
+        </div>
+        <div class="settings-panel">
+            <app-settings-panel></app-settings-panel>
+        </div>
+    </mat-sidenav>
+</mat-sidenav-container>

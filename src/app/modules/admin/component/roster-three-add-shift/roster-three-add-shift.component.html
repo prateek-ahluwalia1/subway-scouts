@@ -1,0 +1,105 @@
+<div class="roster-three-add-shift shadow">
+    <div class="modal-header">
+        <h4 class="modal-title">Selected Shift</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModel()"></button>
+    </div>
+    <div class="modal-body roster_three_add_shift">
+        <form [formGroup]="Selectdshift"></form>
+        <div class="row">
+            <div class="col-12 mt-2">
+                <div class="form-group">
+                    <label for="start_time">Start Time</label>
+                    <div class="ngx-timepicker-field-example">
+                        <ngx-timepicker-field id="start_time" formControlName="start_time" [controlOnly]="true"
+                            [format]="24" [defaultTime]="'00:00'"></ngx-timepicker-field>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-2">
+                <div class="form-group">
+                    <label for="end_time">End Time</label>
+                    <div class="ngx-timepicker-field-example">
+                        <ngx-timepicker-field id="#end_time" (focusout)="showPublish($event)" formControlName="end_time" [controlOnly]="true" [format]="24"
+                            [defaultTime]="'00:00'"></ngx-timepicker-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 md:col-12 mt-2">
+                <div class="form-group">
+                    <label for="role_selection">Role Selection</label>
+                    <select class="form-control" id="role_selection" formControlName="role_selection">
+                        <option value="1">Naveed</option>
+                        <option value="2">Usman</option>
+                        <option value="3">Rameez</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-2">
+                <div class="form-group">
+                    <label for="rate_selection">Rate Selection</label>
+                    <select class="form-control" id="rate_selection" formControlName="rate_selection">
+                        <option value="1">Naveed</option>
+                        <option value="2">Usman</option>
+                        <option value="3">Rameez</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-2">
+                <div class="search_customer_drop">
+                    <input class="form-control search_img" type="text" placeholder="Search...">
+                    <div class="search_list">
+                        <a>usman</a>
+                        <a>naveed</a>
+                        <a>rameez</a>
+                        <a>usman</a>
+                        <a>naveed</a>
+                        <a>rameez</a>
+                        <a>usman</a>
+                        <a>naveed</a>
+                        <a>rameez</a>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <mat-chip-list>
+                <mat-chip class="edit_notes" (click)="editNotesModel()">
+                    Edit Notes
+                </mat-chip>
+    
+            </mat-chip-list>
+        </div>
+        <div class="row mt-2 roster-details">
+            <div class="summery">
+                <div class="shift-hours">
+                    <p>Shift Length</p>
+                    <p>10.5 Hrs</p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <mat-chip-list>
+                    <span class="chift_history">Shift History</span>
+                </mat-chip-list>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="multiple_shift">
+                    <mat-slide-toggle [(ngModel)]="isChecked"></mat-slide-toggle>
+                    <span>Create Multiple</span>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+    </div> -->
+</div>

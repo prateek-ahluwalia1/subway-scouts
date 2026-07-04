@@ -1,0 +1,193 @@
+<div class="card mb-3 w-100">
+    <div class=" font-size-lg text-capitalize font-weight-normal custom-body">
+        <div class="job-track-nav job-track-body">
+            <h5>Invoice Report</h5>
+            <mat-chip-list aria-label="Dog selection" class="dog_selection">
+
+                <app-date-range (dateRange)="getStartEnd($event)" [start]="start" [end]="end"></app-date-range>
+
+
+                <app-select-multiple-customer style="height: 43px; margin: 5px;"
+                    (selectedCustomer)="receiveDataFromChild($event)" class="select-job-tacker" [dataArray]="customers"
+                    [placeholderText]="'Select Customers'"></app-select-multiple-customer>
+
+                <app-select-multiple-site style="height: 43px; margin: 5px;"
+                    (selectedSite)="receiveDataFromChildSite($event)" class="select-job-tacker" [dataArray]="sitesList"
+                    [placeholderText]="'Select Locations'"></app-select-multiple-site>
+
+
+                <mat-form-field class="fuse-mat-rounded job-tracker-field">
+                    <mat-select [placeholder]="'SELECT TYPE'" #status>
+                        <mat-option value="active">Normal</mat-option>
+                        <mat-option value="inactive">Divide</mat-option>
+                    </mat-select>
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:menu-alt-2'">
+                    </mat-icon>
+                </mat-form-field>
+
+                <mat-chip [matMenuTriggerFor]="menu">
+                    <mat-icon svgIcon="mat_outline:file_upload"></mat-icon><span
+                        style="margin-right: 5px;">Export</span>
+                </mat-chip>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="getReports('excel','invoice')">EXCEL</button>
+                    <button mat-menu-item (click)="getReports('preview','invoice')">Preview</button>
+                </mat-menu>
+
+            </mat-chip-list>
+
+        </div>
+
+
+    </div>
+    <div class="card-body" style="height: 400px;">
+        <table style="width:max-content" id="example"
+            class="table table-hover table-striped table-bordered table-responsive text-center"
+            *ngIf="previewData.length > 0">
+            <thead class="live-operation-head">
+                <tr>
+                    <ng-container *ngFor="let header of invoiceHeader">
+                        <th>
+                            {{ header }}</th>
+                    </ng-container>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let item of previewData; let i = index; trackBy: trackByInvoiceId">
+                    <tr>
+                        <td>{{ item.state }}</td>
+                        <td>{{ item.site_name }} ({{
+                            item.site_description }})</td>
+                        <td>{{ item.level }}</td>
+                        <td>
+                            {{ item.guard_full_name }}
+                        </td>
+                        <td>{{ item.phone }}</td>
+                        <td>{{ item.customer_name }}</td>
+                        <td>{{ item.start | date:
+                            'dd-MM-yyyy'
+                            }}
+                        </td>
+                        <td>{{ item.start | date: 'HH:mm' }}
+                        </td>
+                        <td>{{ item.end | date: 'HH:mm' }}
+                        </td>
+                        <td>{{ item.signin_time | date:
+                            'HH:mm'
+                            }}
+                        </td>
+                        <td>{{ item.signout_time | date:
+                            'HH:mm'
+                            }}
+                        </td>
+                        <td>{{ item.hours }}</td>
+                        <td>{{ item.morning_hours | number:
+                            '2.2-2'
+                            }}
+                        </td>
+                        <td>${{ item.day_rate }}</td>
+                        <td>{{ item.night_hours }}</td>
+                        <td>${{ item.night_rate }}</td>
+                        <td>
+                            {{ (item.saturday_morning_hours + item.saturday_night_hours) }}
+                        </td>
+                        <td>${{ item.saturday_rate }}</td>
+                        <td>
+                            {{ (item.sunday_morning_hours + item.sunday_night_hours) }}
+                        </td>
+                        <td>${{ item.sunday_rate }}</td>
+                        <td>
+                            {{ (item.ph_morning_hours + item.ph_night_hours) }}
+                        </td>
+                        <td>${{ item.public_holiday_rate }}
+                        </td>
+                        <td>{{ item.travel_time_value }}
+                        </td>
+                        <td
+                            style="text-align:center;border:1px solid #000000;background-color: #A9D08E; border:1px solid #000000;">
+                            ${{ item.total_amount | number:'1.2-2' }}
+                        </td>
+                        <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{
+                            item.payrol
+                            ?
+                            item.payrol : 'N/A' }}</td>
+                        <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{
+                            item.payroll_bank_name }}</td>
+                        <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{
+                            item.bsb
+                            }}
+                        </td>
+                        <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{
+                            item.payroll_bank_account_number }}</td>
+                        <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">
+                            {{ item.po_wo ? item.po_wo : (item.site_po_wo ? item.site_po_wo : 'N/A') }}
+                        </td>
+
+                        <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{
+                            item.training ==
+                            0 ? 'No' : 'Yes' }}</td>
+                    </tr>
+
+                    <ng-container *ngIf="i === previewData.length - 1 || item.site_id !== previewData[i + 1]?.site_id">
+                        <tr>
+                            <td colspan="11"></td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                {{ calculateTotalHours(item.site_id) }}
+                            </td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                {{ morningHours(item.site_id) }}
+                            </td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                ${{ totalDayRates(item.site_id) | number:'1.2-2' }}
+                            </td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                {{totalNightHours(item.site_id) | number:'1.2-2'}}</td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                ${{totalNightRates(item.site_id) | number:'1.2-2'}}</td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                {{totalSaturdayHoursLocation(item.site_id)}}</td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                ${{totalSaturdayRatesLocation(item.site_id) | number:'1.2-2'}}</td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                {{totalSundayHoursLocation(item.site_id)}}</td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                ${{totalSundayRatesLocation(item.site_id)| number:'1.2-2'}}</td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                {{totalPhHoursLocation(item.site_id)}}</td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                ${{totalPhRatesLocation(item.site_id)| number:'1.2-2'}}</td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                {{totalTravelTimeLocation(item.site_id)| number:'1.2-2'}}</td>
+                            <td
+                                style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">
+                                ${{totalAmountLocation(item.site_id)| number:'1.2-2'}}</td>
+                        </tr>
+                    </ng-container>
+
+                </ng-container>
+                <tr>
+                    <td colspan="23"></td>
+                    <td
+                        style="text-align:center; background-color: #D3D3D3; border:1px solid #000000; font-size:16px; font-weight:600;">
+                        {{ totalAmount() }} </td>
+                    <td colspan="6"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>

@@ -1,0 +1,46 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+
+    <div class="flex-auto p-6">
+
+        <div class="rounded-2xl">
+            <div class="appstatus-page">
+                <div class="task-head">
+                    <div class="user-nav rounded-2xl">
+                        <h4>App Status</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl row">
+                <table class="table table-stripped table-responsive">
+                    <thead style="background-color: #DDF4EF;">
+                        <tr>
+                            <th>Location Name</th>
+                            <th>Staff Name</th>
+                            <th>Date</th>
+                            <th>Shift Start Time</th>
+                            <th>Shift End Time</th>
+                            <th>Signin Time</th>
+                            <th>App Status</th>
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of processedAppData">
+                            <td>{{ item.site?.site_name }}</td>
+                            <td>{{ item.guardz.first_name }} {{ item.guardz.last_name }}</td>
+                            <td>{{ item.start | date: 'dd-MM-yyyy' }}</td>
+                            <td>{{ item.start | date: 'HH:mm' }}</td>
+                            <td>{{ item.end | date: 'HH:mm' }}</td>
+                            <td>{{ item.activity?.signin_time | date: 'HH:mm' }}</td>
+                            <td>
+                              <button [ngClass]="item.badgeClass">{{ item.appStatus }}</button>
+                            </td>
+                            <!-- <td></td> -->
+                          </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

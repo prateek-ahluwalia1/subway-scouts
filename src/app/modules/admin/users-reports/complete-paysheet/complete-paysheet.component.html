@@ -1,0 +1,547 @@
+<div class="card mb-3 w-100">
+  <div class=" font-size-lg text-capitalize font-weight-normal custom-body">
+    <div class="job-track-nav job-track-body">
+      <h5>Complete Paysheet</h5>
+      <mat-chip-list aria-label="Dog selection" class="dog_selection">
+        <app-date-range (dateRange)="getStartEnd($event)" [start]="start" [end]="end"></app-date-range>
+
+        <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-rounded job-tracker-field">
+          <mat-select [formControl]="toppings" [placeholder]="'State'" multiple>
+            <mat-select-trigger>
+              {{toppings.value?.[0] || ''}}
+              <span *ngIf="(toppings.value?.length || 0) > 1" class="example-additional-selection">
+                (+{{ (toppings.value?.length || 0) - 1 }}
+                {{ toppings.value?.length === 2 ? "other" : "others" }})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let state of stateList" [value]="state">{{ state }}
+            </mat-option>
+          </mat-select>
+          <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+        </mat-form-field>
+
+        <app-select-multiple-customer style="height: 43px; margin: 5px"
+          (selectedCustomer)="receiveDataFromChild($event)" class="select-job-tacker" [dataArray]="customers"
+          [placeholderText]="'Select Customers'"></app-select-multiple-customer>
+
+        <app-select-multiple-site style="height: 43px; margin: 5px" (selectedSite)="receiveDataFromChildSite($event)"
+          class="select-job-tacker" [dataArray]="sitesList"
+          [placeholderText]="'Select Locations'"></app-select-multiple-site>
+
+        <mat-chip [matMenuTriggerFor]="menu">
+          <mat-icon svgIcon="mat_outline:file_upload"></mat-icon><span style="margin-right: 5px">Export</span>
+        </mat-chip>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="getReports('excel', 'complete-paysheet')">
+            EXCEL
+          </button>
+          <!-- <button mat-menu-item (click)="getReports('preview', 'complete-paysheet')">
+            PREVIEW
+          </button> -->
+        </mat-menu>
+      </mat-chip-list>
+    </div>
+  </div>
+
+
+  <div class="card-body" style="height: 400px;">
+    <table style="width:max-content" id="example"
+      class="table table-hover table-striped table-bordered table-responsive text-center"
+      *ngIf="previewData.length > 0">
+      <thead class="bg-emerald-400 live-operation-head">
+        <tr>
+          <ng-container *ngFor="let header of paysheet_table">
+            <th>
+              {{ header }}
+            </th>
+          </ng-container>
+        </tr>
+
+      </thead>
+      <tbody>
+        <ng-container *ngFor="
+                    let item of previewData;
+                    let i = index;
+                    trackBy: trackCompleteID
+                  ">
+          <tr class="p-5">
+            <td>{{ item.state }}</td>
+            <td>{{ item.site_name }} ({{ item.site_description }})</td>
+            <td>{{ item.level }}</td>
+            <td>
+              {{
+              (item.guard_first_name !== "" ? item.guard_first_name : "N/A") +
+              " " +
+              (item.guard_last_name !== "" ? item.guard_last_name : "")
+              }}
+            </td>
+            <td>{{ item?.account_holder ?? "N/A" }}</td>
+            <td>{{ item.phone }}</td>
+            <td class="text-capitalize">{{ item?.staff_type?.replace("_", " ") }}</td>
+            <td>{{ item.customer_name }}</td>
+            <td>{{ item.start | date : "dd-MM-yyyy" }}</td>
+            <td>{{ item.start | date : "HH:mm" }}</td>
+            <td>{{ item.end | date : "HH:mm" }}</td>
+            <td>{{ item.signin_time | date : "HH:mm" }}</td>
+            <td>{{ item.signout_time | date : "HH:mm" }}</td>
+            <td>{{ item.hours }}</td>
+            <td>{{ item.morning_hours | number : "2.2-2" }}</td>
+            <td>${{ item.day_rate }}</td>
+            <td>{{ item.night_hours | number : "2.2-2" }}</td>
+            <td>${{ item.night_rate }}</td>
+            <td>
+              {{ item.saturday_morning_hours + item.saturday_night_hours }}
+            </td>
+            <td>${{ item.saturday_rate }}</td>
+            <td>
+              {{ item.sunday_morning_hours + item.sunday_night_hours }}
+            </td>
+            <td>${{ item.sunday_rate }}</td>
+            <td>
+              {{ item.ph_morning_hours + item.ph_night_hours }}
+            </td>
+            <td>${{ item.public_holiday_rate ?? 0 }}</td>
+            <td>${{ item.travel_time_value }}</td>
+            <td>${{ item.travel_time_value * item.day_rate }}</td>
+            <td>{{ item.reimbursement_text ?? "N/A" }}</td>
+            <td>${{ item.reimbursement_value ?? 0 }}</td>
+            <td style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #a9d08e;
+                        border: 1px solid #000000;
+                      ">
+              ${{ item.total_amount | number : "1.2-2" }}
+            </td>
+            <td style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #b4c6e7;
+                      "></td>
+            <td style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #b4c6e7;
+                      "></td>
+            <td style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #b4c6e7;
+                      "></td>
+            <td class="text-capitalize" style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #b4c6e7;
+                      ">
+              {{ item.payrol ? item.payrol : "N/A" }}
+            </td>
+            <td class="text-capitalize" style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #b4c6e7;
+                      ">
+              {{ item.payroll_bank_name }}
+            </td>
+            <td style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #b4c6e7;
+                      ">
+              {{ item.bsb }}
+            </td>
+            <td style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #b4c6e7;
+                      ">
+              {{ item.payroll_bank_account_number }}
+            </td>
+            <td style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #b4c6e7;
+                      ">
+              <ng-container *ngIf="item.po_wo; else siteWoOrNA">{{
+                item.po_wo
+                }}</ng-container>
+              <ng-template #siteWoOrNA>{{
+                item.site_po_wo || "N/A"
+                }}</ng-template>
+            </td>
+            <td style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #b4c6e7;
+                      ">
+              {{ item.training == 0 ? "No" : "Yes" }}
+            </td>
+            <td style="
+                        text-align: center;
+                        border: 1px solid #000000;
+                        background-color: #b4c6e7;
+                      ">
+              {{ item.operation_notes ?? "N/A" }}
+            </td>
+          </tr>
+          <ng-container *ngIf="
+                      i === previewData.length - 1 ||
+                      item.guard_id !== previewData[i + 1]?.guard_id
+                    ">
+            <tr>
+              <td colspan="13" style="
+                          text-align: center;
+                          background-color: #808080;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        "></td>
+
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                {{ calculateStaffTotalHours(item.guard_id) }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                {{ getTotal("morning_hours", item.guard_id) }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                ${{ getTotal("day_rate", item.guard_id) | number : "1.2-2" }}
+              </td>
+
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                {{ getTotal("night_hours", item.guard_id) }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                ${{ getTotal("night_rate", item.guard_id) | number : "1.2-2" }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                {{ totalSaturdayHours(item.guard_id) }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                ${{
+                getTotal("saturday_rate", item.guard_id) | number : "1.2-2"
+                }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                {{ totalSundayHours(item.guard_id) }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                ${{ getTotal("sunday_rate", item.guard_id) | number : "1.2-2" }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                {{ totalPhHours(item.guard_id) }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                ${{ totalPhHoursRates(item.guard_id) }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        "></td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                ${{ totalTravelTimeRates(item.guard_id) }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        "></td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                {{
+                getTotal("reimbursement_value", item.guard_id)
+                | number : "1.2-2"
+                }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                ${{ totalRate(item.guard_id) | number : "1.2-2" }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                ${{ tax(item.guard_id) | number : "1.2-2" }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                ${{ super(item.guard_id) }}
+              </td>
+              <td style="
+                          text-align: center;
+                          background-color: #bfbfbf;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        ">
+                ${{
+                calculateNetPay(item, tax(item.guard_id)) | number : "1.2-2"
+                }}
+              </td>
+              <td colspan="7" style="
+                          text-align: center;
+                          background-color: #808080;
+                          border: 1px solid #000000;
+                          font-weight: bold;
+                        "></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+
+      </tbody>
+      <tfoot class="sticky-footer">
+        <tr>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      " colspan="13">
+            Grand Total
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      ">
+            {{ totalHoursCompletePaysheet() }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      ">
+            {{ getTotal("morning_hours") }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                      ">
+            ${{ getTotal("day_rate") | number : "1.2-2" }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      ">
+            {{ getTotal("night_hours") }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                      ">
+            ${{ getTotal("night_rate") | number : "1.2-2" }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      ">
+            {{ main_total_saturday_hours() }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                      ">
+            ${{ getTotal("saturday_rate") | number : "1.2-2" }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      ">
+            {{ main_total_sunday_hours() }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                      ">
+            ${{ getTotal("sunday_rate") | number : "1.2-2" }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      ">
+            {{ main_total_ph_hours() }}
+          </td>
+
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                      ">
+            ${{ grandtotalPhHoursRates() }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                      "></td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                      ">
+            ${{ grandtotalTravelTimeRates() }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                      "></td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                      ">
+            ${{ getTotal("reimbursement_value") | number : "1.2-2" }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #d3d3d3;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      ">
+            ${{ mainTotal() }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #d3d3d3;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      ">
+            ${{ grandTax }}
+          </td>
+
+          <td style="
+                        text-align: center;
+                        background-color: #d3d3d3;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      ">
+            ${{ grandSuper | number : "1.2-2" }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #d3d3d3;
+                        border: 1px solid #000000;
+                        font-size: 16px;
+                        font-weight: 600;
+                      ">
+            ${{ grandNetPayable | number : "1.2-2" }}
+          </td>
+          <td style="
+                        text-align: center;
+                        background-color: #808080;
+                        border: 1px solid #000000;
+                      " colspan="9"></td>
+        </tr>
+      </tfoot>
+
+    </table>
+  </div>
+
+
+  <!-- <div [class.hiddenMobile]="showMobile" id="phone-container-global"
+        style="position: absolute;top: 10%;left: 50%;z-index: 20000;">
+        <button (click)="shideMobile()">
+            <mat-icon svgIcon="mat_outline:close"
+                style="position: absolute; top: 0; left: 48%;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;"></mat-icon>
+        </button>
+        <div id="phone"></div>
+    </div> -->
+</div>

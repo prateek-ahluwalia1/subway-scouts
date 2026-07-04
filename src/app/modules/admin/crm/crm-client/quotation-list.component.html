@@ -1,0 +1,105 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <div class="flex-auto p-6">
+        <div class="rounded-2xl common-admin-customer-contractor">
+            <mat-card class='light' style="height: 100%;">
+
+                <mat-card-header>
+                    <mat-card-title class="view-card-title">
+                        <div class="title-with-dropdown" style="display: flex; align-items: center;">
+                            <h3 style="flex: 1;">{{ pageTitle }}</h3>
+                        </div>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-toolbar class="primary">
+                    <mat-toolbar-row>
+                        <button *ngIf="adminPermissions && adminPermissions.create" mat-mini-fab
+                            style="margin-right:10px; background-color:#e07c9e" [routerLink]="['/crm/create/Quotes']">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <button mat-mini-fab style="margin-right:10px; background-color:darkgray" (click)="reset()">
+                            <mat-icon>refresh</mat-icon>
+                        </button>
+                        <span class="title-spacer"></span>
+                        <mat-form-field appearance="fill" class="dropdown-field" style="margin-right: 2rem;">
+                            <mat-select placeholder="Select Option" [(value)]="filterOption"
+                                (selectionChange)="onOptionChange()">
+                                <mat-option value="all">All</mat-option>
+                                <mat-option value="invoice">Invoice</mat-option>
+                                <mat-option value="quote">Quote</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="standard" class="search-form-fileld">
+                            <mat-label>Filter</mat-label>
+                            <input matInput (keyup)="applyFilter($event.target.value)">
+                            <mat-icon>filter_list</mat-icon>
+                        </mat-form-field>
+
+                    </mat-toolbar-row>
+                </mat-toolbar>
+
+                <mat-table #table [dataSource]="dataSource" matSort *ngIf="adminPermissions && adminPermissions.read">
+
+                    <ng-container matColumnDef="invoice_no">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                        <mat-cell *matCellDef="let customer"> {{customer.invoice_no}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="contact_name">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Contact Name </mat-header-cell>
+                        <mat-cell *matCellDef="let customer"> {{customer.contact_name}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="qut_owner">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Quotation Owner </mat-header-cell>
+                        <mat-cell *matCellDef="let customer"> {{customer.qut_owner }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="financial_type">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Financial Type </mat-header-cell>
+                        <mat-cell *matCellDef="let customer" class="text-capitalize"> {{customer.financial_type }}
+                            <mat-slide-toggle class="ml-1" *ngIf="customer.financial_type=='quote'"
+                                (change)="onSlideToggleChange(customer)">
+                            </mat-slide-toggle>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="created_at">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Created At </mat-header-cell>
+                        <mat-cell *matCellDef="let customer"> {{customer.created_at | date: 'dd-MM-yyyy' }}
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef style="justify-content:right;">
+                            <!-- <button mat-button style="color:white; background-color:darkgrey" (click)="resetListFilter()">Reset</button> -->
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let customer" style="justify-content:right;">
+
+                            <button mat-mini-fab
+                                style="background-color:rgb(81, 161, 161); min-height: 30px;   margin: 5px;"
+                                (click)="openLg(customer.id)">
+                                <mat-icon>visibility</mat-icon>
+                            </button>
+                            <button *ngIf="adminPermissions && adminPermissions.update" mat-mini-fab
+                                style="background-color:teal; min-height: 30px;   margin: 5px;"
+                                [routerLink]="['/crm/edit/Quotes/', customer.id]">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button *ngIf="adminPermissions && adminPermissions.delete" mat-mini-fab
+                                style="background-color:lightblue; min-height: 30px;  margin: 5px;"
+                                (click)="openDialog(customer.id,customer.financial_type)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator #paginator [pageSize]="20" [pageSizeOptions]="[5, 10]">
+                </mat-paginator>
+            </mat-card>
+            <!-- </mat-sidenav-container> -->
+
+        </div>
+    </div>
+</div>

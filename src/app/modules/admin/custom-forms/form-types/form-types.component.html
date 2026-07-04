@@ -1,0 +1,22 @@
+<div class="absolute inset-0 flex flex-col overflow-hidden main-body-watermark w-100">
+    <div class="p-6 rounded-2xl overflow-auto common-admin-customer-contractor">
+        <div class="users-page">
+            <div class="user-main">
+                <button type="button" class="btn mb-2" (click)="goBack()"> ↩️ Back </button>
+                <div class="user-nav rounded-2xl">
+                    <div class="container">
+                        <h1 class="title">Create a Form</h1>
+                        <div class="grid">
+                            <div class="grid-item" *ngFor="let item of formItems" [routerLink]="item.route">
+                                <span class="icon" aria-hidden="true">{{ item.icon }}</span>
+                                <h2>{{ item.title }}</h2>
+                                <p>{{ item.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <router-outlet></router-outlet>
+</div>

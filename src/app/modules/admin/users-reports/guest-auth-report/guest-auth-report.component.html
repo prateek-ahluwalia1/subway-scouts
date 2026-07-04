@@ -1,0 +1,56 @@
+<div class="absolute inset-0 flex flex-col overflow-hidden main-body-watermark">
+    <div class="p-4 rounded-2xl overflow-auto common-admin-customer-contractor">
+        <div class="activity-log">
+            <div class="user-main">
+                <div class="job-track-nav">
+                    <h3 style="width: 33%;">Guest Auth Report</h3>
+                    <mat-chip-list aria-label="Dog selection" class="dog_selection">
+
+                        <app-date-range (dateRange)="getStartEnd($event)" [start]="start" [end]="end"></app-date-range>
+
+                        <mat-chip [matMenuTriggerFor]="menu">
+                            <mat-icon svgIcon="mat_outline:file_upload"></mat-icon><span
+                                style="margin-right: 5px;">Export</span>
+                        </mat-chip>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="getGuardExcel('excel')">EXCEL</button>
+                            <button mat-menu-item (click)="getGuardExcel('preview')">PREVIEW</button>
+                        </mat-menu>
+
+                    </mat-chip-list>
+                </div>
+            </div>
+
+            <div class="card-body" style="height: 400px;">
+                <table id="example" class="table table-hover table-striped table-bordered table-responsive text-center"  *ngIf="previewGuardData.length > 0">
+                    <thead class="bg-emerald-400 live-operation-head">
+                        <tr>
+                            <th>Guard Name</th>
+                            <th>Signin Time</th>
+                            <th>Signin Selfie</th>
+                            <th>Signin Notes </th>
+                            <th>Signout Time </th>
+                            <th>Signout Selfie </th>
+                            <th>Signout Notes</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        <tr *ngFor="let guard of previewGuardData; let i = index">
+                            <td>{{ guard.name}}</td>
+                            <td>{{ guard.signin_time}}</td>
+                            <td *ngIf="guard.signin_selfie"><img [src]="'https://app-apis.amgsystem.com.au/uploads/' + guard.signin_selfie" alt="Signin Selfie" style="width: 80px; height: 60px;" /></td>
+                            <td *ngIf="!guard.signin_selfie">No image</td>
+                            <td>{{ guard.signin_notes }}</td>
+                            <td>{{ guard.signout_time }}</td>
+                            <td *ngIf="guard.signout_selfie"><img [src]="'https://app-apis.amgsystem.com.au/uploads/' + guard.signout_selfie" alt="Signin Selfie" style="width: 80px; height: 60px;" /></td>
+                            <td *ngIf="!guard.signout_selfie">No image</td>
+                            <td>{{ guard.signout_notes }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+        
+            </div>
+        </div>
+    </div>
+</div>

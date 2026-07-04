@@ -1,0 +1,138 @@
+<div class="container p-0 main-body-watermark">
+  <div class="row m-0">
+    <div class="col-md-12 p-0">
+      <div class="grid profile">
+        <div class="grid-header row m-0">
+          <div class="col-md-2" style="float: left;">
+            <div class="">
+              <img [src]="admin_data?.image" *ngIf="admin_data?.image; else alternateImage" class="" style="height: 100%;">
+            </div>
+
+            <ng-template #alternateImage>
+              <img src="/assets/images/avatars/images.png" class="">
+            </ng-template>
+          </div>
+          <div class="col-md-5 flex flex-col justify-center align-items-center" style="margin-bottom: 35px;">
+            <h2 class="text-capitalize">{{ admin_data?.name}}</h2>
+            <p>{{admin_data?.userType | titlecase}}</p>
+          </div>
+          <div class="col-md-5 flex justify-center align-items-center" *ngIf="qrcode">
+            <p [innerHtml]="qrcode" class="qrcode-profile"></p>
+          </div>
+          <div class="col-md-5 flex justify-center align-items-center" *ngIf="!qrcode">
+            <p>No QR Code Available.</p>
+          </div>
+        </div>
+        <div class="grid-body">
+          <div class="tab-content">
+            <div class="tab-pane active">
+              <h3 class="lead">Personal Info</h3>
+              <hr>
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong class="space">Status:</strong> {{admin_data?.status}}</p>
+                  <p><strong class="space">Phone:</strong> {{admin_data?.phone}}</p>
+                  <p><strong class="space">Customers:</strong>
+                    <ng-container>
+                      <span class="customer-list">
+                        <ng-container *ngFor="let customer of admin_data?.specific_customer; let last = last">
+                          {{ customer.name }}<ng-container *ngIf="!last">, </ng-container>
+                        </ng-container>
+                      </span>
+                    </ng-container>
+                    <!-- <ng-template #showAll>All</ng-template> -->
+                  </p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong class="space">Email:</strong> {{admin_data?.email}}</p>
+                  <p><strong class="space">State:</strong> {{admin_data?.state}}</p>
+                  <p><strong class="space">Locations:</strong>
+                    <ng-container>
+                      <span class="customer-list">
+                        <ng-container *ngFor="let site of admin_data?.specific_sites; let last = last">
+                          {{site.site_name}}<ng-container *ngIf="!last">, </ng-container>
+                        </ng-container>
+                      </span>
+                    </ng-container>
+                    <!-- <ng-template #showAll>All</ng-template> -->
+                  </p>
+                </div>
+                <!-- <div class="flex">
+                  <strong class="space">2FA:</strong>
+                  <div class="toggle-border">
+                    <input id="one" type="checkbox" [(ngModel)]="is2FAEnabled" (change)="onToggleChange($event)">
+                    <label for="one">
+                      <div class="handle"></div>
+                    </label>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+            <!-- account info -->
+           
+            <form class="mt-10" [formGroup]="accountForm" *ngIf="admin_data?.userType === 'admin'">
+              <div class="p-3 bg-white">
+                <h3 class="lead">Change Password</h3>
+                <hr class="my-4">
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group focused">
+                      <label class="form-control-label" for="input-current_pass">Current Password</label>
+                      <input id="input-current_pass" name="current_password" class="form-control form-control-alternative" type="password" formControlName="current_password">
+                     
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group focused">
+                      <label class="form-control-label" for="input-new_password">New Password</label>
+                      <input id="input-new_password" name="new_password" class="form-control form-control-alternative" type="password" formControlName="new_password">
+                      
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group focused">
+                      <label class="form-control-label" for="input-confirm_password">Confirm Password</label>
+                      <input id="input-confirm_password" name="confirm_password" class="form-control form-control-alternative" type="password" formControlName="confirm_password">
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group focused">
+                      <div *ngIf="(accountForm.get('current_password')?.invalid && accountForm.get('current_password')?.touched)  || submitted">
+                        <small *ngIf="accountForm.get('current_password')?.hasError('required')" class="text-danger">Current Password is required</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group focused">
+                      <div *ngIf="(accountForm.get('new_password')?.invalid && accountForm.get('new_password')?.touched)  || submitted">
+                        <small class="text-danger" *ngIf="accountForm.get('new_password')?.hasError('required')">New Password is required</small>
+                        <small class="text-danger" *ngIf="accountForm.get('new_password')?.hasError('maxlength')">Password must be 8 characters</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group focused">
+                      <div *ngIf="(accountForm.get('confirm_password')?.touched && accountForm.get('confirm_password')?.invalid) || submitted">
+                        <small class="text-danger" *ngIf="accountForm.hasError('passwordMismatch') && !accountForm.get('confirm_password')?.errors?.['required']">Passwords do not match</small>
+                        <small class="text-danger" *ngIf="accountForm.get('confirm_password')?.errors?.['required']">Confirm Password is required</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" style="text-align:center">
+                  <div class="col-12">
+                    <button class="btn" (click)="change_password()">Update</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

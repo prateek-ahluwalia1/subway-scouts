@@ -1,0 +1,107 @@
+<div class="main">
+    <div class="header d-flex justify-content-between align-content-center">
+        <h5>{{ rosterId ? 'Update ' + rosterId.roster_name + ' Roster' : 'Create a New Roster' }}</h5>
+        <mat-icon (click)="close('dismiss')">close</mat-icon>
+    </div>
+
+    <div class="body">
+        <form [formGroup]="createNewRoster" (ngSubmit)="addNewRoster(createNewRoster.value)"
+            class="create-roster-field">
+
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Roster Name</mat-label>
+                    <input matInput formControlName="roster_name" placeholder="Roster Name">
+                </mat-form-field>
+                <div *ngIf="submitted && f.roster_name.errors" class="custom-error">
+                    <div *ngIf="f.roster_name.errors.required">Roster Name is required*</div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <mat-form-field color="accent" appearance="outline" class="w-100">
+                        <mat-label>Start Date</mat-label>
+                        <input matInput formControlName="start" [matDatepicker]="picker2" readonly
+                            (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2 color="primary"></mat-datepicker>
+                    </mat-form-field>
+                    <div *ngIf="submitted && f.start.errors" class="custom-error">
+                        <div *ngIf="f.start.errors.required">Start Date is required*</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field color="accent" appearance="outline" class="w-100">
+                        <mat-label>End Date</mat-label>
+                        <input matInput formControlName="end" [matDatepicker]="picker1" readonly
+                            (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1 color="primary"></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- customer site name list -->
+            <div class="row">
+                <div class="col-md-6">
+                    <app-select-multiple-customer (selectedCustomer)="receiveDataFromChild($event)" class="select_"
+                        [dataArray]="customers" [placeholderText]="'Select Customers'"></app-select-multiple-customer>
+                    <div class="row mt-2">
+                        <div *ngIf="submitted && f.customer_id.errors" class="custom-error">
+                            <div *ngIf="f.customer_id.errors.required">Customer is required*</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <app-select-multiple-site (selectedSite)="receiveDataFromChildSite($event)" class="select_"
+                        [type]="type" [dataArray]="sites" [placeholderText]="'Select Locations'"></app-select-multiple-site>
+                    <div class="row mt-2">
+                        <div *ngIf="submitted && f.site_id.errors" class="custom-error">
+                            <div *ngIf="f.site_id.errors.required">Location is required*</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="form-field w-100">
+                        <mat-label>State</mat-label>
+                        <mat-select formControlName="state" readonly (selectionChange)="onStateSelectionChange($event)">
+                            <mat-option value="Victoria">Victoria</mat-option>
+                            <mat-option value="Queensland">Queensland</mat-option>
+                            <mat-option value="New South Wales">New South Wales</mat-option>
+                            <mat-option value="South Australia">South Australia</mat-option>
+                            <mat-option value="ACT">ACT</mat-option>
+                            <mat-option value="Tasmania">Tasmania</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div *ngIf="submitted && f.state.errors" class="custom-error">
+                        <div *ngIf="f.state.errors.required">State is required*</div>
+                    </div>
+                </div> -->
+
+            </div>
+
+            <div class="row">
+                <app-select-multiple-guards signleDouble="yes" style="position: relative;top: 10px;"
+                    class="select_job_roster" (selectedUsers)="receiveDataFromChildAdmins($event)"
+                    [placeholderText]="'Select Admins'" [dataArray]="adminList"></app-select-multiple-guards>
+            </div>
+            <div class="row mt-3">
+                <div *ngIf="submitted && f.adminId.errors" class="custom-error">
+                    <div *ngIf="f.adminId.errors.required">Administrator selection is required*</div>
+                </div>
+            </div>
+
+
+            <div class="roster ">
+                <button type="submit" class="btn btn-border-3 mt-3" color="primary">Save Roster</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+    <p style="color: white">Please Wait...</p>
+</ngx-spinner>

@@ -1,0 +1,1045 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <!-- Main -->
+  <div class="flex-auto p-0">
+    <!-- CONTENT GOES HERE -->
+    <div class="h-400 min-h-400 max-h-400 rounded-2xl">
+      <div class="calender-main shadow" style="
+          background-color: var(--tw-ring-offset-color) !important;
+          border-radius: 0.5rem;
+        ">
+        <!-- header -->
+        <div class="heading-toolbar text-white" style="
+            background-color: #1abc9c;
+            border-radius: 0.5rem 0.5rem 0px 0px;
+            padding: 10px 10px 0px 10px;
+          ">
+          <div class="row">
+            <div class="left col-9">
+              <h5>Roster Name</h5>
+              <p class="small">{{ this.globals.currentWeekend }}</p>
+            </div>
+            <div class="right text-right col-3">
+              <div class="search">
+                <input type="text" name="search" placeholder="Search.." />
+                <!-- <mat-icon class="search-icon"  matPrefix>search</mat-icon> -->
+                <!-- <mat-icon class="search-icon" matSuffix>search</mat-icon> -->
+                <!-- <mat-icon matPrefix>search</mat-icon>
+                                <input type="text" matInput placeholder="Type something.."> -->
+              </div>
+
+              <br />
+              <!-- <button type="button" class="btn btn-outline-light">Publish</button> -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="left-toolbar text-left col-10">
+              <div class="user-type d-flex align-content-center text-white">
+                <ul>
+                  <li [ngClass]="{ active: userType == 'sites' }" (click)="getUserType('sites')">
+                    Sites
+                  </li>
+                  <li [ngClass]="{ active: userType == 'guards' }" (click)="getUserType('guards')">
+                    Guards
+                  </li>
+                </ul>
+                <div class="actions d-flex align-content-center text-white w-100 justify-content-evenly">
+                  <button style="height: 33px; margin-top: 5px; padding: 4px" type="button"
+                    class="btn btn-outline-light" [routerLink]="['/ento-fortnight']">
+                    Roster 2
+                  </button>
+
+                  <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-rounded">
+                    <mat-select [formControl]="toppings" [placeholder]="'States'" multiple class="ent-design">
+                      <mat-select-trigger>
+                        {{toppings.value?.[0] || ''}}
+                        <span *ngIf="(toppings.value?.length || 0) > 1" class="example-additional-selection">
+                          (+{{ (toppings.value?.length || 0) - 1 }}
+                          {{
+                          toppings.value?.length === 2 ? "other" : "others"
+                          }})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">
+                        {{ topping }}</mat-option>
+                    </mat-select>
+                    <mat-icon style="color: white" class="icon-size-5" matPrefix
+                      [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                  </mat-form-field>
+
+                  <mat-form-field class="fuse-mat-rounded">
+                    <mat-select [placeholder]="'View By...'" [(value)]="selectedView" class="ent-design">
+                      <p class="px-3 fw-bold">VIEW BY Site</p>
+                      <mat-option value="site-week">Week</mat-option>
+                      <mat-option value="site-two-weeks">2 Weeks</mat-option>
+                      <hr />
+                      <p class="px-3 fw-bold">VIEW BY Staff</p>
+                      <mat-option value="guard-week">Week</mat-option>
+                      <mat-option value="guard-two-weeks">2 Weeks</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill" [ngClass]="formFieldHelpers" class="fuse-mat-rounded">
+                    <!-- <mat-label>Customers</mat-label> -->
+                    <mat-select [formControl]="customer" multiple [placeholder]="'Customers'" class="ent-design">
+                      <mat-select-trigger>
+                        {{customer.value?.[0] || ''}}
+                        <span *ngIf="(customer.value?.length || 0) > 1" class="example-additional-selection">
+                          (+{{ (customer.value?.length || 0) - 1 }}
+                          {{
+                          customer.value?.length === 2 ? "other" : "others"
+                          }})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let customer of customersList" [value]="topping">
+                        {{ customer }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field class="fuse-mat-rounded">
+                    <mat-select [placeholder]="'Status'" [(value)]="selectedStatus" class="ent-design">
+                      <mat-option value="active">Active</mat-option>
+                      <mat-option value="inactive">Inactive</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-select class="ent-design" [(ngModel)]="selectedSites" (ngModelChange)="(selectedSites)"
+                      name="selectedSites" placeholder="Sites" multiple>
+                      <mat-option *ngFor="let food of allfoods" [value]="food.value">
+                        {{ food.value }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-2">
+                            </div> -->
+
+            <div class="right-toolbar text-end col-2">
+              <button type="button" class="btn btn-outline-light">
+                Publish
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="left col-8"></div>
+            <div class="right-toolbar col-4">
+              <div class="right-menu d-flex align-content-center justify-content-between my-3">
+                <mat-menu #daybyarea="matMenu">
+                  <h6 class="px-3">VIEW BY AREA</h6>
+                  <button mat-menu-item>Day</button>
+                  <button mat-menu-item>Week</button>
+                  <button mat-menu-item>2 Weeks</button>
+                  <button mat-menu-item>Months</button>
+
+                  <hr />
+                  <h6 class="px-3">VIEW BY TEAM MEMBER</h6>
+                  <button mat-menu-item>Day</button>
+                  <button mat-menu-item>Week</button>
+                  <button mat-menu-item>2 Weeks</button>
+                  <button mat-menu-item>4 Weeks</button>
+                  <button mat-menu-item>Months</button>
+                </mat-menu>
+                <mat-chip>
+                  <!-- <mat-icon svgIcon="heroicons_outline:refresh" (click)="reloadCurrentPage()">
+                                    </mat-icon> -->
+                  <mat-icon (click)="reloadCurrentPage()">sync</mat-icon>
+                </mat-chip>
+                <mat-chip>
+                  <!-- <mat-icon svgIcon="mat_outline:settings" [matMenuTriggerFor]="setting"></mat-icon> -->
+                  <mat-icon [matMenuTriggerFor]="setting">settings</mat-icon>
+                </mat-chip>
+                <mat-menu #setting="matMenu">
+                  <h6 class="px-3">Export</h6>
+                  <button mat-menu-item>Print by area</button>
+                  <button mat-menu-item>Print by area(EXCEL)</button>
+                  <button mat-menu-item>Print by team member</button>
+                  <button mat-menu-item>Print by team member(EXCEL)</button>
+                  <button mat-menu-item>Download Roster(CSV)</button>
+                  <button mat-menu-item>Download Roster(JSON)</button>
+                  <hr />
+                  <h6 class="px-3">Options</h6>
+                  <button mat-menu-item>Mark filled shifts empty</button>
+                  <button mat-menu-item>Remove empty shifts</button>
+                  <button mat-menu-item>Delete all shifts</button>
+                  <button mat-menu-item>Mark empty shifts as open</button>
+                </mat-menu>
+
+                <mat-chip [matMenuTriggerFor]="menu" class="d-flex align-content-center">
+                  <!-- <mat-icon viewBox="0 0 30 30" svgIcon="mat_outline:content_copy"></mat-icon> -->
+                  <mat-icon>file_copy</mat-icon>
+                  <span>Copy</span>
+                </mat-chip>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>Copy Shifts</button>
+                  <button mat-menu-item>Import Shifts</button>
+                  <button mat-menu-item>Save Template</button>
+                  <button mat-menu-item>Load Template</button>
+                  <button mat-menu-item disabled>
+                    Copy selected shift (C)
+                  </button>
+                  <button mat-menu-item disabled>
+                    Paste selected shift (V)
+                  </button>
+                </mat-menu>
+                <mat-chip class="d-flex align-content-center">
+                  <mat-icon> bar_chart</mat-icon> <span>Stats</span>
+                  <!-- <mat-icon svgIcon="mat_solid:stacked_bar_chart"></mat-icon> <span>Stats</span>
+                                    <mat-icon svgIcon="mat_solid:keyboard_arrow_down" viewBox="0 0 1024 974"
+                                        class="some-space">
+                                    </mat-icon> -->
+                </mat-chip>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="date-selection">
+              <mat-icon (click)="displayPrevWeek()" class="date_left_right">keyboard_arrow_left</mat-icon>
+              <!-- <app-weekly-selection ></app-weekly-selection> -->
+              <app-ento-design-weekly></app-ento-design-weekly>
+              <mat-icon (click)="displayNextWeek()" class="date_left_right">keyboard_arrow_right</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- body -->
+        <div class="body ento">
+          <table class="table table-bordered p-0 m-0 align-middle mb-0 bg-white ento-table" style="width: 100%"
+            cellspacing="0" cellpadding="0">
+            <thead>
+              <tr>
+                <th class="">
+                  <p class="fw-normal">
+                    $100,000 <span class="text-success fw-bold">4%</span>
+                  </p>
+                  <p class="hours fw-normal">
+                    200.00 <span class="fw-bold">Hours</span>
+                  </p>
+                  <p class="shifts fw-normal">
+                    50 <span class="fw-bold">shifts</span>
+                  </p>
+                </th>
+                <th *ngFor="let day of globals.entoSelectedWeek; let i = index" class="text-uppercase">
+                  <!-- <div class="date-selection d-flex align-content-center"> -->
+
+                  <!-- </div> -->
+
+                  <div class="dayData">
+                    <h5 class="fw-normal">{{ day.slice(0, 3) }}</h5>
+                    <h3 class="fw-bold">{{ day.slice(5, 8) }}</h3>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="tbodyoftable" cdkDropListGroup>
+              <tr style="background: #f1f1f1">
+                <td class="fw-bold">
+                  <!-- {{this.city.cityName}} -->
+                  <h4>lahore</h4>
+                </td>
+                <td class="text-start" *ngFor="let item of city">
+                  <!-- <p>{{item.shift_schedule.time}}</p> -->
+                  <label class="fw-bold shift-timming">{{ item.time }}</label>
+                </td>
+              </tr>
+
+              <!-- data  -->
+              <tr *ngFor="let site of sites" [id]="site.site_id" class="troftable">
+                <td class="sites">
+                  <div class="site d-flex">
+                    <!-- align-items-start -->
+                    <!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 50px; height: 50px"
+                                            class="rounded-circle" /> -->
+                    <div class="ms-2">
+                      <p class="fw-bold mb-1">
+                        {{ site.name }}
+                        <!-- <mat-icon svgIcon="feather:more-vertical" class="more" [id]="site.site_id"></mat-icon> -->
+                      </p>
+                      <p class="text-muted mb-0">{{ site.phone }}</p>
+                    </div>
+                  </div>
+                </td>
+
+                <td *ngFor="let day of globals.entoSelectedWeek" class="tdoftable" [cdkDropListData]="job_new_roster"
+                  [id]="day" cdkDropList (cdkDropListDropped)="drop($event)">
+                  <!-- <div (click)="getBoxDate(day,site)"></div> -->
+                  <div *ngFor="let job of job_new_roster; let i = index" class="">
+                    <div cdkDrag [cdkDragData]="job" [id]="i" class="card divoftd" (click)="showEditOption(job)"
+                      [ngClass]="
+                        job.status == 'completed'
+                          ? 'complete-shift'
+                          : 'missed-shift'
+                      " [cdkContextMenuTriggerFor]="context_menu" [matMenuTriggerFor]="menuedit"
+                      *ngIf="day == job.date && job.site_id == site.site_id">
+                      <div class="d-flex align-items-center justify-content-evenly">
+                        <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt=""
+                          style="width: 33px; height: 33px" class="rounded-circle" />
+                        <div class="ms-0" style="padding: 3px">
+                          <p class="fw-bold">{{ job.time }}</p>
+                          <span class="">{{ job.shift_name }}</span>
+                        </div>
+                      </div>
+
+                      <!-- <div class="shift row">
+                                                <img src="https://mdbootstrap.com/img/new/avatars/8.jpg " alt="" style="width:35px; height: 35px"
+                                                class="rounded-circle col-5" />
+                                                <div class="content col-7" >
+                                                    <p>{{job.time}}</p>
+                                                    <span>{{job.shif_name}}</span>
+                                                </div>
+                                            </div> -->
+
+                      <div class="edit-shift-side" [id]="job.id" *ngIf="job_id_match == job.id && edit_shift_side">
+                        <button>
+                          <fa-icon [icon]="faCreditCard"></fa-icon>
+                        </button>
+                        <button>
+                          <fa-icon [icon]="faPencil"></fa-icon>
+                        </button>
+                        <button>
+                          <fa-icon [icon]="faTrash"></fa-icon>
+                        </button>
+                      </div>
+                    </div>
+
+                    <ng-template #context_menu>
+                      <div class="example-menu" cdkMenu>
+                        <button class="example-menu-item" cdkMenuItem>
+                          <span>Select</span>
+                        </button>
+                        <button class="example-menu-item" cdkMenuItem>
+                          <span>Copy</span>
+                        </button>
+                        <button class="example-menu-item" cdkMenuItem>
+                          <span>Cut</span>
+                        </button>
+                      </div>
+                    </ng-template>
+                  </div>
+
+                  <br />
+                  <br />
+                  <!--  -->
+                  <div class="plus_create_shift" [autoClose]="'outside'" #p="ngbPopover" [ngbPopover]="popContent"
+                    [popoverTitle]="popTitle" placement="bottom" (click)="getBoxDate(day, site)">
+                    <mat-icon>plus</mat-icon>
+                    <!-- <mat-icon svgIcon="heroicons_solid:plus"></mat-icon> -->
+
+                    <ng-template #popContent>
+                      <form [formGroup]="addShiftBasicForm">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Site Name</label>
+                              <input type="text" class="form-control" formControlName="site_name" id="site_name"
+                                [readOnly]="true" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-6 mt-2">
+                            <div class="form-group">
+                              <label for="select_guard">Start Time</label>
+                              <div class="ngx-timepicker-field-example">
+                                <ngx-timepicker-field id="start_time" formControlName="start_time" [controlOnly]="true"
+                                  [format]="24" [defaultTime]="'00:00'">
+                                </ngx-timepicker-field>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-6 mt-2">
+                            <div class="form-group">
+                              <label for="end_time">End Time</label>
+                              <div class="ngx-timepicker-field-example">
+                                <ngx-timepicker-field id="end_time" formControlName="end_time" [controlOnly]="true"
+                                  [format]="24" [defaultTime]="'00:00'">
+                                </ngx-timepicker-field>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12 mt-2">
+                            <div class="form-group">
+                              <label for="select_guard">Select Guard</label>
+                              <select class="form-control" id="select_guard" formControlName="select_guard">
+                                <option value="1">Naveed</option>
+                                <option value="2">Usman</option>
+                                <option value="3">Rameez</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button class="advanced-option" (click)="
+                            openVerticallyCentered(entoDetailContent, p.close())
+                          ">
+                          Advanced
+                        </button>
+                        <button (click)="onSubmit()" type="submit" class="px-6 ml-3 save-btn">
+                          Save
+                        </button>
+                      </form>
+                    </ng-template>
+                    <ng-template #popTitle>
+                      <div class="popover-header-date">
+                        <div class="pop-date">
+                          <span>{{ clickedboxDate }}</span>
+                        </div>
+                        <div class="pop-time">
+                          <span>09:00 AM | 11:00 PM</span>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </div>
+
+                  <div class="hardcoded-schedule" (click)="showShiftTemplate(day, site.site_id)">
+                    <mat-icon svgIcon="heroicons_solid:menu"></mat-icon>
+                  </div>
+
+                  <div *ngIf="
+                      job_id_match == day &&
+                      site_id_match == site.site_id &&
+                      edit_shift_side
+                    ">
+                    <div
+                      class="float-wrapper-container right tether-element tether-enabled tether-element-attached-center tether-element-attached-left tether-target-attached-center tether-target-attached-right">
+                      <div class="floating-container-body">
+                        <div style="
+                            transition: opacity 150ms ease-in-out 0s;
+                            opacity: 1;
+                          ">
+                          <div class="base-popover-container">
+                            <div class="add-shift-from-template-popover">
+                              <div class="title-container">
+                                <fa-icon [icon]="faXmark" (click)="close()"></fa-icon>
+                                <span class="title">Shift Template</span>
+                                <span type="button" class="add-template-button"
+                                  (click)="costomTemplateModal()">+Add</span>
+                              </div>
+                              <ul class="templates">
+                                <div *ngFor="
+                                    let custom_template of buit_in_template
+                                  " class="r-limitation-block" (click)="
+                                    addCustomShift(
+                                      custom_template,
+                                      day,
+                                      site.site_id
+                                    )
+                                  ">
+                                  <li class="template-background" style="background-color: rgb(233 228 222)">
+                                    <div class="shift-template-container">
+                                      <div class="template-container">
+                                        <div class="details-container">
+                                          <div class="time-and-location-container">
+                                            <div class="template-time">
+                                              {{ custom_template.time }}
+                                            </div>
+                                          </div>
+                                          <div class="name-container">
+                                            <div class="title-and-job">
+                                              <span class="limit-max-width">
+                                                <div style="
+                                                    overflow: hidden;
+                                                    overflow-wrap: break-word;
+                                                    text-overflow: ellipsis;
+                                                    white-space: nowrap;
+                                                    word-break: break-all;
+                                                  ">
+                                                  {{
+                                                  custom_template.shift_name
+                                                  }}
+                                                </div>
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </div>
+                              </ul>
+                            </div>
+                            <div class="container__arrow container__arrow--rc"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <p class="fw-bold p-1">Leaves</p>
+                </td>
+                <td *ngFor="let day of globals.entoSelectedWeek" class="p-0">
+                  <div class="leaves-detail">
+                    <p class="leave">7.60 hrs Blendon Blenton</p>
+                    <p class="leave">2.00 hrs Anton hofer</p>
+                    <p class="leave">6:00 hrs Justin Marshall</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- an hidden div is created to set the position of appearance of the menu-->
+  <ng-template #entoDetailContent let-modal>
+    <div class="top py-1">
+      <mat-icon (click)="modal.close('Close click')">close</mat-icon>
+    </div>
+    <div class="row header px-1 py-2 m-0">
+      <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 84px; height: 62px"
+        class="rounded-circle col-2" />
+      <div class="col-9">
+        <h6 class="m-0">Usman Bhatti</h6>
+        <div class="shifts-summary row">
+          <div class="col-4">
+            <fa-icon [icon]="calenderIcon"></fa-icon>
+            <span><b>0</b></span>
+          </div>
+
+          <div class="col-4">
+            <fa-icon [icon]="faClock"></fa-icon>
+            <span><b>7.5</b></span>
+          </div>
+          <div class="col-4">
+            <fa-icon [icon]="faUser"></fa-icon>
+            <span><b>4</b></span>
+          </div>
+        </div>
+        <div class="shifts-name row">
+          <p class="col-4 m-0">Shift Weekly Hours</p>
+          <p class="col-4 m-0">Shift Length</p>
+          <p class="col-4 m-0">Shift Cost</p>
+        </div>
+      </div>
+    </div>
+    <h6 class="text-center">New Shift on Thu 30 Dec</h6>
+    <div class="right-model-body px-2 py-1">
+      <form [formGroup]="addShiftAdvanceForm">
+        <mat-form-field appearance="outline" class="col-12">
+          <mat-label>Site Name</mat-label>
+          <input matInput formControlName="site_name" name="site_name" placeholder="" />
+        </mat-form-field>
+
+        <!-- <mdb-form-control>
+        <label mdbLabel class="form-label" for="form1">Site Name</label>
+        <input
+          mdbInput
+          class="form-control"
+          formControlName="site_name"
+          id="site_name"
+          type="text"
+          placeholder="Site Name"
+          aria-label="readonly input example"
+          [readonly]="true"
+        />
+      </mdb-form-control> -->
+
+        <mat-form-field class="example-full-width" appearance="outline" class="col-12">
+          <mat-select formControlName="select_guard" placeholder="Who is working?">
+            <mat-option *ngFor="let guard of guards" [ngValue]="guard">{{
+              guard
+              }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="row pb-1 mt-2 py-1 px-2 my-1 mx-1">
+          <div class="col-lg-6">
+            <div class="form-group">
+              <label for="select_guard" class="py-1">Start Time</label>
+              <div class="ngx-timepicker-field-example" style="background: #eee">
+                <ngx-timepicker-field [controlOnly]="true" [format]="24" [defaultTime]="'00:00'"></ngx-timepicker-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="form-group">
+              <label for="select_guard " class="py-1">End Time</label>
+              <div class="ngx-timepicker-field-example" style="background: #eee">
+                <ngx-timepicker-field [controlOnly]="true" [format]="24" [defaultTime]="'00:00'"></ngx-timepicker-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="hideShowBreakP fw-bold" (click)="toggleBreaks()">
+          <mat-icon *ngIf="!isShowbreak" svgIcon="mat_solid:keyboard_arrow_down"></mat-icon>
+          <mat-icon *ngIf="isShowbreak" class="date_left_right">keyboard_arrow_right</mat-icon>Shift Details
+        </p>
+        <div class="row px-4" *ngIf="!isShowbreak">
+          <div class="col-6">
+            <p>Shift Payable</p>
+            <div class="yes-no">
+              <p>
+                <input type="radio" name="shift_payable" formControlName="shift_payable" value="yes" />
+                <label for="test1">Yes</label>
+              </p>
+              <p>
+                <input type="radio" name="shift_payable" formControlName="shift_payable" value="no" />
+                <label for="test2">No</label>
+              </p>
+            </div>
+          </div>
+          <div class="col-6">
+            <p>Shift Chargeable</p>
+            <div class="yes-no">
+              <p>
+                <input type="radio" name="shift_chargeable" formControlName="shift_chargeable" value="yes" />
+                <label for="test3">Yes</label>
+              </p>
+              <p>
+                <input type="radio" name="shift_chargeable" formControlName="shift_chargeable" value="no" />
+                <label for="test4">No</label>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p class="hideShowCustomP" (click)="toggleCustomRates()">
+          <mat-icon *ngIf="!isShowCustomRates" svgIcon="mat_solid:keyboard_arrow_down"></mat-icon>
+          <mat-icon *ngIf="isShowCustomRates" class="date_left_right">keyboard_arrow_right</mat-icon>
+          Custom Rates
+        </p>
+        <!-- <div class="row px-4" *ngIf="!isShowCustomRates">
+          <div class="col-6">
+            <mat-card-content>
+              <section class="example-section">
+                <mat-checkbox
+                  class="example-margin"
+                  name=""
+                  (click)="enabledCustomRates()"
+                >
+                  Enable
+                </mat-checkbox>
+
+                <mat-checkbox
+                  class="example-margin"
+                  name=""
+                  (click)="enabledCustomRates()"
+                >
+                  Disable
+                </mat-checkbox>
+              </section>
+            </mat-card-content>
+          </div>
+        </div> -->
+        <div class="row px-4 my-1" *ngIf="!isShowCustomerOption">
+          <section>
+            <mat-checkbox class="col-6" color="primary" value="checked" [(ngModel)]="isEnable" name="enable">
+              Enable</mat-checkbox>
+            <mat-checkbox class="col-6" color="primary" value="disable" [(ngModel)]="isDisable" name="disable">
+              Disable</mat-checkbox>
+          </section>
+        </div>
+
+        <!-- <mat-radio-group
+  aria-labelledby="example-radio-group-label"
+  class="example-radio-group row"
+  [(ngModel)]="selectedRatesStatus">
+  <mat-radio-button class="example-radio-button col-4" *ngFor="let season of seasons" [value]="season">
+    {{season}}
+  </mat-radio-button>
+</mat-radio-group>
+
+
+<div>Your favorite season is: {{selectedRatesStatus}}</div> -->
+
+        <!-- <div class="row px-4" *ngIf="!isShowCustomRates">
+          <div class="col-6">
+            <mat-card-content>
+              <section class="example-section">
+                <mat-checkbox
+                  class="example-margin"
+                  name=""
+                  (click)="enabledCustomRates()"
+                >
+                  Disable
+                </mat-checkbox>
+              </section>
+            </mat-card-content>
+          </div>
+        </div> -->
+
+        <div class="row px-4 custome-rates" *ngIf="selectedRatesStatus == 'enable'">
+          <div class="col-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Payrates Level</mat-label>
+              <mat-select formControlName="payrate_level" name="payrate_level">
+                <mat-option>None</mat-option>
+                <mat-option>1</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Chargerates Level</mat-label>
+              <mat-select formControlName="chargerate_lavel" name="chargerate_lavel">
+                <mat-option>None</mat-option>
+                <mat-option></mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Payrates</mat-label>
+              <mat-select formControlName="payrate" name="payrate">
+                <mat-option>None</mat-option>
+                <mat-option></mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Chargerates</mat-label>
+              <mat-select formControlName="chargerate" name="chargerate">
+                <mat-option>None</mat-option>
+                <mat-option></mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row my-3">
+          <div class="yes-no">
+            <p class="m-0 col-8" style="font-size: 15px; padding-left: 22px">
+              Un-published Shift
+            </p>
+            <p class="yes-no1 col-2">
+              <input type="radio" id="unpublished_shift1" formControlName="unpublished_shift" value="yes" />
+              <label for="test1">Yes</label>
+            </p>
+            <p class="yes-no2 col-2">
+              <input type="radio" value="no" id="unpublished_shift2" formControlName="unpublished_shift" />
+              <label for="test2">No</label>
+            </p>
+          </div>
+        </div>
+
+        <p class="hideShowOthers" (click)="toggleOthers()">
+          <mat-icon *ngIf="!isShowOthersDetail" svgIcon="mat_solid:keyboard_arrow_down"></mat-icon>
+          <mat-icon *ngIf="isShowOthersDetail" class="date_left_right">keyboard_arrow_right</mat-icon>
+          Other Details
+        </p>
+
+        <div class="row px-4 otherDetailDiv" *ngIf="!isShowOthersDetail">
+          <div class="col-12">
+            <mat-card-content>
+              <section class="example-section">
+                <mat-checkbox class="example-margin" formControlName="public_holiday" name="public_holiday">Public
+                  Holidays
+                </mat-checkbox>
+                <mat-checkbox class="example-margin" formControlName="covid_marshal" name="covid_marshal">Covid Marshal
+                </mat-checkbox>
+              </section>
+            </mat-card-content>
+          </div>
+          <div class="col-12">
+            <mat-card-content>
+              <section class="example-section">
+                <mat-checkbox class="example-margin" formControlName="training" id="training">
+                  Training
+                </mat-checkbox>
+                <mat-checkbox class="example-margin" formControlName="continuation" id="continuation">Continuation
+                </mat-checkbox>
+              </section>
+            </mat-card-content>
+          </div>
+          <div class="col-12">
+            <mat-card-content>
+              <section class="example-section">
+                <mat-checkbox class="example-margin" formControlName="overtime_enabled" id="overtime_enabled"
+                  (click)="toggleOverTime()">OverTime
+                </mat-checkbox>
+                <mat-checkbox class="example-margin" formControlName="travel_time" id="traveltime_enabled"
+                  (click)="toggleTravelTime()">Travel Time
+                </mat-checkbox>
+              </section>
+            </mat-card-content>
+          </div>
+          <div class="col-12">
+            <mat-form-field appearance="outline" *ngIf="isShowOverTime">
+              <mat-label>Overtime Value</mat-label>
+              <mat-select formControlName="overtime_value" id="overtime_value">
+                <mat-option>None</mat-option>
+                <mat-option value="1">1</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" *ngIf="isCheckedTravelTime">
+              <mat-label>Travel Time</mat-label>
+              <mat-select formControlName="travel_time" id="travel_time">
+                <mat-option>None</mat-option>
+                <mat-option></mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer m-0 p-0">
+      <button type="button" class="btn btn-success" (click)="submitShftAdvanceForm()">
+        Submit
+      </button>
+      <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">
+        Close
+      </button>
+    </div>
+  </ng-template>
+  <!-- <div class="row modal-creat-shift"> -->
+
+  <!-- <div class="col-3">
+                <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 70px; height: 70px"
+                    class="rounded-circle" />
+                <div class="select-guard-detail pb-2">
+                    <h4>Usman Bhatti</h4>
+                </div>
+
+                <div class="roster-stat pb20">
+                    <div class="modal-side-element">
+                        <fa-icon [icon]="calenderIcon"></fa-icon>
+                        <div class="shitplushor">
+                            <p><b>0</b></p>
+                            <p>Shift Weekly Hours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="roster-stat pb20">
+                    <div class="modal-side-element">
+                        <fa-icon [icon]="faClock"></fa-icon>
+                        <div class="shitplushor">
+                            <p><b>7.5</b></p>
+                            <p>Shift Length</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="roster-stat pb20">
+                    <div class="modal-side-element">
+                        <fa-icon [icon]="faUser"></fa-icon>
+                        <div class="shitplushor">
+                            <p><b>0</b></p>
+                            <p>Shift Cost</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="modal-header">
+                    <h4 class="modal-title">New Shift on Thu 24 Nov</h4>
+                    <button type="button" class="btn-close" aria-label="Close"
+                        (click)="modal.dismiss('Cross click')"></button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="addShiftAdvanceForm">
+                        
+                        <div class="row pb-1">
+                            <div class="col-lg-6">
+                                <mdb-form-control>
+                                    <label mdbLabel class="form-label" for="form1">Site Name</label>
+                                    <input mdbInput class="form-control" formControlName="site_name" id="site_name"
+                                        type="text" placeholder="Site Name" aria-label="readonly input example"
+                                        [readonly]="true" />
+                                </mdb-form-control>
+                            </div>
+                            <div class="col-lg-6">
+                                <label mdbLabel class="form-label" for="form1">Who is working?</label>
+                                <select class="form-control" name="select_guard" id="select_guard"
+                                    formControlName="select_guard">
+                                    <option *ngFor="let guard of guards" [ngValue]="guard">{{guard}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row pb-1 mt-2">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="select_guard">Start Time</label>
+                                    <div class="ngx-timepicker-field-example">
+                                        <ngx-timepicker-field [controlOnly]="true" [format]="24"
+                                            [defaultTime]="'00:00'"></ngx-timepicker-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="select_guard">Start Time</label>
+                                    <div class="ngx-timepicker-field-example">
+                                        <ngx-timepicker-field [controlOnly]="true" [format]="24"
+                                            [defaultTime]="'00:00'"></ngx-timepicker-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="hideShowBreakP" (click)=toggleDisplayDivIf()>
+                            <mat-icon *ngIf="!isShowbreak" svgIcon="mat_solid:keyboard_arrow_down"></mat-icon>
+                            <mat-icon *ngIf="isShowbreak" class="date_left_right">keyboard_arrow_right</mat-icon>Shift
+                            Details
+                        </p>
+                        <div class="row px-4" *ngIf="!isShowbreak">
+                            <div class="col-lg-6">
+                                <p>Shift Payable</p>
+                                <div class="yes-no">
+                                    <p>
+                                        <input type="radio" name="shift_payable" formControlName="shift_payable"
+                                            value="yes">
+                                        <label for="test1">Yes</label>
+                                    </p>
+                                    <p>
+                                        <input type="radio" name="shift_payable" formControlName="shift_payable"
+                                            value="no">
+                                        <label for="test2">No</label>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <p>Shift Chargeable</p>
+                                <div class="yes-no">
+                                    <p>
+                                        <input type="radio" name="shift_chargeable" formControlName="shift_chargeable"
+                                            value="yes">
+                                        <label for="test3">Yes</label>
+                                    </p>
+                                    <p>
+                                        <input type="radio" name="shift_chargeable" formControlName="shift_chargeable"
+                                            value="no">
+                                        <label for="test4">No</label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="hideShowCustomP" (click)=toggleCustomRates()>
+                            <mat-icon *ngIf="!isShowCustomRates" svgIcon="mat_solid:keyboard_arrow_down"></mat-icon>
+                            <mat-icon *ngIf="isShowCustomRates" class="date_left_right">keyboard_arrow_right</mat-icon>
+                            Custome Rates
+                        </p>
+                        <div class="row px-4" *ngIf="!isShowCustomRates">
+                            <div class="col-6">
+                                <mat-card-content>
+                                    <section class="example-section">
+                                        <mat-checkbox class="example-margin" name="" (click)="enabledCustomRates()">
+                                            Enable
+                                        </mat-checkbox>
+                                    </section>
+                                </mat-card-content>
+                            </div>
+
+                        </div>
+                        <div class="row px-4 custome-rates" *ngIf="isShowCustomRatesField">
+                            <div class="col-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Payrates Level</mat-label>
+                                    <mat-select formControlName="payrate_level" name="payrate_level">
+                                        <mat-option>None</mat-option>
+                                        <mat-option>1</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Chargerates Level</mat-label>
+                                    <mat-select formControlName="chargerate_lavel" name="chargerate_lavel">
+                                        <mat-option>None</mat-option>
+                                        <mat-option></mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Payrates</mat-label>
+                                    <mat-select formControlName="payrate" name="payrate">
+                                        <mat-option>None</mat-option>
+                                        <mat-option></mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Chargerates</mat-label>
+                                    <mat-select formControlName="chargerate" name="chargerate">
+                                        <mat-option>None</mat-option>
+                                        <mat-option></mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <p class="hideShowOthers" (click)=toggleOthers()>
+                            <mat-icon *ngIf="!isShowOthersDetail" svgIcon="mat_solid:keyboard_arrow_down"></mat-icon>
+                            <mat-icon *ngIf="isShowOthersDetail" class="date_left_right">keyboard_arrow_right</mat-icon>
+                            Other Details
+                        </p>
+                        <div class="row px-4 otherDetailDiv" *ngIf="!isShowOthersDetail">
+                            <div class="col-12">
+                                <div class="yes-no">
+                                    <p>Un-published Shift</p>
+                                    <p class="yes-no1">
+                                        <input type="radio" id="unpublished_shift1" formControlName="unpublished_shift"
+                                            value="yes">
+                                        <label for="test1">Yes</label>
+                                    </p>
+                                    <p class="yes-no2">
+                                        <input type="radio" value="no" id="unpublished_shift2"
+                                            formControlName="unpublished_shift">
+                                        <label for="test2">No</label>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <mat-card-content>
+                                    <section class="example-section">
+                                        <mat-checkbox class="example-margin" formControlName="public_holiday"
+                                            name="public_holiday">Public Holidays
+                                        </mat-checkbox>
+                                        <mat-checkbox class="example-margin" formControlName="covid_marshal"
+                                            name="covid_marshal">Covid Marshal
+                                        </mat-checkbox>
+                                    </section>
+                                </mat-card-content>
+                            </div>
+                            <div class="col-12">
+                                <mat-card-content>
+                                    <section class="example-section">
+                                        <mat-checkbox class="example-margin" formControlName="training" id="training">
+                                            Training
+                                        </mat-checkbox>
+                                        <mat-checkbox class="example-margin" formControlName="continuation"
+                                            id="continuation">Continuation
+                                        </mat-checkbox>
+                                    </section>
+                                </mat-card-content>
+                            </div>
+                            <div class="col-12">
+                                <mat-card-content>
+                                    <section class="example-section">
+                                        <mat-checkbox class="example-margin" formControlName="overtime_enabled"
+                                            id="overtime_enabled" (click)=toggleOverTime()>OverTime
+                                        </mat-checkbox>
+                                        <mat-checkbox class="example-margin" formControlName="travel_time"
+                                            id="traveltime_enabled" (click)=toggleTravelTime()>Travel Time
+                                        </mat-checkbox>
+                                    </section>
+                                </mat-card-content>
+
+                            </div>
+                            <div class="col-12">
+                                <mat-form-field appearance="outline" *ngIf="isShowOverTime">
+                                    <mat-label>Overtime Value</mat-label>
+                                    <mat-select formControlName="overtime_value" id="overtime_value">
+                                        <mat-option>None</mat-option>
+                                        <mat-option value="1">1</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" *ngIf="isCheckedTravelTime">
+                                    <mat-label>Travel Time</mat-label>
+                                    <mat-select formControlName="travel_time" id="travel_time">
+                                        <mat-option>None</mat-option>
+                                        <mat-option></mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" (click)="submitShftAdvanceForm()">Submit</button>
+                    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+                </div>
+            </div> -->
+  <!-- </div> -->
+</div>

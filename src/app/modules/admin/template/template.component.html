@@ -1,0 +1,88 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+
+  <!-- Main -->
+  <div class="flex-auto p-6">
+    <!-- h-400 min-h-400 max-h-400  -->
+    <div class=" p-3 rounded-2xl">
+      <div class="upper bg-white d-flex justify-content-between p-2">
+        <div class="d-flex ">
+          <h3 class="me-2 mt-1 fm-math">SMS Template</h3>
+          <button class="btn btn-sm h-75 flex align-items-center"
+            [disabled]="smstempPermissions && !smstempPermissions.create" matTooltip="Add New SMS Template"
+            matTooltipPosition="right" matTooltipHideDelay="100000"
+            (click)="openVerticallyCentered('add',content)"><mat-icon class="mt-1">library_add</mat-icon></button>
+        </div>
+        <div>
+          <mat-form-field class="example-form-field w-100  my-input" appearance="fill" id="recipient-name-search">
+            <input matInput type="text" placeholder="Search.." [(ngModel)]="searchTerm" (ngModelChange)="search()">
+            <mat-icon>search</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="table-container mt-3 rounded-2xl " *ngIf="smstempPermissions && smstempPermissions.read">
+        <table class="table">
+          <thead class="table-head">
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Message</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <div *ngIf="!templetes">
+              No results found.
+            </div>
+            <tr class="table-row" *ngFor="let data of templetes | filter:searchTerm">
+              <!-- role="button" -->
+              <td class="text-capitalize">{{data.title}}</td>
+              <td class="text-break">{{data.msg_body}}</td>
+              <td>
+                <mat-icon (click)="openVerticallyCentered('update',content,data,i)"
+                  *ngIf="smstempPermissions && smstempPermissions.update">edit</mat-icon>
+                <mat-icon (click)="deleted(data)"
+                  *ngIf="smstempPermissions && smstempPermissions.delete">delete</mat-icon>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <mat-icon class="cross" role="button" (click)="c('dismiss')">close</mat-icon>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">{{tatle}}</h5>
+  </div>
+  <form [formGroup]="myForm">
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="recipient-name" class="col-form-label">Title:</label>
+        <input type="text" formControlName="title" class="form-control">
+        <span class="text-danger" *ngIf="isSubmitted && formControl.title.errors?.required">
+          Title is required
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="message-text" class="col-form-label">Message:</label>
+        <textarea formControlName="msg" class="form-control" id="message-text"></textarea>
+        <span class="text-danger" *ngIf="isSubmitted && formControl.msg.errors?.required">
+          Msg is required
+        </span>
+      </div>
+
+    </div>
+    <div class="modal-footer d-flex justify-content-between">
+    </div>
+
+  </form>
+  <div class="m-1 text-center">
+    <button *ngIf="!updateEnable" type="button" class="btn btn-outline-dark w-30 my-1"
+      (click)="onSubmit(myForm.value,'add')">Save</button>
+    <button *ngIf="updateEnable" type="button" class="btn btn-outline-dark w-30 my-1"
+      (click)="onSubmit(myForm.value,'update')">Update</button>
+  </div>
+</ng-template>

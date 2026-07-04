@@ -1,0 +1,48 @@
+<div class="custome-roster-three">
+    <div class="header_date">
+        <div class="week" *ngFor="let day of globals.getWeekDays">
+            <p>{{ day }}</p>
+        </div>
+    </div>
+    <div class="roster-body">
+        <ng-container *ngFor="let site of sites">
+            <div class="site-div" [id]="site.site_id">
+                <h6 class="sites-heading" (click)="showShift(site.site_id)">{{ site.name }}
+                    <!-- <mat-icon class="date_left_right"
+                        *ngIf="!showShifts">keyboard_arrow_down</mat-icon>
+                    <mat-icon class="date_left_right"
+                        *ngIf="showShifts">keyboard_arrow_right</mat-icon> -->
+                </h6>
+                <div class="shift-body-div" *ngIf="showShiftId == site.site_id && showShifts">
+                    <div class="shift-body" *ngFor="let day of globals.getWeekDays">
+                        <ng-container *ngFor="let job of job_new_roster;let i=index">
+                            <div class="card divoftd" cdkDrag [cdkDragData]="job"
+                                [ngClass]="job.status=='completed' ? 'complete-shift' : 'missed-shift'"
+                                *ngIf="day==job.date && site.site_id==job.site_id">
+                                <p>{{job.time}}</p>
+                                <span class="user-detail">{{job.shift_name}}<mat-icon class="info-icon"
+                                        svgIcon="heroicons_outline:information-circle" (click)="staffDetail()"></mat-icon>
+                                </span>
+                                <div class="shift_footer">
+                                    <mat-icon svgIcon="heroicons_outline:chat-alt" class="shift_chat"></mat-icon>
+                                    <div class="rigth-f">
+                                        <mat-icon class="right-icon"
+                                            svgIcon="heroicons_outline:document-duplicate"></mat-icon>
+                                        <mat-icon class="right-icon" svgIcon="heroicons_outline:x"></mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <br> <br>
+
+                        <div class="plus_create_shift" (click)="OpenShiftRoster()">
+                            <mat-icon class="plus-shift" svgIcon="heroicons_solid:plus-circle"></mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+
+    </div>
+</div>

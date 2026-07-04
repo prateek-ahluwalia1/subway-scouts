@@ -1,0 +1,386 @@
+<div class="absolute inset-0 flex flex-col overflow-hidden main-body-watermark">
+    <!-- Main -->
+    <div class="flex-auto p-6 overflow-auto" style="height: 100vh;" #scrollContainer>
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl" #scrollContainer>
+            <div class="Jobroster-main" style="border-radius: 10px;">
+                <div class="nav rounded-2xl">
+                    <h4>{{ rosterName }}</h4>
+                </div>
+                <div class="calender-main shadow"
+                    style="background-color: var(--tw-ring-offset-color) !important; border-radius: .5rem;">
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="container-nav">
+                            <div class="user-type">
+                                <ul>
+                                    <li *ngIf="rosterPermissions && rosterPermissions.viewBySite"
+                                        [ngClass]="{'active': userType=='location'}" (click)="getUserType('location')">
+                                        Branches
+                                    </li>
+                                    <!-- <li *ngIf="rosterPermissions && rosterPermissions.viewByGuards"
+                                        [ngClass]="{'active': userType=='staff'}" (click)="getUserType('staff')">
+                                        Staff
+                                    </li> -->
+                                </ul>
+                            </div>
+                            <mat-chip-list aria-label="Dog selection" class="dog_selection">
+                                <mat-chip class="custome-week">
+                                    <mat-icon (click)="displayPrevWeek()"
+                                        class="date_left_right">keyboard_arrow_left</mat-icon>
+                                    <app-weekly-selection (startDate)="receiveStartDate($event)"
+                                        (endDate)="receiveEndDate($event)"></app-weekly-selection>
+                                    <mat-icon (click)="displayNextWeek()"
+                                        class="date_left_right">keyboard_arrow_right</mat-icon>
+                                </mat-chip>
+
+                                <mat-chip (click)="today()">
+                                    <mat-icon viewBox="0 0 30 30" svgIcon="today"></mat-icon>
+                                    <span>Today</span>
+                                </mat-chip>
+
+                                <mat-form-field class="fuse-mat-rounded">
+                                    <mat-select [placeholder]="'Select state...'" [(value)]="selectedState" #state
+                                        (selectionChange)="filterState(state.value)">
+                                        <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <app-select-multiple-customer signleDouble="yes"
+                                    (selectedCustomer)="receiveDataFromChild($event)" class="select_job_roster"
+                                    [dataArray]="customers" [placeholderText]="'Select Customers'">
+                                </app-select-multiple-customer>
+
+                                <app-select-multiple-site (selectedSite)="receiveDataFromChildSite($event)"
+                                    class="select_job_roster site-job-new-roster" [type]="type" [dataArray]="sitesList"
+                                    [placeholderText]="userType =='staff' ? 'Select Staff' : 'Select Branches'">
+                                </app-select-multiple-site>
+
+                                <mat-form-field class="fuse-mat-rounded">
+                                    <mat-select [placeholder]="'SITE TYPE'" [(value)]="selectedType" #status
+                                        (selectionChange)="siteStatus(status.value)">
+                                        <mat-option value="active">Active Branch</mat-option>
+                                        <mat-option value="inactive">Inactive Branch</mat-option>
+                                        <mat-option value="all">All Branches</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field class="fuse-mat-rounded">
+                                    <mat-select [placeholder]="'View By...'" [(value)]="selected" #view
+                                        (selectionChange)="viewBy(view.value)">
+                                        <p class="px-3">VIEW BY Branch</p>
+                                        <mat-option value="site-week" [disabled]="userType=='staff'">Week</mat-option>
+                                        <mat-option *ngIf="rosterPermissions && rosterPermissions.twoWeeks"
+                                            value="site-two-weeks" [disabled]="userType=='staff'">2
+                                            Weeks
+                                        </mat-option>
+                                        <!-- <div class="view">
+                                            <hr>
+                                            <p class="px-3">VIEW BY Staff</p>
+                                            <mat-option value="staff-week"
+                                                [disabled]="userType=='location'">Week
+                                            </mat-option>
+                                            <mat-option *ngIf="rosterPermissions && rosterPermissions.twoWeeks"
+                                                value="staff-two-weeks" [disabled]="userType=='location'">2
+                                                Weeks
+                                            </mat-option>
+                                        </div> -->
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-chip (click)="reloadCurrentPage()">
+                                    <mat-icon svgIcon="heroicons_outline:refresh"></mat-icon>
+                                </mat-chip>
+                                <!-- [ngClass]="{ 'disabled-copied' : this.globals.selectedSitesIds.length==0 }" -->
+                                <!-- && loginUser!='customer' -->
+                                <mat-chip
+                                    *ngIf="rosterStatus=='active' && rosterPermissions && rosterPermissions.bulkActions"
+                                    [matMenuTriggerFor]="setting" [ngClass]="{ 'disabled-copied' :!isCopyEnabled }">
+                                    <mat-icon svgIcon="mat_outline:settings"></mat-icon>
+                                </mat-chip>
+
+                                <mat-menu #setting="matMenu">
+                                    <!-- <h6 class="px-3">Export</h6> -->
+                                    <!-- <button mat-menu-item>Print by site(CSV)</button>
+                                    <button mat-menu-item>Print by site(EXCEL)</button>
+                                    <button mat-menu-item>Print by staff(CSV)</button>
+                                    <button mat-menu-item>Print by staff(EXCEL)</button> -->
+                                    <!-- <button mat-menu-item (click)="generateRosterReportNormal('normal')">
+                                        Download New Roster Report
+                                    </button>
+
+                                    <button mat-menu-item (click)="generateRosterReport('normal')">
+                                        Download Normal Roster Report
+                                    </button>
+
+                                    <button mat-menu-item (click)="generateRosterReport('divide')">
+                                        Download Divide Roster Report
+                                    </button> -->
+                                    <!-- <button mat-menu-item>Download Roster(JSON)</button> -->
+                                    <!-- <hr> -->
+                                    <h6 class="px-3">Options</h6>
+                                    <!-- <button mat-menu-item (click)="siteActionBulk('copy_current')">Copy this to Current Week</button> -->
+                                    <button mat-menu-item (click)="siteActionBulk('rollover')">Rollover this Week</button>
+                                    <!-- <button mat-menu-item (click)="siteActionBulk('clear_shifts')">Clear Shifts</button>
+                                    <button mat-menu-item (click)="siteActionBulk('unpublish')">Unpublish Week</button>
+                                    <button mat-menu-item (click)="siteActionBulk('unassign')">Unassign Week</button> -->
+                                    <!-- <button mat-menu-item (click)="siteActionBulkMultiple()">Add multiple shifts</button> -->
+                                </mat-menu>
+                                <!-- && loginUser!='customer' -->
+                                <!-- <mat-chip
+                                    *ngIf="rosterStatus=='active' && rosterPermissions && rosterPermissions.addStaffToLocations"
+                                    ngbTooltip="Add Staff on Locations" (click)="addGuardOnSites(addGuard)">
+                                    <mat-icon svgIcon="mat_outline:assignment_ind"></mat-icon>
+                                </mat-chip> -->
+
+                                <mat-chip
+                                    *ngIf="userType!='staff' && rosterStatus=='active' && rosterPermissions && rosterPermissions.createNewLocation"
+                                    ngbTooltip="Create a new Branch" (click)="createSite()">
+                                    <mat-icon svgIcon="mat_outline:note_alt"></mat-icon>
+                                </mat-chip>
+
+                                <!-- <mat-chip
+                                    *ngIf="rosterStatus=='active' && rosterPermissions && rosterPermissions.bulkActions"
+                                    [matMenuTriggerFor]="bulkAction"
+                                    [ngClass]="{ 'disabled-copied' : this.globals.selectedSitesIds.length==0 }">
+                                    <mat-icon viewBox="0 0 30 30" svgIcon="assignment_turned_in"></mat-icon>
+                                    <span>Bulk Action</span>
+                                </mat-chip>
+
+                                <mat-menu #bulkAction="matMenu">
+                                    <button mat-menu-item (click)="siteActionBulk('clear_shifts')">Clear Shifts</button>
+                                    <button mat-menu-item (click)="siteActionBulk('unpublish')">Unpublish Week</button>
+                                    <button mat-menu-item (click)="siteActionBulk('unassign')">Unassign Week</button>
+                                </mat-menu> -->
+
+                                <!-- <mat-chip
+                                    *ngIf="rosterStatus=='active' && rosterPermissions && rosterPermissions.asapJob"
+                                    (click)="AdhocShift()">
+                                    <mat-icon viewBox="0 0 30 30" svgIcon="mat_outline:public"></mat-icon>
+                                    <span>Broadcast a job</span>
+                                </mat-chip> -->
+
+                                <!-- <mat-chip *ngIf="rosterStatus=='active' && loginUser!='customer'" (click)="sitesDelete()"
+                                    [ngClass]="{ 'disabled-copied' : this.globals.selectedCardIds.length==0 }">
+                                    <mat-icon svgIcon="mat_outline:delete_forever"></mat-icon>
+                                    <span>Delete Shifts</span>
+                                </mat-chip> -->
+
+                                <!-- <mat-chip
+                                    *ngIf="rosterStatus=='active' && loginUser!='customer' && rosterPermissions && rosterPermissions.bulkActions"
+                                    [matMenuTriggerFor]="menu" [disabled]="!isCopyEnabled"
+                                    [ngClass]="{ 'disabled-copied' :!isCopyEnabled }" (click)="CopyShiftBulk()">
+                                    <mat-icon viewBox="0 0 30 30" svgIcon="mat_outline:content_copy"></mat-icon>
+                                    <span>Copy</span>
+                                </mat-chip> -->
+
+                                <mat-chip (click)="rosterStats()">
+                                    <mat-icon svgIcon="mat_solid:stacked_bar_chart"></mat-icon> <span>Stats</span>
+                                    <mat-icon svgIcon="mat_solid:keyboard_arrow_down" viewBox="0 0 1024 974"
+                                        class="some-space">
+                                    </mat-icon>
+                                </mat-chip>
+
+                                <mat-chip
+                                    *ngIf="rosterStatus=='active' && loginUser!='customer' && rosterPermissions && rosterPermissions.availableStaff"
+                                    ngbTooltip="Available Staff" (click)="checkAvailableStaff()">
+                                    <mat-icon viewBox="0 0 30 30" svgIcon="mat_outline:supervisor_account"></mat-icon>
+                                </mat-chip>
+
+                                <mat-chip *ngIf="rosterStatus=='active' && loginUser!='customer'"
+                                    ngbTooltip="Deleted Shifts" (click)="viewDeletedShifts()">
+                                    <mat-icon viewBox="0 0 30 30" svgIcon="mat_outline:restore_from_trash"></mat-icon>
+                                </mat-chip>
+
+                                <mat-chip *ngIf="rosterStatus=='active' && loginUser!='customer'"
+                                    (click)="unpublish_shift_count > 0 && publishShift()"
+                                    [disabled]="unpublish_shift_count==0" class="publish_site_color"
+                                    [matBadge]="unpublish_shift_count" matBadgeOverlap="false">
+                                    Publish
+                                </mat-chip>
+                            </mat-chip-list>
+                        </div>
+                    </div>
+
+                    <ng-container *ngIf="showStats">
+                        <div class="roster-color-card">
+                            <p *ngFor="let colorKey of filterKeys(rosterColor)"
+                                [ngStyle]="{ 'background-color': rosterColor[colorKey] }"><span>{{ colorKey.replace('_',
+                                ' ') }}</span>
+                            </p>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="isShowSkelton">
+                        <app-skelton></app-skelton>
+                    </ng-container>
+
+                    <ng-container
+                        *ngIf="!isShowSkelton && selected=='site-week' || selected=='staff-week' && showCalender">
+                        <app-one-weeks [calenderType]="userType" [dataArray]="sitesListChild" [days_hours]="days_hours"
+                            [rosterStatus]="rosterStatus"></app-one-weeks>
+                    </ng-container>
+
+                    <ng-container
+                        *ngIf="!isShowSkelton && selected=='site-two-weeks' || selected=='staff-two-weeks' && showCalender">
+                        <app-two-weeks [calenderType]="userType" [dataArray]="sitesListChild" [days_hours]="days_hours"
+                            [rosterStatus]="rosterStatus"></app-two-weeks>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <button class="back-to-top" (click)="scrollToTop()">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+</div>
+
+
+
+<ng-template #addGuard let-modal>
+
+    <div class="modal-header">
+        <h5 class="modal-title">Add Staff On Locations</h5>
+        <button type="button" class="close" style="color: white;opacity: 1;" data-dismiss="modal"
+            (click)="close('cancel')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-select-multiple-customer signleDouble="no" (selectedCus)="selectedCus($event)" class="select_job_roster"
+            [dataArray]="customers" [placeholderText]="'Select Customer'">
+        </app-select-multiple-customer>
+
+        <app-select-multiple-site signleDouble="no" style="position: relative;top: 10px;"
+            (selectedSite)="receiveDataFromChildSi($event)" class="select_job_roster site-job-new-roster mt-2"
+            [type]="type" [dataArray]="singleSites"
+            [placeholderText]="userType =='staff' ? 'Select Staff' : 'Select Location'">
+        </app-select-multiple-site>
+
+        <mat-card class="result" style="position: relative;top: 20px;">
+            <mat-card-content>
+                <section class="example-section">
+                    <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkedSlide"
+                        (change)="toggleGuard($event,guards_arr,'add_to_site_at_once')" [disabled]="disabledSlide">
+                        Add All at Once!
+                    </mat-slide-toggle>
+                </section>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-tab-group style="position: relative;top: 40px;" class="guard-for-site"
+            (selectedTabChange)="onTabChange($event)">
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="example-tab-icon">supervised_user_circle</mat-icon>
+                    Customer Staff
+                </ng-template>
+
+                <!-- search bar -->
+                <div class="search-here" style="margin-bottom: 10px;">
+                    <mat-icon svgIcon="feather:search" class="search-icon"
+                        style="color: #94a3b8 !important; margin:4px 7px !important;">
+                    </mat-icon>
+                    <!-- <input matInput placeholder="Search here..." [(ngModel)]="searchTerm"
+                         style="font-size: medium;"> -->
+                    <input matInput placeholder="Search here..." [(ngModel)]="searchTerm" style="font-size: medium;">
+                </div>
+                
+                <ng-container *ngFor="let staff of customers_guards | searchStaff:searchTerm">
+                    <mat-slide-toggle (change)="toggleGuard($event, staff, 'add_to_site')">
+                        {{ staff.first_name }} {{ staff.middle_name ? staff.middle_name : '' }} {{ staff.last_name ?
+                        staff.last_name : '' }}
+                    </mat-slide-toggle>
+                </ng-container>
+            </mat-tab>
+
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="example-tab-icon">note_add</mat-icon>
+                    Location Staff
+                </ng-template>
+                <div class="search-here" style="margin-bottom: 10px;">
+                    <mat-icon svgIcon="feather:search" class="search-icon"
+                        style="color: #94a3b8 !important; margin:4px 7px !important;"></mat-icon>
+                    <input matInput placeholder="Search here..." [(ngModel)]="searchlocation"
+                        style="font-size: medium;">
+                </div>
+                <mat-slide-toggle *ngFor="let staff of site_guards | searchStaff:searchlocation"
+                    (change)="toggleGuard($event,staff)" [checked]="true">{{ staff.first_name }} {{
+                    staff.middle_name?staff.middle_name:'' }} {{ staff.last_name?staff.last_name:'' }}
+                </mat-slide-toggle>
+            </mat-tab>
+        </mat-tab-group>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close('cancel')">Close</button>
+    </div>
+
+
+</ng-template>
+
+<ng-template #showTable let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Work Limitation Violations</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="alert alert-warning mb-4">
+      <strong>Operation blocked:</strong> Some guards would exceed legal/allowed work hours.
+      <br>
+      <strong>Suggestion:</strong> {{ suggestion || 'Please reassign shifts or adjust guard work hours to proceed.' }}
+    </div>
+
+    <div class="mb-3">
+      <strong>Total violations:</strong> {{ totalViolations }}
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover table-sm">
+        <thead class="table-light">
+          <tr>
+            <th>Guard</th>
+            <th>Shift Date</th>
+            <th>Week Offset</th>
+            <th>Violation Message</th>
+            <th>Period</th>
+            <th>Limit</th>
+            <th>Would be</th>
+            <th>Excess</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let v of violations">
+            <td>
+              {{ v.guard_name }}<br>
+              <small class="text-muted">ID: {{ v.guard_id }}</small>
+            </td>
+            <td>{{ v.shift_date | date:'dd MMM yyyy (EEE)' }}</td>
+            <td>{{ v.week_offset }}</td>
+            <td>{{ v.message }}</td>
+            <td>{{ v.details?.fortnight_period || '—' }}</td>
+            <td>{{ v.details?.fortnight_limit || '?' }} hrs</td>
+            <td class="text-danger fw-bold">{{ v.details?.total_hours || '?' }} hrs</td>
+            <td class="text-danger fw-bold">+{{ v.details?.exceed_hours || '?' }} hrs</td>
+          </tr>
+
+          <tr *ngIf="violations?.length === 0">
+            <td colspan="8" class="text-center text-muted py-4">
+              No violation details available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.dismiss('Cancel')">Cancel</button>
+  </div>
+</ng-template>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+    <p style="color: white">Please Wait...</p>
+</ngx-spinner>

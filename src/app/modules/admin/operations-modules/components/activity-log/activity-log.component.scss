@@ -1,0 +1,313 @@
+$primary-color: var(--primary_color, #01A37E);
+$color-secondary: var(--color-secondary, #1e293c);
+$color-light-button: var(--color-light-button, #01a37e2e);
+
+.nav {
+    display: flex;
+    padding: 15px 25px;
+    box-shadow: 0 2px 17px rgb(30 30 30 / 5%);
+    background-color: rgba(var(--fuse-bg-card-rgb),
+            var(--tw-bg-opacity)) !important;
+    border-radius: var(--br-2xl);
+    margin-bottom: 20px;
+    justify-content: space-between;
+
+    .filters {
+        display: flex;
+    }
+}
+
+//   Wajahat
+
+.active {
+    background-color: $color-light-button;
+}
+
+.mat-chip {
+    background-color: $primary-color !important;
+    padding: 0 4px;
+    color: var(--color-white);
+
+}
+
+.mat-icon {
+    color: #074677 !important;
+    margin: 0 10px;
+}
+
+.mat-standard-chip {
+    border-radius: 5px;
+    padding: 7px 4px;
+    margin: 5px 10px !important;
+}
+
+section {
+    box-shadow: 0 2px 17px rgb(30 30 30 / 5%);
+    background-color: rgba(var(--fuse-bg-card-rgb), var(--tw-bg-opacity)) !important;
+    border-radius: var(--br-2xl);
+
+}
+
+.search-here {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 25px 15px;
+    border-bottom: 1px solid #e2e8f0;
+
+    .search-here-icon {
+        color: #e2e8f0 !important;
+    }
+
+    input {
+        overflow-x: scroll;
+        font-weight: 500;
+    }
+}
+
+.activity-log-user-icon {
+    padding: 6px 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+hr {
+    margin: 0;
+    font-weight: 500;
+}
+
+
+.row {
+    margin: 0;
+}
+
+.col-lg-3 {
+    border-right: 1px solid #e2e8f0;
+    padding: 0;
+}
+
+.calendar__input {
+    width: 100% !important;
+}
+
+.calendar__input-wrapper {
+    width: 100% !important;
+}
+
+
+
+.timeline_main {
+
+    /* The actual timeline (the vertical ruler) */
+    .timeline {
+        position: relative;
+        max-width: 100%;
+        margin: 0 auto;
+
+    }
+
+    /* The actual timeline (the vertical ruler) */
+    .timeline::after {
+        border-radius: 10px;
+        content: "";
+        position: absolute;
+        width: 9px;
+        background-color: rgb(202, 202, 202);
+        top: 0;
+        bottom: 0;
+        left: 23%;
+        margin-left: 0px;
+    }
+
+    /* Container around content */
+    .container {
+        padding: 10px 40px;
+        position: relative;
+        background-color: inherit;
+        width: 76%;
+        margin: 0;
+    }
+
+    /* The circles on the timeline */
+    .container::after {
+        content: '';
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        right: -17px;
+        background-color: rgb(255, 255, 255);
+        border: 4px solid var(--my-color-var);
+        top: 30px;
+        border-radius: 50%;
+        z-index: 1;
+    }
+
+    /* Place the container to the left */
+    .left {
+        left: 0;
+    }
+
+    /* Place the container to the right */
+    .right {
+        left: 24%;
+    }
+
+    /* Add arrows to the left container (pointing right) */
+    .left::before {
+        content: " ";
+        height: 0;
+        position: absolute;
+        top: 22px;
+        width: 0;
+        z-index: 1;
+        right: 30px;
+        border: medium solid rgb(234, 234, 234);
+        border-width: 10px 0 10px 10px;
+        border-color: transparent transparent transparent white;
+    }
+
+    /* Add arrows to the right container (pointing left) */
+    .right::before {
+        content: " ";
+        height: 0px;
+        position: absolute;
+        top: 24px;
+        width: 0px;
+        z-index: 1;
+        left: 22px;
+        border: medium solid rgb(79, 11, 11);
+        border-width: 17px 23px 17px 0;
+        border-color: transparent rgb(240 240 240) transparent transparent;
+    }
+
+    /* Fix the circle for containers on the right side */
+    .right::after {
+        left: -16px;
+    }
+
+    /* The actual content */
+    .content {
+        padding: 10px 20px;
+        background-color: rgb(240, 240, 240);
+        position: relative;
+        border-radius: 6px;
+
+        .date_sheet {
+            border-radius: 10px;
+            box-sizing: border-box;
+            left: -185px;
+            background: #eeeeee;
+            width: max-content;
+            position: absolute;
+            top: 12px;
+            padding: 7px;
+
+            .date {
+                margin: 0;
+                color: #f78909;
+                font-weight: bold;
+                text-align: center;
+                font-size: 13px;
+
+            }
+
+            .by {
+                text-align: center;
+                font-weight: 600;
+                margin: 0;
+                line-height: 1.2;
+                width: 100px;
+                color: black;
+                font-size: 15px;
+                padding: 10px;
+                text-transform: capitalize;
+                white-space: initial;
+
+            }
+
+            .time {
+                margin: 0;
+                text-align: center;
+                font-size: 18px;
+                color: #1d7765;
+                font-weight: bold;
+
+            }
+        }
+
+        .date_sheet::after {
+            content: '';
+            height: 0px;
+            position: absolute;
+            top: 11px;
+            width: 0px;
+            z-index: 1;
+            right: -12px;
+            transform: rotate(180deg);
+            border: medium solid rgb(79, 11, 11);
+            border-width: 8px 12px 8px 0;
+            border-color: transparent rgb(238 238 238) transparent transparent;
+        }
+
+        .heading {
+            font-weight: bold;
+            width: max-content;
+            font-size: 12px;
+            padding: 4px 10px;
+            color: white;
+            border-radius: 5px;
+            text-transform: capitalize;
+        }
+
+        .date {
+            margin: 0;
+            font-size: 16px;
+
+            .light-text {
+                color: #434343;
+                font-size: 12px;
+                font-weight: 300;
+                margin: 0px 3px;
+
+            }
+
+            .dark-text {
+                font-size: 14px;
+                color: #1e1c1c;
+
+                font-weight: 600;
+            }
+        }
+
+        .card {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 7px;
+            background: #ffffff;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 50px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
+
+            .head {
+                font-size: 14px;
+                margin: 0;
+                font-weight: bold;
+                color: #444;
+            }
+
+            .dates {
+                font-size: 11px;
+                color: rgb(137, 137, 137);
+            }
+        }
+
+        .details {
+            color: #444444;
+            font-size: 14px;
+        }
+
+    }
+}
+
+.prevoius-data {
+    p {
+        margin: 0;
+    }
+}

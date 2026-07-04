@@ -1,0 +1,38 @@
+::ng-deep app-login-page{
+    background-image: url("/assets/images/login-page/Background5.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.login-container{
+    margin-top: 12%;
+    margin-bottom: 8%;
+}
+.logo{
+    height: 55%; 
+    width: 40%;   
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+    margin-top: 15%;
+}
+.login-form-2{
+    padding: 3% 0%;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
+.login-form-2 h3{
+    text-align: center;
+    color: black;
+}
+
+.login-container form{
+    padding: 6% 10%;
+}
+.create_btn{
+    background-color: #386BC0;
+    padding: 8px 25px;
+    border-radius: 8px;
+    color: white;
+    margin-top: 0 !important;
+}

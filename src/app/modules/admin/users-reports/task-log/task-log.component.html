@@ -1,0 +1,75 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+
+    <div class="flex-auto p-6">
+
+        <div class="rounded-2xl">
+            <div class="tasklog-page">
+                <div class="task-head">
+                    <div class="user-nav rounded-2xl">
+                        <h4>Admin Log</h4>
+                        <mat-chip-list aria-label="Dog selection" class="dog_selection timesheet-matfield">
+
+                            <app-select-multiple-guards signleDouble="no" class="mr-2 mt-1"
+                                style="position: relative;width: 160px;"
+                                (selectedUsers)="receiveDataFromChildSingle($event)" [dataArray]="admins"
+                                [placeholderText]="'Select a admin'"></app-select-multiple-guards>
+
+                            <mat-form-field appearance="fill" class="dateRange job-tracker-from-to">
+                                <mat-date-range-input [rangePicker]="picker">
+                                    <input [(ngModel)]="start" matStartDate placeholder="Start date">
+                                    <input [(ngModel)]="end" matEndDate placeholder="End date">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                            </mat-form-field>
+
+                            <mat-chip (click)="SearchResult()" class="job-tracker-search">
+                                <mat-icon>youtube_searched_for</mat-icon>
+                                <span style="margin-right: 10px;">Search</span>
+                            </mat-chip>
+
+                            <!-- <mat-chip class="job-tracker-search">
+                                <span style="margin-right: 10px;">Download</span>
+                            </mat-chip> -->
+                        </mat-chip-list>
+                    </div>
+                </div>
+            </div>
+
+
+            <ng-container *ngFor="let main of displayAdminactivity">
+                <div class="overflow-div"
+                    *ngIf="Adminactivity[main].Activity && Adminactivity[main].Activity.length > 0">
+                    <div class="first-box" *ngIf="Adminactivity[main].Login" style="margin-top: 15px;">
+                        <h5 class="text-capitalize">{{ Adminactivity[main].Login?.action_by_name }}</h5>
+                        <h6>Login Date and Time:</h6>
+                        <p style="color:green;">{{ Adminactivity[main].Login?.route_enter }}</p>
+                    </div>
+                    <div class="timeline">
+                        <div *ngFor="let task of Adminactivity[main].Activity; let i = index" class="container"
+                            [ngClass]="i % 2 === 0 ? 'left' : 'right'">
+                            <div class="content">
+                                <!-- <h2><span>{{ getLastTwoNamesFromUrl(task.page) }}</span></h2> -->
+                                <!-- <h6>{{ Adminactivity[task].Login?.action_by_name }}</h6> -->
+                                <h5>Page Enter: {{task.route_enter}}</h5>
+                                <h6>Page Leave: {{task.route_leave}}</h6>
+                                <p class="text-muted" style="margin-bottom: 10px;">Activities:</p>
+                                <mat-chip-list>
+                                    <mat-chip color="warning" *ngFor="let item of task.action?.split(',')">{{
+                                        item.trim() }}</mat-chip>
+                                </mat-chip-list>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="first-box" *ngIf="Adminactivity[main].Logout" style="margin-top: 15px;">
+                        <h5 class="text-capitalize">{{ Adminactivity[main].Logout?.action_by_name }}</h5>
+                        <h6>Logout Date and Time:</h6>
+                        <p style="color:red;">{{ Adminactivity[main].Logout?.route_leave }}</p>
+                    </div>
+                </div>
+            </ng-container>
+
+        </div>
+    </div>
+</div>

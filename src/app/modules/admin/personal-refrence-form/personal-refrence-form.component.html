@@ -1,0 +1,89 @@
+<div class="row">
+    <div class="col-12">
+     <button type="button" (click)="close()" style="float: right; margin-right: 3rem; margin-top: 3rem;">
+         <mat-icon>cancel</mat-icon>
+     </button>
+    </div> 
+ </div>
+<div class="wrap_form">
+    <form [formGroup]="AddPersonalRef">
+    <div class="content" #content>
+        <div class="logo ">
+            <img src="../../assets/images/logo/scouts.png" alt="" class="mb-2">
+        </div>
+
+        <div class="bar text-center p-2  mb-3 text-light">
+            <h5>Perosnal Refrences</h5>
+        </div>
+
+        <div class="form-1 mb-4">
+            <div class="body w-100 d-flex">
+                <div class="form-body pb-2 w-50 d-flex ">
+                    <label>Name:</label>
+                    <input type="text" formControlName="name" class="border-secondary ps-2 border-bottom w-75 ">
+                </div>
+                <div class="form-body pb-2 w-50 d-flex ">
+                    <label class="text-center">Relationship: </label>
+                    <input type="text" formControlName="relationship" class="border-secondary ps-2 border-bottom w-75">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex mt-2 w-100">
+            <label for="">Contact Number</label>
+            <input type="number" formControlName="contact" class="border-bottom ps-2 ms-2 border-secondary w-25 no-spin-box">
+        </div>
+
+        <div class="d-flex mt-2 w-100">
+            <label class="mt-2">Applicant’s signature:</label>
+            <input type="text" formControlName="sign" class="border-bottom ps-2 ms-2 border-secondary w-50">
+        </div> 
+
+        <div class="form-1 mt-2 mb-4">
+            <div class="body w-100 d-flex">
+                <div class="form-body  w-50 d-flex ">
+                    <label>Print full name:</label>
+                    <input type="text" formControlName="fullname" class="border-secondary ps-2 border-bottom w-75 ">
+                </div>
+
+                <div class="form-body  w-50 d-flex ">
+                    <label class="text-center">Date: </label>
+                    <input type="text" formControlName="date" class="border-secondary ps-2 border-bottom w-75">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex mt-2 w-100">
+            <label for="">Checked and interviewed by:</label>
+            <input type="text" formControlName="checkedBy" class="border-bottom ps-2 ms-2 border-secondary w-50">
+        </div> 
+
+        <p class="mt-4 fw-bold">Please send your compliance documents to 
+            <span role="button" class="link">app.thescouts.com.au</span>
+        </p>
+
+        <div class="d-flex w-75 justify-content-between fw-bold">
+            <div>
+                <ul>
+                    <li>Security Licence</li>
+                    <li>Driver Licence • First aid Cert</li>
+                    <li>Covid Vaccination Cert</li> 
+                </ul>
+            </div>
+            <div>
+                <ul>
+                    <li>Proof of citizenship</li>
+                    <li>WWCC / White Card</li>
+                    <li>Visa Copy OR - Security Certs</li> 
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-content-center" style="margin-top: 5rem;">
+        <button type="button" class="btn btn-success m-1" (click)="makePdf()"
+            *ngIf="this.global.admin && this.global.admin.admin_user_type === 'super-admin'">Save pdf</button>
+        <button type="button" class="btn btn-success m-1" (click)="submit()">Submit</button>
+    </div>
+    </form>
+</div>

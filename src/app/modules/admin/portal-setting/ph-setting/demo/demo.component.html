@@ -1,0 +1,24 @@
+<body>
+    <div class="container">
+        <div class="cta-form">
+            <h2>Enter Holiday Information</h2>
+            <p>Fill in the required details for the holiday below.</p>
+        </div>
+        <form action="" class="form" (ngModelChange)="onFormChange()">
+            <input type="text" placeholder="Holiday Name" class="form__input" id="holiday_name"
+                [(ngModel)]="data.holiday_name" required />
+            <label for="holiday_name" class="form__label">Holiday Name</label>
+
+            <select class="form__input custom-select" aria-label="Select State" name="state" [(ngModel)]="data.state"
+                required>
+                <label for="state" class="form__label">State Name</label>
+                <option [value]="null" disabled selected>Select State</option>
+                <option *ngFor="let state of states" [value]="state.value">{{ state.name }}</option>
+            </select>
+
+            <input type="text" placeholder="Some Information" class="form__input mt-3" id="holiday_information"
+                [(ngModel)]="data.holiday_information" required />
+            <label for="holiday_information" class="form__label">Some Information about?</label>
+        </form>
+    </div>
+</body>

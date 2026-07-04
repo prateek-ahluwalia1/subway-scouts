@@ -1,0 +1,55 @@
+$primary-color: var(--primary_color, #01A37E);
+$color-secondary: var(--color-secondary, #1e293c);
+$color-light-button: var(--color-light-button, #01a37e2e);
+////Hira
+.btn {
+  background-color: var(--background-primary) !important;
+  color: #ffffff !important;
+  padding: 7px 10px;
+}
+
+.center {
+  height: 50%;
+  width: 50%;
+  object-fit: contain;
+  border-radius: 9px;
+}
+
+.borderless td,
+.borderless th {
+  border: none;
+
+  p {
+    margin: 0;
+    opacity: .5;
+  }
+}
+
+.col_head {
+  width: 35%;
+}
+
+.col_data {
+  width: 35%;
+}
+
+.two-weeks-th {
+  font-size: 11px;
+  margin: 5px 5px;
+  // border: 1px; 
+  // border-radius: 12px; 
+  background-color: $color-light-button !important;
+}
+
+.shift-time-name {
+  background-color: $color-light-button;
+  color: var(--color-primary);
+  text-align: center;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  p{
+    margin: 0;
+    font-size: 12px;
+  }
+}

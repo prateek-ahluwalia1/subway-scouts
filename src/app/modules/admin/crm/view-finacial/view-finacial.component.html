@@ -1,0 +1,166 @@
+<div class="w-100 creat-quotation-page">
+    <div class="invoice-1" id="pdf-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="invoice-inner clearfix">
+                        <div class="invoice-info clearfix" id="invoice_wrapper">
+                            <div class="invoice-headar">
+                                <div class="row g-0">
+                                    <div class="col-sm-6">
+                                        <div class="invoice-logo">
+                                            <!-- logo started -->
+                                            <div class="logo">
+                                                <img src="assets/images/logo/scouts.png" alt="logo" />
+                                            </div>
+                                            <!-- logo ended -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 invoice-id">
+                                        <div class="info">
+                                            <h1 class="color-white inv-header-1">
+                                                {{ user?.financial_type=='invoice'? 'Invoice': 'Quote ' }}
+                                            </h1>
+                                            <p class="color-white mb-1">
+                                                <strong> {{ user?.financial_type=='invoice'? 'Invoice':
+                                                    'Quote ' }} Number</strong>
+                                                <span>{{ user?.invoice_no }}</span>
+                                            </p>
+                                            <p class="color-white mb-0">
+                                                <strong>Due Date</strong>
+                                                <span>{{ user?.valid | date : "dd-MM-yyyy" }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="invoice-top">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="invoice-number" *ngIf="user?.financial_type == 'invoice'">
+                                            <strong>Bill To:</strong>
+                                            {{ user?.lead_address?.name }}<br />
+                                            {{ user.bill_street }}
+                                            {{ user.bill_city }}<br />
+                                            {{ user.bill_state }}
+                                            {{ user.bill_code }}, {{ user.bill_country }}<br />
+                                        </div>
+                                        <div class="invoice-number mb-30" *ngIf="user?.financial_type == 'invoice'">
+                                            <strong>ABN:</strong>
+                                            {{ user?.abn }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="invoice-number">
+                                            <div class="invoice-number-inner">
+                                                <strong>The Scouts: </strong>
+                                                <span class="m-0">Overton Road Williams Landing Vic 3027</span>
+                                                <br />
+                                                <span class="m-0">1300 550 401</span>
+                                                <br>
+                                                <span mailto:class="m-0">info@thescouts.com.au</span>
+                                            </div>
+                                        </div>
+                                        <div class="invoice-number">
+                                            <div class="invoice-number-inner" *ngIf="user?.financial_type == 'invoice'">
+                                                <strong>Account Name: </strong>
+                                                <span class="m-0">{{ company_detail.bank_name }}</span>
+                                                <br />
+                                                <strong>ACC: </strong>
+                                                <span class="m-0">{{ company_detail.account_number }}</span>
+                                                <br>
+                                                <strong>BSB: </strong>
+                                                <span mailto:class="m-0">{{ company_detail.bsb }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <main>
+                                <div class="card">
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table mb-0">
+                                                <thead class="card-headers">
+                                                    <tr>
+                                                        <td class="col-5"><strong>Product Name</strong></td>
+                                                        <td class="col-1"><strong>Qty</strong></td>
+                                                        <td class="col-2 text-center">
+                                                            <strong>Unit Price</strong>
+                                                        </td>
+                                                        <td class="col-2 text-center">
+                                                            <strong>Amount</strong>
+                                                        </td>
+                                                        <td class="col-2 text-end">
+                                                            <strong>Total Amount</strong>
+                                                        </td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let row of rows; let i = index">
+                                                        <td class="col-5">{{ row.productName }}</td>
+                                                        <td class="col-1 text-center">
+                                                            {{ row.quantity }}
+                                                        </td>
+                                                        <td class="col-2 text-center">
+                                                            {{ row.listPrice }}
+                                                        </td>
+                                                        <td class="col-2 text-end">{{ row.amount }}</td>
+                                                        <td class="col-2 text-end">
+                                                            {{ row.totalAmount }}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot class="card-footer">
+                                                    <tr>
+                                                        <td colspan="4" class="text-end first-column">
+                                                            <strong>Discount {{
+                                                                getCurrencySign(user?.currency)
+                                                                }}:</strong>
+                                                        </td>
+                                                        <td class="text-end">{{ discountValue }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-end first-column">
+                                                            <strong>Sub Total {{
+                                                                getCurrencySign(user?.currency)
+                                                                }}:</strong>
+                                                        </td>
+                                                        <td class="text-end">{{ subTotal }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-end first-column">
+                                                            <strong>GST (10%):</strong>
+                                                        </td>
+                                                        <td class="text-end">{{ gstAmount }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-end first-column border-bottom-0">
+                                                            <strong>Grand Total {{
+                                                                getCurrencySign(user?.currency)
+                                                                }}:</strong>
+                                                        </td>
+                                                        <td class="text-end border-bottom-0">
+                                                            {{ grandTotal }}
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </main>
+                            <footer class="text-center mt-4">
+                                <h1><span>Additional Notes</span></h1>
+                                <hr />
+                                <div>
+                                    <p>{{ additionalNotesText }}</p>
+                                </div>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

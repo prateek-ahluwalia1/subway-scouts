@@ -1,0 +1,114 @@
+<div class="modal-header">
+    <h5 class="modal-title" style="justify-content: center;">Copy which day and site</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="close('dismiss')"></button>
+</div>
+<div class="modal-body">
+    <section class="example-section">
+        <div class="row first-row">
+            <p>Select days to copy</p>
+        </div>
+        <span class="example-list-section d-flex justify-content-center">
+            <mat-checkbox class="custom-checkbox-1 mb-3" [checked]="allComplete" [indeterminate]="someComplete()"
+                [style.background-color]="allComplete?'#CFE2FF':''" (change)="setAll($event.checked)">Select/ Unselect
+                All
+            </mat-checkbox>
+        </span>
+        <span class="example-list-section">
+            <ul class="d-flex w-100 justify-content-around mb-0 pl-0" style="text-align: center;">
+                <li *ngFor="let subtask of task.subtasks">
+                    <mat-checkbox class="custom-checkbox" [(ngModel)]="subtask.completed"
+                        [style.background-color]="subtask.completed?'#CFE2FF':''"
+                        (ngModelChange)="updateAllComplete(subtask)">
+                        {{subtask.name}}
+                    </mat-checkbox>
+                </li>
+            </ul>
+        </span>
+    </section>
+
+    <div class="row p-5">
+
+        <mat-checkbox [checked]="allChecked" [indeterminate]="someSelected()" (change)="setAllSites($event.checked)">
+            {{site.site_name}}
+        </mat-checkbox>
+
+        <br>
+        <br>
+
+        <div *ngFor="let subtask of site.sites">
+            <mat-checkbox [(ngModel)]="subtask.selected" [color]="subtask.color" (ngModelChange)="updateAllCompleteSites(subtask)">
+                {{subtask.site_name}}
+            </mat-checkbox>
+        </div>
+    </div>
+</div>
+<div class="modal-footer" style="justify-content: space-between;">
+    <button type="button" class="close-btn" (click)="close('dismiss')">Close</button>
+    <button type="button" class="btn btn-outline-dark" (click)="copiedShifts()" [disabled]="selectedShifts.length==0">Copy Shifts</button>
+    <!-- <button type="button" class="close-btn">Previous</button> -->
+</div>
+
+<ng-template #showTable let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Work Limitation Violations</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="alert alert-warning mb-4">
+      <strong>Operation blocked:</strong> Some guards would exceed legal/allowed work hours.
+      <br>
+      <strong>Suggestion:</strong> {{ suggestion || 'Please reassign shifts or adjust guard work hours to proceed.' }}
+    </div>
+
+    <div class="mb-3">
+      <strong>Total violations:</strong> {{ totalViolations }}
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover table-sm">
+        <thead class="table-light">
+          <tr>
+            <th>Guard</th>
+            <th>Shift Date</th>
+            <th>Week Offset</th>
+            <th>Violation Message</th>
+            <th>Period</th>
+            <th>Limit</th>
+            <th>Would be</th>
+            <th>Excess</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let v of violations">
+            <td>
+              {{ v.guard_name }}<br>
+              <small class="text-muted">ID: {{ v.guard_id }}</small>
+            </td>
+            <td>{{ v.shift_date | date:'dd MMM yyyy (EEE)' }}</td>
+            <td>{{ v.week_offset }}</td>
+            <td>{{ v.message }}</td>
+            <td>{{ v.details?.fortnight_period || '—' }}</td>
+            <td>{{ v.details?.fortnight_limit || '?' }} hrs</td>
+            <td class="text-danger fw-bold">{{ v.details?.total_hours || '?' }} hrs</td>
+            <td class="text-danger fw-bold">+{{ v.details?.exceed_hours || '?' }} hrs</td>
+          </tr>
+
+          <tr *ngIf="violations?.length === 0">
+            <td colspan="8" class="text-center text-muted py-4">
+              No violation details available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.dismiss('Cancel')">Cancel</button>
+  </div>
+</ng-template>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+    <p style="color: white">Please Wait...</p>
+</ngx-spinner>

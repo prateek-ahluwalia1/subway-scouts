@@ -1,0 +1,65 @@
+<div class="modal-header">
+    <h4 class="modal-title">Copy Shifts</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body text-center">
+    <!-- <div class="row pb-1 mt-2">
+        <p class="mb-3 mt-2 font-weight-medium">Select Days to Copy</p>
+
+        <div class="form-group d-flex justify-content-center">
+            <select class="form-control month-select" [(ngModel)]="selectedMonth" (change)="updateDaysForSelectedMonth()">
+              <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+            </select>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-3 mb-2" *ngFor="let day of daysInMonth; let i = index">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" [id]="'day' + i"
+                      [value]="day" [(ngModel)]="selectedDaysMap[day]"
+                    />
+                    <label class="form-check-label" [for]="'day' + i">{{ day }}</label>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="container py-4">
+        <div class="text-center mb-4">
+          <h5 class="font-weight-bold">Select Days to Copy</h5>
+          <p class="text-muted small">Choose a month and select the days you want to copy</p>
+        </div>
+      
+        <div class="d-flex justify-content-center mb-4">
+            <div class="input-group w-auto">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="monthSelect">Month</label>
+                </div>
+                <select class="custom-select select-month" style="width:300px" [(ngModel)]="selectedMonth" (change)="updateDaysForSelectedMonth()">
+                    <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+                </select>
+            </div>
+        </div>
+      
+        <!-- Day Checkboxes in Card -->
+        <div class="card border-0">
+            <div class="card-body">
+          
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <div class="day-checkbox p-2 rounded border text-center" *ngFor="let day of daysInMonth; let i = index"
+                  [ngClass]="{ 'selected-day': selectedDaysMap[day] }" (click)="toggleDaySelection(day)"
+                  style="width: 55px; cursor: pointer;">
+                  {{ day }}
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>      
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-border-3" (click)="activeModal.dismiss('Cross click')">Cancel</button>
+        <button type="button" class="btn btn-border-3" (click)="copyShift()">Copy Shift</button>
+    </div>
+</div>

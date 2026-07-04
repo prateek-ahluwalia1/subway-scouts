@@ -1,0 +1,67 @@
+app-form{
+    width: 100 !important;
+}
+:host{
+    width: 100% !important;
+    height: 100% !important;
+}
+.wrap_form{
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+}
+
+.content{
+    padding-left: 9%;
+    padding-right: 9%;
+   .logo{ 
+    margin-bottom: 20px;
+    img{
+        height: 8rem;
+        width: 8rem;
+    }
+}
+
+
+
+    h5{
+        color: #01A37E;
+    }
+    .title{
+        margin-top:18px;
+        margin-bottom: 0px;
+        background-color: #01A37E;
+        h2{
+    
+            color: white
+          
+        }
+    }
+    ul{
+       
+        li{
+            list-style: disc; 
+        margin-top: 12px;    }
+    }
+    .employer{
+        width: 70%;
+        input{
+            width: 70%;
+        }
+    }
+    .contactPerson{
+        width: 30%;
+    }
+}
+.active{
+    background-color: #01A37E;
+    color: white;
+}
+
+.no-spin-box::-webkit-inner-spin-button,
+.no-spin-box::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

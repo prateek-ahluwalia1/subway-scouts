@@ -1,0 +1,8 @@
+$color-light-button: var(--color-light-button, #01a37e2e);
+
+.bg_light {
+    background-color: $color-light-button;
+}
+.disabled-input{
+    min-height: 40px;
+}

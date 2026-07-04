@@ -1,0 +1,49 @@
+$primary-color: var(--primary_color, #01A37E);
+.main {
+    .header {
+        padding: 15px;
+        background-color: $primary-color;
+        align-items: center;
+        color: #ffffff;
+
+        .mat-icon {
+            color: #ffffff;
+        }
+    }
+
+    .line {
+        border-top: 1px solid #dcdcdc;
+        padding-top: 24px;
+    }
+
+    .body {
+        padding: 15px;
+    }
+
+    .row {
+        position: relative;
+
+        mat-datepicker-toggle {
+            color: #64748b;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+       
+    }
+
+    .roster {
+        text-align: center;
+        padding-right: 1%;
+    }
+}
+
+.custom-error {
+    color: red;
+    margin-top: -15px;
+    font-size: 11px;
+}
+.select-all-admin {
+    margin: 5px 17px;
+}

@@ -1,0 +1,65 @@
+<div class="modal-header">
+    <h4 class="modal-title">Available Staff</h4>
+    <button type="button" class="close" aria-label="Close" (click)="close('close')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="model-body p-3 " style="overflow-y: auto; height:90%;margin-bottom: 30px;">
+    <ng-container *ngFor="let staff of staff">
+        <div class="staff-details flex align-items-center justify-content-between">
+            <div class="flex">
+                <img src="https://toppng.com/uploads/preview/user-account-management-logo-user-icon-11562867145a56rus2zwu.png"
+                    alt="" style="width: 60px; object-fit: contain;">
+                <div class="p-3">
+                    <p class="m-0 fs-5 bold">{{ staff.first_name }} {{ staff.middle_name }} {{ staff.last_name }}</p>
+                    <p class="m-0">{{ staff.phone }}</p>
+                </div>
+            </div>
+            <div *ngIf="fromParent" class="cursor-pointer" (click)="addStaff(staff)">
+                <mat-icon svgIcon="mat_outline:person_add_alt"></mat-icon>
+            </div>
+        </div>
+        <div class="card">
+            <div class="row pre-nxt w-100 m-0 border-bottom">
+                <div class="col-6 border-right text-center">
+                    <p class="fs-6 mb-2">Previous</p>
+                </div>
+                <div class="col-6 text-center">
+                    <p class="fs-6 mb-2">Next</p>
+                </div>
+            </div>
+            <div class="row w-100 m-0">
+                <div class="col-6 text-center">
+                    <div class="content" *ngIf="staff?.prev_shift && !isEmptyObject(staff.prev_shift); else prevShift">
+                        <p>{{ staff?.prev_shift?.site }}</p>
+                        <p>{{ staff?.prev_shift?.temp_date }}</p>
+                        <p>{{ staff?.prev_shift?.start }}-{{ staff?.prev_shift?.end }}</p>
+                    </div>
+                </div>
+
+                <div class="col-6 text-center">
+                    <div class="content" *ngIf="staff?.next_shift && !isEmptyObject(staff.next_shift); else nxtShift">
+                        <p>{{ staff?.next_shift?.site }}</p>
+                        <p>{{ staff?.next_shift?.date }}</p>
+                        <p>{{ staff?.next_shift?.start }}-{{ staff?.next_shift?.end }}</p>
+                    </div>
+                </div>
+                
+
+                <ng-template #prevShift>
+                    <div class="content">
+                        <p>No Shift</p>
+                    </div>
+                </ng-template>
+
+                <ng-template #nxtShift>
+                    <div class="content">
+                        <p>No Shift</p>
+                    </div>
+                </ng-template>
+            </div>
+
+        </div>
+    </ng-container>
+    <h5 *ngIf="staff.length==0">Staff not found</h5>
+</div>

@@ -1,0 +1,136 @@
+<div class="modal-header">
+    <h4>{{ type=='add'?'Add Leave':'Staff Leave Details' }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="close('dismiss')"></button>
+</div>
+<div class="row w-100 p-6 m-0 overflow-auto">
+    <div class="message bg-white ">
+        <ng-container *ngIf="type=='add'; else elseBlock1">
+            <!-- Content to display when condition1 is true -->
+            <mat-chip-list aria-label="Dog selection" class="dog_selection">
+                <mat-form-field class="w-100">
+                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                        <input matStartDate formControlName="start" placeholder="Start date *" [min]="minDate" readonly>
+                        <input matEndDate formControlName="end" placeholder="End date *" [min]="minDate" readonly>
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+
+
+                <mat-form-field class="w-100 mt-2 guard-leave-type">
+                    <mat-label>Leave type</mat-label>
+                    <mat-select [(ngModel)]="leave_type" name="leave_type"> <!-- Bind to the leave_type property -->
+                        <mat-option value="annual">Annual</mat-option>
+                        <mat-option value="sick">Sick</mat-option>
+                        <mat-option value="other">Other</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <div class="row mt-2 guard-leave-select">
+                    <app-select-multiple-guards signleDouble="no" style="position: relative;top: 10px;"
+                        (selectedUsers)="receiveDataFromChildGuardsSingle($event)" class="select_job_roster"
+                        [dataArray]="guardList" [placeholderText]="'Select Staff *'"></app-select-multiple-guards>
+                </div>
+
+                <button class="btn btn-border-3 mt-4 m-auto" (click)="submitLeave()">+Add</button>
+            </mat-chip-list>
+        </ng-container>
+        <ng-template #elseBlock1>
+            <ul class="nav">
+                <li [ngClass]="{'active': sideType === 'admin'}" (click)="change('admin')">Leave by Admin</li>
+                <li [ngClass]="{'active': sideType === 'guard'}" (click)="change('guard')">Leave request by Staff</li>
+            </ul>
+            <div class="details">
+                <ng-container *ngIf="sideType === 'admin'">
+                    <ng-container *ngIf="leaveFromAdmin.length === 0">
+                        <p>No leave requests by admin.</p>
+                    </ng-container>
+                    <ng-container *ngFor="let item of leaveFromAdmin">
+                        <mat-expansion-panel class="w-100 m-1 leave-management">
+                            <mat-expansion-panel-header>
+                                <div id="app" class="mr-5">
+                                    <label class="checker" (click)="approveLeave(item)">
+                                        <input type="checkbox" class="checkbox" (click)="$event.stopPropagation()"
+                                            (keydown)="$event.stopPropagation()" [checked]="item.status === 'approved'">
+                                        <div class="check-bg"></div>
+                                        <div class="checkmark">
+                                            <svg viewBox="0 0 100 100">
+                                                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="15"
+                                                    stroke="#FFF" fill="none" d="M20,55 L40,75 L77,27"></path>
+                                            </svg>
+                                        </div>
+                                    </label>
+                                </div>
+                                <p class="m-0">{{ item.reason }}</p>
+                            </mat-expansion-panel-header>
+                            <div class="date d-flex justify-content-between">
+                                <p>From:</p>
+                                <p>{{ item.start_date }}</p>
+                                <p>To:</p>
+                                <p>{{ item.end_date }}</p>
+                            </div>
+                            <div class="notes">
+                                <p class="m-0">Notes:</p>
+                                <p class="m-0">{{ item.notes }}</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="m-0">Status:</p>
+                                <p class="m-0">{{ item.status }}</p>
+                            </div>
+                        </mat-expansion-panel>
+                    </ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="sideType === 'guard'">
+                    <ng-container *ngIf="leaveRequest.length === 0">
+                        <p>No leave requests by stafff.</p>
+                    </ng-container>
+
+                    <ng-container *ngFor="let item of leaveRequest">
+                        <mat-expansion-panel class="w-100 m-1 leave-management">
+                            <mat-expansion-panel-header>
+                                <div id="app" class="mr-5" >
+                                    <label class="checker" (click)="approveLeave(item)">
+                                        <input type="checkbox" class="checkbox"  [checked]="item.status === 'approved'" (click)="$event.stopPropagation()"
+                                            (keydown)="$event.stopPropagation()">
+                                        <div class="check-bg"></div>
+                                        <div class="checkmark">
+                                            <svg viewBox="0 0 100 100">
+                                                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="15"
+                                                    stroke="#FFF" fill="none" d="M20,55 L40,75 L77,27"></path>
+                                            </svg>
+                                        </div>
+                                    </label>
+                                </div>
+                                <p class="m-0">{{ item.reason }}</p>
+                            </mat-expansion-panel-header>
+                            <div class="notes">
+                                <p class="m-0">Notes:</p>
+                                <p class="m-0">{{ item.notes }}</p>
+                            </div>
+                            <div class="date d-flex justify-content-between">
+                                <p class="m-0">From:</p>
+                                <p class="m-0">{{ item.start_date }}</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="m-0">To:</p>
+                                <p class="m-0">{{ item.end_date }}</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="m-0">Status:</p>
+                                <p class="m-0">{{ item.status }}</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="m-0">Approved By:</p>
+                                <p class="m-0">{{ item.admin_name }}</p>
+                            </div>
+                        </mat-expansion-panel>
+                    </ng-container>
+                </ng-container>
+            </div>
+
+        </ng-template>
+        <!-- </div> -->
+    </div>
+</div>

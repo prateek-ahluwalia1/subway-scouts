@@ -1,0 +1,48 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <!-- Main -->
+    <div class="flex-auto p-6">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+            <div class="runsheet-page">
+                <div class="runsheet-head"
+                    style="background-color: var(--tw-ring-offset-color) !important; border-radius: 13px;">
+                    <div class="user-nav rounded-2xl">
+                        <h4>Alarm Dispatch System</h4>
+                        <mat-chip-list aria-label="Dog selection" class="dog_selection">
+                            <button class="btn btn-border-3" style="margin-right: 15px;"
+                                (click)="createNewSite()">Create New Location</button>
+                            <button class="btn btn-border-3" (click)="createNewAlarm()">Create New</button>
+                        </mat-chip-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table for detail -->
+        <section>
+            <div class="d-flex justify-content-end searchbar_main">
+                <input type="text" placeholder="Search here.." class="searchbar" [(ngModel)]="searchText">
+                <mat-icon>search</mat-icon>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let detail of filteredAlarm || getAlarmDetails">
+                        <td>{{detail.name}}</td>
+                        <td>
+                            <mat-icon svgIcon="mat_solid:edit" style="color: #01A37E;"
+                                (click)="editAlarmDetails(detail.id)"></mat-icon>&nbsp;
+                            <mat-icon svgIcon="mat_solid:delete" style="color: #d1001f;"
+                                (click)="deleteAlarmDetails(detail.id)"></mat-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>

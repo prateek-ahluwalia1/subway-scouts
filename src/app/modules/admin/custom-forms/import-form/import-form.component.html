@@ -1,0 +1,46 @@
+<div class="absolute inset-0 flex flex-col overflow-hidden main-body-watermark w-100">
+    <div class="p-6 rounded-2xl overflow-auto common-admin-customer-contractor">
+        <div class="users-page">
+            <div class="user-main">
+                <button type="button" class="btn mb-2" (click)="goBack()"> ↩️ Back </button>
+
+                <div class="user-nav rounded-2xl">
+                    <div class="container">
+                        <h1 class="title">Import Form</h1>
+                        <div class="grid">
+                            <label *ngFor="let item of formItems" class="grid-item">
+                                <span class="icon">{{ item.icon }}</span>
+                                <h2>{{ item.title }}</h2>
+                                <p>{{ item.description }}</p>
+                                <input #fileInput  type="file" (change)="onFileSelected($event)" accept="application/pdf" style="display:none;">
+                               
+                            </label>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-list rounded-2xl mt-3" >
+            <ng-container *ngIf="selectedFileName">
+
+              <div class="row">
+                <div class="col-lg-11">
+                    <div *ngIf="pdfSrc">
+                        <iframe [src]="pdfSrc" width="100%" height="600px"></iframe>
+                      </div>
+                </div>
+
+                <div class="col-lg-1">
+                    <div class="form-actions">
+                        <mat-icon svgIcon="heroicons_solid:pencil-alt" style="cursor: pointer;"  (click)="edit()"></mat-icon>
+                        <mat-icon svgIcon="heroicons_outline:trash" style="cursor: pointer;" (click)="deleteSelectedFile()"></mat-icon>
+                    </div>
+                </div>
+              </div>
+               
+            </ng-container>
+        </div>
+    </div>
+</div>

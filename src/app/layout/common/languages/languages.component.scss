@@ -1,0 +1,87 @@
+$primary-color: var(--primary_color, #01A37E);
+$color-secondary: var(--color-secondary, #1e293c);
+// Define other color variables here
+
+$color-light-button: var(--color-light-button, #01a37e2e);
+
+.dropbtn {
+  /* background-color: #3498DB; */
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover,
+.dropbtn:focus {
+  background-color: #2980B9;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {
+  display: block;
+}
+
+.profile-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-image img {
+  margin-right: 35px;
+}
+
+.profile-image {
+  margin-right: 15px;
+}
+
+.mat-profile-btn {
+  width: auto;
+  border: none;
+  border-radius: 0;
+}
+
+.custom-name {
+  background-color: $primary-color;
+  position: relative;
+  top: 2px;
+  text-align: center;
+  color: #ffffff;
+
+  span {
+    position: relative;
+    top: 3px;
+  }
+}

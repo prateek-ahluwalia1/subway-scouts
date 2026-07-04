@@ -1,0 +1,167 @@
+$primary-color: var(--primary_color, #01A37E);
+$color-secondary: var(--color-secondary, #1e293c);
+$color-light-button: var(--color-light-button, #01a37e2e);
+.portal-setting-role-and-permission {
+
+    .nav {
+        display: flex;
+        padding: 15px 25px;
+        box-shadow: 0 2px 17px rgb(30 30 30 / 5%);
+        background-color: rgba(var(--fuse-bg-card-rgb), var(--tw-bg-opacity)) !important;
+        border-radius: var(--br-2xl);
+    }
+
+    .avatar-group {
+        display: flex;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding: 30px 30px 10px 32px;
+    }
+
+    .avatar-container {
+        position: relative;
+        cursor: pointer;
+        width: 2.375rem;
+        height: 2.375rem;
+        margin-right: -1rem;
+    }
+
+    .avatar-container:hover {
+        z-index: 1;
+        transform: translateY(-10px);
+        transition: transform 0.3s ease;
+    }
+
+    .avatar-container img {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        transition: transform 0.3s ease;
+    }
+
+    .avatar-label {
+        display: none;
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        padding: 5px 8px;
+        border-radius: 5px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .avatar-container:hover .avatar-label {
+        display: block;
+    }
+
+
+    .card {
+        background-clip: padding-box;
+        box-shadow: 0 2px 6px 0 rgba(67, 89, 113, .12);
+    }
+
+    div.card-datatable {
+        padding-bottom: 1rem;
+    }
+
+    div.dataTables_filter {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    div.dataTables_wrapper div.dataTables_filter {
+        text-align: right;
+    }
+
+    div.dataTables_wrapper div.dataTables_filter label {
+        font-weight: normal;
+        white-space: nowrap;
+        text-align: left;
+    }
+
+    div.dataTables_wrapper div.dataTables_filter input {
+        margin-left: 0.5em;
+        display: inline-block;
+        width: auto;
+    }
+
+    .user_role {
+        width: 160px;
+        margin-bottom: 6px;
+    }
+
+    .form-select {
+        background-clip: padding-box;
+    }
+
+    div.card-datatable.dataTable,
+    div.card-datatable .dataTable {
+        border-right: 0;
+        border-left: 0;
+    }
+
+    table.dataTable {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin-bottom: 1rem !important;
+        margin-top: 0 !important;
+    }
+
+    .avatar-sm {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .badge-green {
+        background-color: green;
+        color: white;
+    }
+
+    .badge-red {
+        background-color: red;
+        color: white;
+    }
+
+
+    .custom-cta-btn {
+        background: #063E69;
+        border: 1px solid #2998ff;
+        color: #fff;
+        box-shadow: 0 5px 8px 0 rgb(41 152 255 / 21%);
+        white-space: nowrap;
+        height: 40px;
+        font-size: 15px;
+        position: relative;
+        text-align: center;
+        padding: 0 16px;
+        line-height: 0;
+        background: #fff;
+        border: 1px solid #d9d9d9;
+        border-radius: 20px;
+        color: #2998ff;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        cursor: pointer;
+        width: 100%;
+        margin: auto;
+        letter-spacing: 0.64px;
+    }
+
+    .mat-mdc-form-field+.mat-mdc-form-field {
+        margin-left: 8px;
+    }
+
+    mat-expansion-panel-content {
+        background-color: $color-light-button;
+    }
+}

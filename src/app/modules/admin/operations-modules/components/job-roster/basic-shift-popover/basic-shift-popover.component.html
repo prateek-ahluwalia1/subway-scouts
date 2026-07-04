@@ -1,0 +1,153 @@
+<div class="plus_create_shift" [autoClose]="false" #p="ngbPopover" [ngbPopover]="popContent"
+    [popoverTitle]="popTitle" (click)="getBoxDate()">
+    <mat-icon svgIcon="heroicons_solid:plus"></mat-icon>
+    
+    <ng-template #popContent>
+        <form [formGroup]="addShiftBasicForm">
+            <div class="row" *ngIf="calenderType=='location'">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Branch Name</label>
+                        <input type="text" class="form-control" formControlName="site_name" [readOnly]="true"
+                            [value]="site_id">
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="calenderType=='staff'">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Staff Name</label>
+                        <input type="text" class="form-control" formControlName="guard_name" [readOnly]="true"
+                            [value]="guard_id">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 mt-2">
+                    <div class="form-group">
+                        <label for="start_time">Start Time</label>
+                        <div class="ngx-timepicker-field-example">
+                            <ngx-timepicker-field [controlOnly]="true" formControlName="start_time" [format]="24"
+                                (timeChanged)="onChangeHour('start',$event)"
+                                [defaultTime]="'00:00'"></ngx-timepicker-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 mt-2">
+                    <div class="form-group">
+                        <label for="end_time">End Time</label>
+                        <div class="ngx-timepicker-field-example">
+                            <ngx-timepicker-field formControlName="end_time" [controlOnly]="true" [format]="24"
+                                (timeChanged)="onChangeHour('end',$event)"
+                                [defaultTime]="'00:00'"></ngx-timepicker-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 mt-2" *ngIf="calenderType!=='staff'">
+                    <div class="dropdown h-100" class="statusDropdownContainer">
+                        <p class="btn-white dropdown-toggle mb-2 statusFilterDropdown flex-middle" role="button"
+                            id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="text-truncate">{{selectedValue ?
+                                selectedValue.first_name
+                                +' '+
+                                selectedValue.last_name :
+                                'Select staff'}}</span>
+                        </p>
+                        <div class="dropdown-menu pt-0" aria-labelledby="dropdownMenuButton">
+                            <input type="text" class="w-100 p-2 searchInput" formControlName="searchValue"
+                                (ngModelChange)="filterDropdown($event)" placeholder="Search staff...">
+                            <span *ngFor="let option of filteredList" class="dropdown-item pointer text-contain"
+                                [ngClass]="{'alternateBackground': $index%2 == 0 }" (click)="selectValue(option)">
+                                {{option.first_name}} {{option.last_name}}
+                            </span>
+                            <div *ngIf="filteredList.length <=0" class="text-center text-muted mt-1">No
+                                staff found</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-2" *ngIf="calenderType==='staff'">
+                    <div class="dropdown h-100" class="statusDropdownContainer">
+                        <p class="btn-white dropdown-toggle mb-2 statusFilterDropdown h-100 flex-middle" role="button"
+                            id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="    false">
+                            <span class="text-truncate">{{selectedValue ?
+                                selectedValue.site_name :
+                                'Select Location'}}</span>
+                        </p>
+                        <div class="dropdown-menu pt-0" aria-labelledby="dropdownMenuButton">
+                            <input type="text" class="w-100 p-2 searchInput" formControlName="searchValue"
+                                (ngModelChange)="filterDropdown($event)" placeholder="Search location...">
+                            <span *ngFor="let option of filteredList" class="dropdown-item pointer text-contain"
+                                [ngClass]="{'alternateBackground': $index%2 == 0 }" (click)="selectValue(option)">
+                                {{option.site_name}}
+                            </span>
+                            <div *ngIf="filteredList.length <=0" class="text-center text-muted mt-1">No
+                                staff found</div>
+                        </div>
+                    </div>
+                    <div *ngIf="showLocationError && !selectedValue" class="text-danger mt-2">Please select a location.</div>
+                </div>
+            </div>
+
+            <button class="advanced-option" (click)="openVerticallyCentered(p.close())">
+                Advanced
+            </button>
+            <button (click)="onSubmit(p)" style="float: right;" type="submit" class="px-6 ml-3 btn">
+                Save
+            </button>
+        </form>
+    </ng-template>
+    <ng-template #popTitle>
+        <div class="popover-header-date">
+            <div class="pop-date"><span>{{clickedboxDate}}</span></div>
+            <!-- <div class="pop-time"><span> {{ plusStart }} | {{ plusEnd }}</span></div> -->
+            <div class="pop-time text-center text-danger"><span> {{ isPublicHoliday ? 'It\'s a holiday shift' : ''
+                    }}</span></div>
+        <mat-icon class="close" (click)="p.close()">close</mat-icon>
+
+        </div>
+    </ng-template>
+
+
+    <ng-template #partTimeGuardDialog let-modal>
+        <div class="modal-header">
+        <h4 class="modal-title">Guard Availability</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>{{modalMessage}}</p>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="isExceeded" type="button" class="btn btn-primary" (click)="onDiscard($event, modal,p.close())">Ok</button>
+            
+            <button *ngIf="isPartTime" type="button" class="btn btn-secondary" (click)="showFullTimer($event, modal)">Full-Timer Guard</button>
+            <button *ngIf="isPartTime" type="button" class="btn btn-secondary" (click)="onContinue($event, modal)">Continue</button>
+            
+         </div>
+    </ng-template>
+
+    <ng-template #sendOtp let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Verification Required</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+
+  <div class="modal-body">
+    <p class="text-warning mb-3">{{ otpModalmessage }}</p>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Enter OTP</mat-label>
+      <input matInput [(ngModel)]="otpValue" name="otp" type="text" autocomplete="off" />
+    </mat-form-field>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.dismiss('Cancel')">Cancel</button>
+    <button type="button" class="btn text-white button-back" (click)="onSendOtp()">Send</button>
+  </div>
+</ng-template>
+  
+</div>

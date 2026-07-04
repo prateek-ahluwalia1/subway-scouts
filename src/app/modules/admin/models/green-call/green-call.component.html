@@ -1,0 +1,44 @@
+<div class="d-flex justify-content-between w-100 p-4" style="position: sticky;top: 0;background-color: white;z-index: 8;">
+    <h2>Green Call</h2> 
+    <mat-icon class="bg-danger text-light rounded" role="button" (click)="close()">close</mat-icon>
+</div>
+
+<div class="scroll p-4" style=" min-height: 60vh;max-height: 77vh;overflow: auto;">
+    <div class="main-container p-2">
+        <div class="row">
+            <div class="col-12" style="text-align: -webkit-right;">
+                <button class="map-btn" (click)="toggleMap()">
+                    <i class="fa-solid fa-map-marker-alt"></i> Show Map
+                </button>
+            </div>
+            <div *ngIf="isMapVisible" class="col-12 py-3">
+                <div class="map rounded mb-4 border d-flex align-items-center justify-content-center text-muted" #map3
+                    id="map3">Map
+                </div>
+            </div>
+            
+            <div class="col-12">
+                <div style="min-height:40vh; max-height:45vh; overflow:auto">
+                    <table class="w-100">
+                        <tr>
+                            <th>Sent Time:</th>
+                            <th>Response Time:</th>
+                            <th>Response:</th>
+                        </tr>
+                        <tr *ngFor="let call of greenCalls" class="border-bottom mb-2 pb-2"
+                            [ngClass]="{'red-row': call?.response_time && call.status === 'no' || call.status === null, 'green-row': call.status === 'yes'}">
+                            <td>{{ call?.send_time | time }}</td>
+                            <td>{{call?.response_time | time}}</td>
+                            <td>{{call?.response_time?call?.status:'N/R'}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- <div class="col-5">
+                <div class="map rounded mb-4 border d-flex align-items-center justify-content-center text-muted" #map3
+                    id="map3"> Map
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>

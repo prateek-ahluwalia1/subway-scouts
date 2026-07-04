@@ -1,0 +1,602 @@
+<div class="grade" style="height: 20%"></div>
+
+<div class="absolute inset-0 flex flex-col overflow-hidden">
+  <div class="flex-auto overflow-auto p-3">
+    <form #invoiceForm="ngForm" style="width: 100%">
+      <div class="d-flex real-content ms-4 me-4 flex-auto min-w-0 main-body-watermark">
+        <!-- CONTENT GOES HERE -->
+        <div class="bg-white p-2 me-4 content">
+          <div class="invoice_header border-bottom m-10">
+            <div class="d-flex">
+
+              <app-select-multiple-customer signleDouble="no" (selectedCus)="selectedCus($event)" class="select_job_roster" 
+                [dataArray]="customers" [placeholderText]="'Select Customer'">
+              </app-select-multiple-customer>
+
+              <mat-form-field appearance="fill" class="dateRange ms-2 me-2 job-tracker-from-to">
+                <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                  <input matStartDate formControlName="start" placeholder="Start date"/>
+                  <input matEndDate formControlName="end" placeholder="End date"/>
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="picker" (change)="changedate()"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+                <mat-error *ngIf="submitted && (range.controls['start'].hasError('required') || range.controls['end'].hasError('required'))">
+                  Valid date is required.
+                </mat-error>
+              </mat-form-field>
+
+              <div class="radio_buttons">
+                <div class="form-check form-check-inline">
+                  <input type="radio" name="invoice_type" id="normal_invoice" value="normal" [(ngModel)]="invoiceType"
+                    (change)="updateInvoiceType()"/>
+                  <label style="margin-top: -17px" class="form-check-label radio_label" for="normal_invoice">Normal Invoice</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                  <input type="radio" name="invoice_type" id="summariz_invoice" value="summariz"
+                    [(ngModel)]="invoiceType" (change)="updateInvoiceType()"/>
+                  <label class="form-check-label radio_label" for="detailed_invoice">Detailed Invoice</label>
+                </div>
+                <mat-error class="ml-5" *ngIf="submitted && !invoiceType">Select type</mat-error>
+              </div>
+
+              <button mat-icon-button class="btn btn-success mt-2" (click)="onSearch()">
+                <mat-icon [ngStyle]="{ color: 'white' }">search</mat-icon>
+              </button>
+            </div>
+            <div style="display: flex; flex-direction: row-reverse; position: relative; right: 10%;">
+              <mat-error class="ml-5" *ngIf="searchRequired">Search Required!</mat-error>
+            </div>
+            <div class="p-2 d-flex w-100 align-items-center">
+              <h4 class="m-0 fs-2x fw-bold text-gray-800">Invoice #</h4>
+              <input style="width: 200px" class="form-control text-muted" placeholder="invoice number" type="text"
+                name="invoice_no" id="invoice_no" [(ngModel)]="invoice_no" maxlength="11" required readonly/>
+              <mat-error class="ml-5" *ngIf="(isPreview || isDonwload || isSend) && !invoice_no">Required invoice number.</mat-error>
+              <mat-error class="ml-5" *ngIf="(isPreview || isDonwload || isSend) && invoice_no && invoice_no.length > 12">
+                Invoice number should be up to 12 characters.</mat-error>
+            </div>
+          </div>
+
+          <div class="row border-bottom m-10" style="min-height: 400px">
+            <div class="col-md-6">
+              <h6 class="p-2">Invoice From</h6>
+              <div class="bill_from d-flex flex-column">
+                <input class="form-control" type="text" placeholder="Name" name="admin_name" readonly/>
+                <input class="form-control" type="text" placeholder="Email" readonly name="admin_email"/>
+                <input class="form-control" type="text" placeholder="Phone" [value]="phone_company?.value" name="admin_phone"/>
+                <input #abnInput class="form-control" type="number" placeholder="ABN"  name="admin_abn" maxlength="11" pattern="[0-9]*" min="0" readonly/>
+
+                <textarea class="form-control" cols="10" rows="5" placeholder="Description" [ngModel]="invoiceDescriptionFrom"
+                  (ngModelChange)="invoiceDescriptionFrom = $event" name="invoiceDescriptionFrom">
+                </textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h6 class="p-2">Invoice to</h6>
+              <div class="bill_to d-flex flex-column" *ngIf="selectedCustomerData.length > 0; else defaultFields">
+                <div *ngFor="let customer of selectedCustomerData">
+                  <input class="form-control custom_mb" type="text" placeholder="Name" [(ngModel)]="customer.name" name="customer_name"/>
+                  <mat-error class="ml-5" *ngIf="!iscustName">
+                    Name Required!
+                  </mat-error>
+
+                  <input class="form-control custom_mb" type="text" placeholder="Email" [(ngModel)]="customer.email" name="customer_email" readonly />
+                  <input class="form-control custom_mb" type="text" placeholder="Phone" [(ngModel)]="customer.phone" name="customer_phone" minlength="10" maxlength="15"/>
+                  <input class="form-control custom_mb" placeholder="ABN" [value]="selectedCustomer?.value?.abn" (input)="onAbnInputChange($event)"
+                    name="customer_abn" maxlength="11" pattern="[0-9]*" min="0" step="0" (keypress)="checkValue($event)"/>
+                  <mat-error class="ml-5" *ngIf="!customer.abn">
+                    ABN Required!
+                  </mat-error>
+
+                  <mat-error class="ml-5" *ngIf="customer.abn && !isAbnValid">
+                    Invalid ABN. Please enter a valid 11-digit ABN.
+                  </mat-error>
+
+                  <textarea class="form-control" cols="10" rows="5" placeholder="Description" [ngModel]="invoiceDescriptionTo" 
+                    (ngModelChange)="invoiceDescriptionTo = $event" name="invoiceDescriptionTo">
+                  </textarea>
+                </div>
+              </div>
+
+              <ng-template #defaultFields>
+                <div class="bill_to d-flex flex-column">
+                  <input class="form-control" type="text" placeholder="Name" [(ngModel)]="name" name="name"/>
+                  <input class="form-control" type="text" placeholder="Email" [(ngModel)]="email" name="email"/>
+                  <input class="form-control" type="text" placeholder="Phone" [(ngModel)]="phone" name="phone"/>
+                  <input class="form-control" type="number" placeholder="ABN" [(ngModel)]="abn" (keydown)="onDiscountKeyDown($event)"
+                    min="0" name="abn" maxlength="11" pattern="[0-9]*"/>
+                  <textarea class="form-control" cols="10" rows="5" placeholder="Description" [(ngModel)]="invoiceDescriptionTo"
+                    name="invoiceDescriptionTo">
+                  </textarea>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+          <div class="main p-6 w-100">
+            <div class="row main_inner">
+              <div class="col-12 table-responsive mb-10">
+                <table *ngIf="invoiceType === 'normal' && roasterHoursList.length > 0" class="table hide-bottom-border">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Hours</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody [@stagger]="roasterHoursList.length">
+                    <ng-container *ngFor="let row of roasterHoursList; let i = index">
+                      <tr
+                        [@fadeIn]="''"
+                        [@stagger]="i"
+                        *ngIf="!row.isEdit; else editRow">
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.hours | number : "1.2-2" }}</td>
+                        <td>
+                          {{ row.payrate | currency: (selectedCurrency === "AUD"? "$": selectedCurrency) }}
+                        </td>
+                        <td class="text-right">
+                          {{ row.totalpay | currency: (selectedCurrency === "AUD"? "$": selectedCurrency) }}
+                        </td>
+                        <td style="width: 3% !important">
+                          <button *ngIf="i > 4 && !row.isEdit" mat-icon-button class="ms-2" (click)="toggleEdit(i)">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+
+                    <ng-container *ngFor="let row of dynamicRows; let i = index">
+                      <tr *ngIf="row.isEdit">
+                        <td>
+                          <input class="form-control custome_width" type="text" [(ngModel)]="row.name" placeholder="Item" name="name"/>
+                        </td>
+                        <td>
+                          <input class="form-control custome_width" type="number" [(ngModel)]="row.hours" min="0" name="hours" (keydown)="onDiscountKeyDown($event)" />
+                        </td>
+                        <td>
+                          <input class="form-control custome_width" type="number" [(ngModel)]="row.payrate" min="0" name="payrate" (keydown)="onDiscountKeyDown($event)" />
+                        </td>
+                        <td>
+                          {{ row.totalpay | currency: (selectedCurrency === "AUD"? "$": selectedCurrency) }}
+                        </td>
+                        <td style="width: 3% !important">
+                          <button mat-icon-button class="ms-2" *ngIf="row.isEdit" [disabled]="!row.name || !row.hours || !row.payrate" (click)="saveRow(i, row)">
+                            <mat-icon>save</mat-icon>
+                          </button>
+                          <button mat-icon-button class="ms-2" *ngIf="row.isEdit" (click)="deleteRow(i)">
+                            <mat-icon>delete_outline</mat-icon>
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+
+                    <tr class="tr2">
+                      <td colspan="2"></td>
+                      <td class="text-left"><strong>Total</strong></td>
+                      <td class="text-right">
+                        <strong>
+                          {{ totalPrice| currency: (selectedCurrency === "AUD"? "$": selectedCurrency) }}
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr class="tr2">
+                      <td colspan="2"></td>
+                      <td class="text-left"><strong>GST</strong></td>
+                      <td class="text-right">
+                        <strong>{{ gstValue }}%</strong>
+                      </td>
+                    </tr>
+                    <tr class="tr2">
+                      <td colspan="2"></td>
+                      <td class="text-left"><strong>Grand Total</strong></td>
+                      <td class="text-right">
+                        <strong>
+                          {{ grand_total| currency: (selectedCurrency === "AUD"? "$": selectedCurrency) }}
+                        </strong>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="table-container"> 
+                  <table *ngIf="invoiceType === 'summariz' && detailed_invoice_data && detailed_invoice_data.length > 0"
+                    class="table table-striped table-bordered" style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th>Item ID</th>
+                        <th>Description</th>
+                        <th>State</th>
+                        <th>PO/WO</th>
+                        <th class="text-center">Hours</th>
+                        <th class="text-right">
+                          Price ($) <br />
+                          <small>excluding tax</small>
+                        </th>
+                        <th class="text-center">Disc. (%)</th>
+                        <th>Tax</th>
+                        <th class="text-right">
+                          Amount ($) <br />
+                          <small>excluding tax</small>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody [@stagger]="detailed_invoice_data.length">
+                      <ng-container *ngFor="let item of this.detailed_invoice_data; let i = index">
+                        <tr [@fadeIn]="''" [@stagger]="i">
+                          <td>{{ i + 1 }}</td>
+                          <td>
+                            <div class="custom_description">
+                              <span>{{ formatDateRange(item.start, item.end, item.hour_type) }}</span>
+                              <span
+                                >{{ item.first_name }} {{ item.last_name }}
+                              </span>
+                              <span>{{
+                                formatTimeRange(item.start, item.end)
+                              }}</span>
+                            </div>
+                          </td>
+                          <td>{{ item.state }}</td>
+                          <td>
+                            {{ item.po_wo || item.site_po_wo || "N/A" }}
+                          </td>
+                          <td class="text-center">
+                            <div
+                              *ngIf="
+                                item.units ||
+                                item.morning_hours ||
+                                item.night_hours ||
+                                item.sunday_morning_hours ||
+                                item.sunday_night_hours ||
+                                item.saturday_morning_hours ||
+                                item.saturday_night_hours ||
+                                item.ph_morning_hours ||
+                                item.ph_night_hours
+                              "
+                            >
+                              {{
+                                item.units ||
+                                  item.morning_hours ||
+                                  item.night_hours ||
+                                  item.sunday_morning_hours ||
+                                  item.sunday_night_hours ||
+                                  item.saturday_morning_hours ||
+                                  item.saturday_night_hours ||
+                                  item.ph_morning_hours ||
+                                  item.ph_night_hours ||
+                                  0 | number : "1.0-2"
+                              }}
+                            </div>
+                            <ng-container
+                              *ngIf="item.morning_hours || item.night_hours || item.saturday_morning_hours || item.saturday_night_hours || item.sunday_night_hours || item.sunday_morning_hours"
+                            >
+                              <div class="Datetime"
+                                *ngIf="
+                                  !(
+                                    item.morning_time &&
+                                    item.morning_time.length
+                                  ) &&
+                                  !(item.night_time && item.night_time.length)
+
+                                  && !(item.saturday_morning && item.saturday_morning.length)
+                                  && !(item.saturday_night && item.saturday_night.length)
+                                  && !(item.sunday_morning && item.sunday_morning.length)
+                                  && !(item.sunday_night && item.sunday_night.length)
+
+                                "
+                              >
+                                ( {{ item.start.split(" ")[1] | slice : 0 : 5 }} ) -
+                                ( {{ item.end.split(" ")[1] | slice : 0 : 5 }} )
+                              </div>
+                            </ng-container>
+                            <div class="Datetime"
+                              *ngIf="
+                                item.morning_time && item.morning_time.length
+                              "
+                            >
+                              <div *ngFor="let timeSlot of item.morning_time" class="Datetime">
+                                ( {{ timeSlot[0] }} - {{ timeSlot[1] }} )
+                              </div>
+                            </div>
+                            <div
+                              *ngIf="item.night_time && item.night_time.length" class="Datetime"
+                            >
+                              <div *ngFor="let timeSlot of item.night_time" class="Datetime">
+                                ( {{ timeSlot[0] }} - {{ timeSlot[1] }} )
+                              </div>
+                            </div>
+                            <div
+                            *ngIf="item.saturday_morning && item.saturday_morning.length" class="Datetime"
+                          >
+                            <div *ngFor="let timeSlot of item.saturday_morning" class="Datetime">
+                              ( {{ timeSlot[0] }} - {{ timeSlot[1] }} )
+                            </div>
+                          </div>
+
+                          <div
+                          *ngIf="item.saturday_night && item.saturday_night.length" class="Datetime"
+                        >
+                          <div *ngFor="let timeSlot of item.saturday_night" class="Datetime">
+                            ( {{ timeSlot[0] }} - {{ timeSlot[1] }} )
+                          </div>
+                        </div>
+                        <div
+                          *ngIf="item.sunday_night && item.sunday_night.length" class="Datetime"
+                        >
+                          <div *ngFor="let timeSlot of item.sunday_night" class="Datetime">
+                            ( {{ timeSlot[0] }} - {{ timeSlot[1] }} )
+                          </div>
+                        </div>
+                        <div
+                        *ngIf="item.sunday_morning && item.sunday_morning.length" class="Datetime"
+                      >
+                        <div *ngFor="let timeSlot of item.sunday_morning" class="Datetime">
+                          ( {{ timeSlot[0] }} - {{ timeSlot[1] }} )
+                        </div>
+                      </div>                           
+                            
+                          </td>
+
+                          <td class="text-right">
+                            {{
+                              item.day_rate ||
+                                item.night_rate ||
+                                item.saturday_rate ||
+                                item.sunday_rate ||
+                                item.public_holiday_rate
+                                | currency
+                                  : (selectedCurrency === "AUD"
+                                      ? "$"
+                                      : selectedCurrency)
+                            }}
+                          </td>
+                          <td class="text-center">0.0</td>
+                          <td>GST</td>
+                          <td class="text-right">
+                            {{
+                              calculateTotalAmount(item)
+                                | currency
+                                  : (selectedCurrency === "AUD"
+                                      ? "$"
+                                      : selectedCurrency)
+                            }}
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+
+                    <tfoot>
+                      <tr class="tr2" style="margin-bottom: 0px">
+                        <td colspan="6"></td>
+                        <td colspan="2" class="text-left">
+                          <strong>Total</strong>
+                        </td>
+
+                        <td class="text-right">
+                          <strong>
+                            {{
+                              subTotal
+                                | currency
+                                  : (selectedCurrency === "AUD"
+                                      ? "$"
+                                      : selectedCurrency)
+                            }}
+                          </strong>
+                        </td>
+                      </tr>
+                      <tr class="tr2">
+                        <td colspan="6"></td>
+                        <td colspan="2" class="text-left">
+                          <strong>GST</strong>
+                        </td>
+
+                        <td class="text-right">
+                          <strong>{{ gstValue }}%</strong>
+                        </td>
+                      </tr>
+                      <tr class="tr2">
+                        <td colspan="6"></td>
+                        <td colspan="2" class="text-left">
+                          <strong>Grand Total</strong>
+                        </td>
+
+                        <td class="text-right">
+                          <strong
+                            >{{
+                              grand_Total
+                                | currency
+                                  : (selectedCurrency === "AUD"
+                                      ? "$"
+                                      : selectedCurrency)
+                            }}
+                          </strong>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <div class="w-100 rounded-pill mt-4 text-right">
+                  <div class="row add_btn_row">
+                    <button
+                      *ngIf="invoiceType === 'normal' && searchPerformed"
+                      class="btn btn-success btn-sm add_btn"
+                      (click)="addRow()"
+                    >
+                      Add more
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-4 side-div rounded-2xl">
+          <p>Currency</p>
+
+          <mat-form-field style="width: 100%">
+            <mat-select
+              name="selectedCurrency"
+              [(value)]="selectedCurrency"
+              (selectionChange)="getCurrency($event)"
+            >
+              <mat-option
+                *ngFor="let currency of currencyOptions"
+                [value]="currency"
+              >
+                {{ currency }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field style="width: 100%" class="form-field">
+            <mat-label>Due Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="duedate"
+              [(ngModel)]="due_date"
+              name="due_date"
+              (keydown.enter)="$event.preventDefault()"
+              placeholder="Due Date"
+              [matDatepickerFilter]="filterDates"
+              readonly
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="duedate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #duedate color="primary"></mat-datepicker>
+          </mat-form-field>
+          <mat-error *ngIf="!due_date && (isPreview || isSend || isDonwload)">
+            Due Date is Required
+          </mat-error>
+          <div class="dotted-border"></div>
+
+          <div class="payment mt-4 d-flex justify-content-between w-100">
+            <p class="toggle-heading">Payment Methods</p>
+            <mat-slide-toggle
+              [(ngModel)]="isPaymentMethodOn"
+              (change)="onPaymentMethodsToggleChange()"
+            ></mat-slide-toggle>
+          </div>
+
+          <mat-radio-group
+            *ngIf="isPaymentMethodOn"
+            name="selectedPaymentOption"
+            [(ngModel)]="selectedPaymentOption"
+            class="custom-radio-button"
+          >
+            <mat-radio-button
+              value="bank_transfer"
+              style="margin-right: 10px"
+              [checked]="isPaymentMethodOn"
+              >Bank Transfer</mat-radio-button
+            >
+            <mat-radio-button value="bpay">BPAY</mat-radio-button>
+          </mat-radio-group>
+
+          <mat-error
+            *ngIf="
+              (isDonwload || isPreview || isSend) &&
+              !this.selectedPaymentOption &&
+              isPaymentMethodOn
+            "
+          >
+            <small>Select Payment method</small>
+          </mat-error>
+
+          <div class="lateFees d-flex mt-3 justify-content-between w-100">
+            <p class="toggle-heading">Late fees</p>
+            <mat-slide-toggle
+              (change)="onLateFeesToggleChange()"
+            ></mat-slide-toggle>
+          </div>
+          <div *ngIf="lateFeesToggleOn">
+            <ng-container>
+              <input
+                class="form-control"
+                type="number"
+                placeholder="Late Fee"
+                [(ngModel)]="lateFeesValue"
+                name="latefee"
+                (keydown)="onDiscountKeyDown($event)"
+                min="0"
+              />
+            </ng-container>
+          </div>
+          <div class="notes d-flex justify-content-between w-100">
+            <p class="toggle-heading">Notes</p>
+            <mat-slide-toggle
+              (change)="onNotesToggleChange()"
+            ></mat-slide-toggle>
+          </div>
+
+          <div *ngIf="showNotes">
+            <ng-container>
+              <textarea
+                class="form-control"
+                cols="10"
+                rows="3"
+                placeholder="Write notes here..."
+                [(ngModel)]="additionalNotes"
+                name="additionalNotes"
+              ></textarea>
+            </ng-container>
+          </div>
+
+          <div class="payment mt-2 d-flex justify-content-between w-100">
+            <p class="toggle-heading">GST(%)</p>
+            <mat-slide-toggle
+              [checked]="true"
+              (change)="onGSTToggleChange($event)"
+              name="gst"
+            ></mat-slide-toggle>
+          </div>
+
+          <div *ngIf="gstToggleChecked">
+            <ng-container>
+              <input
+                class="form-control"
+                type="number"
+                placeholder="%"
+                [(ngModel)]="gstValue"
+                name="gstValue"
+                (input)="onInputChange($event)"
+                (keydown)="gstkeydown($event)"
+                maxlength="3"
+                pattern="[0-9]*"
+                (keypress)="checkGST($event)"
+                min="0"
+                max="100"
+              />
+            </ng-container>
+          </div>
+
+          <div class="dotted-border"></div>
+          <div class="download mt-3 d-flex justify-content-between">
+            <button
+              class="btn btn-secondary w-50"
+              (click)="donwloadPDF('open', invoiceForm)"
+            >
+              Preview</button
+            ><button
+              class="btn btn-secondary ms-2 w-50"
+              (click)="donwloadPDF('download', invoiceForm)"
+            >
+              Download
+            </button>
+          </div>
+          <button
+            class="btn btn-success w-100 mt-2 mb-4"
+            (click)="sendInvoice(invoiceForm)"
+          >
+            Send Invoice
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

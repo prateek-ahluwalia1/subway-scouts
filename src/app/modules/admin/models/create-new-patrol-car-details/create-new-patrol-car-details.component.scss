@@ -1,0 +1,24 @@
+.inc-width{
+    .mat-form-field{
+        width: 100%;
+    }
+}
+
+inc-width-calendar{
+    .mat-form-field{
+        width: 100%;
+    } 
+}
+
+.row {
+    position: relative;
+
+    mat-datepicker-toggle {
+        color: #64748b;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+   
+}

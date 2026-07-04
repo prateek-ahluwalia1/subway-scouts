@@ -1,0 +1,45 @@
+<div class="profile-menu flex items-center cursor-pointer ng-star-inserted">
+  <!-- <button class="btn" type="button" style="color: #fff; padding: 4px 10px;" (click)="navigateToTasks()">
+    Operation Notes
+    <span class="badge badge-danger">{{ global.unreadNotes }}</span>
+  </button> -->
+
+  <div class="profile-menu flex items-center px-4 cursor-pointer ng-star-inserted">
+    <div class="profile-image relative flex flex-0 items-center justify-center w-8 h-8">
+      <ng-container *ngIf="avatar; else content">
+        <img [src]="userInfo?.avatar" class="w-full h-full rounded-full object-cover ng-star-inserted"
+          alt="admin image">
+      </ng-container>
+      <ng-template #content>
+        <div class="w-full h-full rounded-full object-cover custom-name">
+          <span>{{ getInitials(userInfo?.name) }}</span>
+        </div>
+      </ng-template>
+    </div>
+    <div>
+      <button mat-icon-button class="mat-profile-btn" [matMenuTriggerFor]="menu"
+        aria-label="Example icon-button with a menu">
+      <!-- <button mat-icon-button class="mat-profile-btn" [matMenuTriggerFor]="menu"
+        aria-label="Example icon-button with a menu" [matBadge]="ticketCount" matBadgeSize="small"
+        matBadgeColor="accent"> -->
+        <span style="font-size: 11px">{{ userInfo?.name }}</span>
+        <mat-icon style="font-size: 13px;" class="demo-section">expand_more</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="adminProfile()">
+          <mat-icon>people</mat-icon>
+          <span>Profile</span>
+        </button>
+        <!-- <button mat-menu-item (click)="support()" class="demo-section">
+          <mat-icon>insert_drive_file</mat-icon>
+          <span>Support</span>
+          <span class="badge badge-danger ml-2">{{ ticketCount }}</span>
+        </button> -->
+        <button mat-menu-item (click)="signOut()">
+          <mat-icon>power_settings_new</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</div>

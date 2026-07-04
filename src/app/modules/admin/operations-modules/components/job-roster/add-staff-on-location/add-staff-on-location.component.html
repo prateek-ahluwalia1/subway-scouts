@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h5 class="modal-title">Add Staff On Locations</h5>
+    <button type="button" class="close" style="color: white;opacity: 1;" data-dismiss="modal" (click)="close('cancel')"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <app-select-multiple-customer signleDouble="no" (selectedCus)="selectedCus($event)" class="select_job_roster"
+        [dataArray]="customers" [placeholderText]="'Select Customer'"></app-select-multiple-customer>
+
+    <app-select-multiple-site signleDouble="no" style="position: relative;top: 10px;"
+        (selectedSi)="receiveDataFromChildSi($event)" class="select_job_roster site-job-new-roster mt-2"
+        [dataArray]="singleSites"
+        [placeholderText]="userType =='staff' ? 'Select Staff' : 'Select Location'"></app-select-multiple-site>
+
+    <mat-card class="result" style="position: relative;top: 20px;">
+        <mat-card-content>
+            <section class="example-section">
+                <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkedSlide"
+                    (change)="toggleGuard($event,'add_to_site_at_once')" [disabled]="disabledSlide">
+                    Add All at Once!
+                </mat-slide-toggle>
+            </section>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-tab-group style="position: relative;top: 40px;" class="guard-for-site"
+        (selectedTabChange)="onTabChange($event)">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">supervised_user_circle</mat-icon>
+                Customer Staff
+            </ng-template>
+
+            <!-- search bar -->
+            <div class="search-here flex" style="margin-bottom: 10px;">
+                <mat-icon svgIcon="feather:search" class="search-icon"
+                    style="color: #94a3b8 !important; margin:4px 7px !important;"></mat-icon>
+                <input matInput placeholder="Search here..." [(ngModel)]="searchTerm" style="font-size: medium;">
+            </div>
+            <ng-container *ngFor="let staff of customers_guards | filterStaff:searchTerm">
+                <mat-slide-toggle (change)="toggleGuard($event, staff, 'add_to_site')">
+                    {{ staff.first_name }} {{ staff.middle_name ? staff.middle_name : '' }} {{ staff.last_name ?
+                    staff.last_name : '' }}
+                </mat-slide-toggle>
+            </ng-container>
+        </mat-tab>
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">note_add</mat-icon>
+                Location Staff
+            </ng-template>
+            <div class="search-here flex" style="margin-bottom: 10px;">
+                <mat-icon svgIcon="feather:search" class="search-icon"
+                    style="color: #94a3b8 !important; margin:4px 7px !important;"></mat-icon>
+                <input matInput placeholder="Search here..." [(ngModel)]="searchlocation" style="font-size: medium;">
+            </div>
+            <mat-slide-toggle *ngFor="let staff of site_guards | filterStaff:searchlocation"
+                (change)="toggleGuard($event,staff)" [checked]="true">{{ staff.first_name }} {{
+                staff.middle_name?staff.middle_name:'' }} {{ staff.last_name?staff.last_name:'' }}
+            </mat-slide-toggle>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="close('cancel')">Close</button>
+</div>

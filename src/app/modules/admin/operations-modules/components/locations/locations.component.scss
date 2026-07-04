@@ -1,0 +1,161 @@
+$primary-color: var(--primary_color, #01A37E);
+$color-secondary: var(--color-secondary, #1e293c);
+$color-light-button: var(--color-light-button, #01a37e2e);
+
+.site-page {
+    border-radius: var(--br-2xl);
+
+    .site-head {
+        border-radius: var(--br-2xl);
+
+        .user-nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 19px 41px;
+            box-shadow: 0 2px 17px rgb(30 30 30 / 5%);
+            background-color: rgba(var(--fuse-bg-card-rgb), var(--tw-bg-opacity)) !important;
+            border-radius: var(--br-2xl);
+            align-items: center;
+
+            mat-chip {
+                padding: 20px 25px;
+            }
+
+            .search-customer,
+            .sitesstate {
+                margin-right: 20px;
+            }
+        }
+
+    }
+}
+
+.button-back {
+    background: $primary-color;
+    color: var(--color-primary);
+}
+
+section {
+    box-shadow: 0 2px 17px rgb(30 30 30 / 5%);
+    background-color: rgba(var(--fuse-bg-card-rgb), var(--tw-bg-opacity)) !important;
+    border-radius: 13px;
+    position: relative;
+    top: 18px;
+
+    .searchbar_main {
+        position: relative;
+
+        .searchbar {
+            padding: 10px 16px 10px 36px;
+            border-radius: 10px;
+            width: 228px;
+            background-color: rgb(245, 242, 242);
+            margin: 13px 13px;
+        }
+
+        mat-icon {
+            top: 24px;
+            position: absolute;
+            right: 210px;
+
+        }
+    }
+
+    table {
+        width: 100%;
+
+        thead {
+            background-color: $color-light-button;
+        }
+
+        tr.mat-row,
+        tr.mat-footer-row {
+            height: 75px !important;
+        }
+
+        th {
+            font-weight: 600;
+            color: black !important;
+            font-size: 14px;
+            background-color: $color-light-button;
+        }
+
+        body.light .mat-header-cell,
+        body .light .mat-header-cell {
+            color: rgb(10, 10, 10) !important;
+        }
+
+        th.mat-header-cell,
+        td.mat-cell,
+        td.mat-footer-cell {
+            border-bottom-width: 0 !important;
+            border-bottom-style: 0 !important;
+        }
+
+        .mat-row:nth-child(even) {
+            background-color: rgb(244 244 244);
+        }
+
+        .mat-cell {
+            font-weight: 600 !important;
+        }
+    }
+
+}
+
+
+.fa-solid {
+    cursor: pointer;
+    font-size: 22px;
+    margin-right: 7px;
+    color: $primary-color;
+}
+
+.select_job_roster {
+    height: 43px;
+}
+
+.container {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.container::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.container img {
+    float: left;
+    max-width: 60px;
+    width: 100%;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+
+.time-right {
+    float: right;
+    color: #aaa;
+}
+
+.dp {
+    height: 40px;
+    border-radius: 50%;
+    width: 11%;
+    // margin-top: 6px;
+    // background-color: $primary-color;
+    background-color: rgb(185, 236, 219);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.multi-line-cell {
+    white-space: pre-line;
+}

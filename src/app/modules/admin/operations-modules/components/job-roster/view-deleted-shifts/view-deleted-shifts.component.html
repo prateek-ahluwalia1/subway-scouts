@@ -1,0 +1,53 @@
+<!-- <div class="row m-0 w-100 my-2">
+    <div class="col-12 m-0 p-0">
+        <div class="flex items-center justify-space-around">
+            <div class="relative">
+                <input name="start" type="date" placeholder="Select date start">
+            </div>
+            <span class="mx-4 text-gray-500">to</span>
+            <div class="relative">
+                <input name="end" type="date" datepicker-format="dd/mm/yyyy" placeholder="Select date end">
+            </div>
+        </div>
+    </div>
+    <div class="col-12 m-0 p-0">
+        <app-select-multiple-guards signleDouble="yes" style="position: relative;top: 10px;" class="select_job_roster"
+            (selectedUsers)="receiveDataFromChild($event)" [placeholderText]="'Select Admins'"
+            [dataArray]="adminList"></app-select-multiple-guards>
+    </div>
+    <div class="col-12 m-0 flex justify-content-end p-0 mt-1">
+        <button class="btn btn-sm" (click)="searchDelShifts()">Search</button>
+    </div>
+
+</div> -->
+<div class="modal-body" #pdfTable>
+    <h3 style="margin-bottom: 10px;" class="delete-heading">Deleted Shifts</h3>
+    <table class="w-100" style="width: 100%; height: 300px; overflow-y:auto;">
+        <thead style="width: 100%;">
+            <th>Site</th>
+            <th>Assign To</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Reason</th>
+            <th>Changed By</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of shiftsData.deletedShifts">
+                <td>
+                    <ng-container *ngIf="item.site_name && !item.runsheet_name">
+                        {{ item.site_name }}
+                    </ng-container>
+                    <ng-container *ngIf="!item.site_name && item.runsheet_name">
+                        {{ item.runsheet_name }}
+                    </ng-container>
+                </td>
+                <td>{{ item?.staff_name==""? 'N/A' : item.staff_name }}</td>
+                <td>{{ item?.start }}</td>
+                <td>{{ item?.end }}</td>
+                <td>{{ item.reason==""? 'N/A': item.reason }}</td>
+                <td class="text-capitalize">{{ item?.deleted_by }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

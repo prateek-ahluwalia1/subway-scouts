@@ -1,0 +1,23 @@
+<div [routerLink]="routerLink" class="card-shadow-primary mb-3 widget-chart widget-chart2 text-left card">
+    <div class="widget-chat-wrapper-outer">
+        <div class="widget-chart-content">
+            <h6 class="widget-subheading">{{ title }}</h6>
+            <div class="widget-chart-flex">
+                <div class="widget-numbers mb-0 w-100">
+                    <div class="widget-chart-flex">
+                        <div class="fsize-4">
+                            {{ value }}
+                        </div>
+                        <div class="ml-auto" *ngIf="percentage !== null">
+                            <div class="widget-title ml-auto font-size-lg font-weight-normal text-muted">
+                                <span [ngClass]="percentageClass">
+                                    {{ percentage | number:'1.2-2' }}%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

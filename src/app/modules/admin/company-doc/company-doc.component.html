@@ -1,0 +1,82 @@
+<div class="flex flex-col flex-auto min-w-0 main-body-watermark">
+    <div class="flex-auto p-6">
+        <div class="rounded-2xl common-style-for-cards">
+            <div class="com-main" style="border-radius: 10px;">
+                <div class="nav rounded-2xl" style="justify-content: space-between;">
+                    <h4>Company Documents</h4>
+                    <button class="btn" type="button" (click)="openFoldercanvas()">Create New Folder</button>
+                </div>
+
+                <!--Canvas for creating Folder-->
+                <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="offcanvasScrollingLabel" #createFolder>
+                    <div class="offcanvas-header" style="padding-bottom: 0;">
+                      <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Create Folder</h5>
+                      <button type="button" class="text-reset" aria-label="Close" (click)="closeFoldercanvas()">
+                        <mat-icon svgIcon="cancel"></mat-icon>
+                      </button>
+                    </div>
+                    <hr>
+                    <div class="offcanvas-body">
+                        <form [formGroup]="AddFolderName">
+                            <div class="row">
+                                <mat-form-field>
+                                    <mat-label>Name</mat-label>
+                                    <input matInput placeholder="Enter Folder Name" formControlName="name">
+                                </mat-form-field>
+                            </div>
+                            <div class="row" style="margin-top: 30px;">
+                                <div class="col-12" style="text-align: center;">
+                                    <button class="btn" (click)="Save()">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                <!--create folder-->
+                </div>
+
+
+                <!--List of Created Folders-->
+                <div class="main pt-6 w-100">
+                    <ng-container>
+                        <div>
+                            <div class="flex flex-wrap -m-2 mt-2">
+                                <ng-container *ngFor="let folder of all">
+                                    <div class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card" >
+                                        <a class="z-10 absolute inset-0 flex flex-col p-2 cursor-pointer">
+                                            <button type="button" [routerLink]="['/files-list',folder.id, subfolder]">
+                                                <div class="aspect-[9/6]">
+                                                    <div class="flex items-center justify-center h-full">
+                                                        <!-- Icon -->
+                                                        <mat-icon class="icon-size-16 text-hint opacity-50"
+                                                            [svgIcon]="'heroicons_solid:folder'" [ngClass]="{'yellow-icon': true}"></mat-icon>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
+                                                    <div class="truncate">{{folder.folder}}</div>
+                                                </div>
+                                            </button>
+                                            <div class="flex flex-row justify-end items-center mt-2">
+                                                <div class="truncate mr-2">
+                                                    <i class="fa-regular fa-pen-to-square" style="color: #02367b; font-size: 14px;"
+                                                    (click)="editFolder(folder.id)"></i>
+                                                </div>
+                                                <div class="truncate">
+                                                    <i class="fa-solid fa-trash-can" style="color: #d1001f; font-size: 14px;"
+                                                    (click)="deleteFolder(folder.id)"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="line-spin-fade-rotating">
+    <p style="color: white">Please Wait...</p>
+</ngx-spinner>

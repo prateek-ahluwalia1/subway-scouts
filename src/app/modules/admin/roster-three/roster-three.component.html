@@ -1,0 +1,89 @@
+<div class="roster-three-main">
+    <app-roster-three-add-shift *ngIf="globals.roster_three_shift_component"></app-roster-three-add-shift>
+
+    <div *ngIf="globals.roster_three_sidebar" class="roster-sidemenu">
+        <div class="card publish-noti">
+            <div class="row">
+                <div class="col-10">
+                    <h5>Public & Holiday</h5>
+                    <h6>12 Unpublished Shifts</h6>
+                </div>
+                <div class="col-2">
+                    <mat-icon class="date_left_down" [matMenuTriggerFor]="shiftOption">keyboard_arrow_down</mat-icon>
+                </div>
+                <mat-menu #shiftOption="matMenu">
+                    <button mat-menu-item>Delete</button>
+                    <button mat-menu-item>Update</button>
+                    <button mat-menu-item>Update without notify</button>
+                </mat-menu>
+            </div>
+        </div>
+        <mat-chip-list aria-label="Dog selection" class="dog_selection">
+            <mat-form-field color="accent" >
+                <mat-select [formControl]="hotelMultiCtrl" placeholder="Customers" [multiple]="true" #multiSelect>
+                    <mat-option>
+                        <ngx-mat-select-search [showToggleAllCheckbox]="true"
+                            [toggleAllCheckboxIndeterminate]="isIndeterminate" [toggleAllCheckboxChecked]="isChecked"
+                            (toggleAll)="toggleSelectAll($event)" [formControl]="hotelMultiFilterCtrl"
+                            placeholderLabel="search here"></ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let customer of filteredCustomersMulti | async" [value]="customer">
+                        {{ customer.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-chip-list>
+        <div class="row view-by">
+            <p>View By</p>
+            <div class="col-12">
+                <mat-chip-list aria-label="Fish selection" (change)="onChange($event)">
+                    <mat-chip #chipRef="matChip" *ngFor="let chip of availableChips"
+                        (click)="chipRef.selectViaInteraction()" [selected]="chip.selected">
+                        {{chip.name}}
+                    </mat-chip>
+                </mat-chip-list>
+            </div>
+        </div>
+        <h6 class="summer-heading mt-2">Roster Summery</h6>
+        <div class="row roster-details">
+            <div class="summery card">
+                <div class="total-shifts">
+                    <p>Total Shifts</p>
+                    <p>25</p>
+                </div>
+                <div class="total-sites">
+                    <p>Total Shifts</p>
+                    <p>25</p>
+                </div>
+                <div class="total-hours">
+                    <p>Shift Hours</p>
+                    <p>141</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="calender-main roster-three-header">
+        <div class="row">
+            <div class="container-nav roster-three">
+                <mat-chip-list class="dog_selection">
+                    <mat-icon (click)="displayPrevWeek()" class="date_left_right">keyboard_arrow_left</mat-icon>
+                    <app-weekly-selection></app-weekly-selection>
+                    <mat-icon (click)="displayNextWeek()" class="date_left_right">keyboard_arrow_right</mat-icon>
+                    <app-select-multiple-site></app-select-multiple-site>
+                    <mat-form-field class="fuse-mat-rounded">
+                        <mat-select [placeholder]="'Action'">
+                            <mat-option value="">Active</mat-option>
+                            <mat-option value="">Inactive</mat-option>
+                            <mat-option value="">All</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-chip-list>
+            </div>
+        </div>
+        <div *ngIf="selected=='site-week'" class="table-responsive-lg">
+            <app-one-week></app-one-week>
+        </div>
+
+    </div>
+</div>

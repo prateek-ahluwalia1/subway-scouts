@@ -1,0 +1,87 @@
+<div class="main-body-watermark w-100">
+    <div class="p-6 rounded-2xl common-admin-customer-contractor">
+        <div class="users-page">
+            <div class="user-main"
+                style="background-color: var(--tw-ring-offset-color) !important; border-radius: 13px;">
+                <div class="user-nav rounded-2xl">
+                    <h4>Customers</h4>
+                </div>
+            </div>
+        </div>
+
+        <section>
+            <div class="show_admin">
+                <div class="user-type">
+                    <ul>
+                        <li [ngClass]="{'active': userType=='active'}" (click)="getUserType('active')">Active
+                            ({{ active }})</li>
+                        <li [ngClass]="{'active': userType=='inactive'}" (click)="getUserType('inactive')">Inactive
+                            ({{ inactive }})
+                        </li>
+                    </ul>
+                </div>
+                <mat-chip-list class="customer_chip">
+                    <div class="search-here">
+                        <mat-icon svgIcon="feather:search" class="search-icon" style="color: #94a3b8 !important; margin:4px 7px !important;"></mat-icon>
+                        <input matInput placeholder="Search With Name..." [(ngModel)]="searchTerm" (ngModelChange)="search()">
+                    </div>
+                    <!-- <mat-chip>
+                        <mat-icon svgIcon="mat_outline:file_upload"></mat-icon><span class="mr-2">
+                            <span>Export</span> </span>
+                    </mat-chip> -->
+                    <mat-chip class="publish_site_color btn btn-border-3" (click)="createCustomer()" *ngIf="custPermissions && custPermissions.create">
+                        <span>New Customer</span>
+                    </mat-chip>
+                </mat-chip-list>
+            </div>
+            <br>
+            <table mat-table [dataSource]="dataSource" *ngIf="custPermissions && custPermissions.read">
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> NAME </th>
+                    <td class="name-hover text-capitalize" mat-cell *matCellDef="let element"
+                        (click)="openModel(element.id)">{{element.name}} 
+                    </td>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef> Email </th>
+                    <td class="name" mat-cell *matCellDef="let element"> {{element.email}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef> Status </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-slide-toggle [checked]="element.status=='active'?true:false"
+                            (change)="updateActiveStatus(element)">
+                        </mat-slide-toggle>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="address" class="icons-customer">
+                    <th mat-header-cell *matHeaderCellDef> Address </th>
+                    <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Action</th>
+                    <td mat-cell *matCellDef="let element" [matMenuTriggerFor]="menu">
+                        <mat-icon (click)="openModel(element.id)" class="accent cursor"
+                            svgIcon="heroicons_solid:pencil-alt"
+                            *ngIf="custPermissions && custPermissions.update">
+                        </mat-icon>
+                        <mat-icon color="warn" class="danger-icon cursor" svgIcon="heroicons_outline:trash"
+                            (click)="delCustomer(element.id)"
+                            *ngIf="custPermissions && custPermissions.delete">
+                        </mat-icon>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            
+            <mat-paginator #paginator [pageSize]="20" [pageSizeOptions]="[5, 10,20]"></mat-paginator>
+
+        </section>
+    </div>
+</div>

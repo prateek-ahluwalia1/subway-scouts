@@ -1,0 +1,73 @@
+<div class="main">
+    <div class="upper-section " style="position: sticky;top:0px;z-index: 10;background:white">
+        <!-- header -->
+        <div class="header">
+            <div class="modal-header">
+                <h4>Add Availability Details</h4>
+                <button type="button" class="btn-close" aria-label="Close" (click)="close('dismiss')"
+                    style="margin-right: 20px;"></button>
+            </div>
+        </div>
+
+        <div class="body">
+            <div class="scrollable">
+                <div class="form-togglelist">
+                    <div class="row head-row">
+                        <div class="col-2 head-col">Day</div>
+                        <div class="col-2 head-col">Status</div>
+                        <div class="col-3 head-col">Shifts</div>
+                        <div class="col-4 head-col"></div>
+                    </div>
+                    <div class="row body-row" *ngFor="let day of availability_days; let i=index">
+                        <div class="col-2 body-col"> {{day.day}} </div>
+
+                        <div class="col-2 body-col">
+                            <mat-slide-toggle [checked]="day.toggleValue"
+                                (change)="toggleChange($event.checked, day)"></mat-slide-toggle>
+                        </div>
+
+                        <div class="col-3 body-col" *ngIf="day.showJobLevel">
+                            <mat-form-field appearance="outline" class="unavailablejobs w-100">
+                                <mat-label>Job Level</mat-label>
+                                <mat-select class="custom-mat-select" name="type{{day.id}}" [(ngModel)]="day.data"
+                                    (selectionChange)="choose($event.value,day)">
+                                    <mat-option *ngFor="let type of day.types" [value]="type.value">
+                                        {{type.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-4 body-col" *ngIf="day.showTimePicker">
+                            <div class="row" style="padding: 10px;">
+                                <div class="form-group">
+                                    <label [for]="'start_time_' + day.id">{{day.start}}</label>
+                                    <div class="ngx-timepicker-field-example">
+                                        <ngx-timepicker-field [controlOnly]="true" [format]="24"
+                                            [attr.id]="'start_time_' + day.id" [attr.name]="'start_time_' + day.id"
+                                            [(ngModel)]="day.startTime"></ngx-timepicker-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px;">
+                                <div class="form-group">
+                                    <label [for]="'end_time_' + day.id">{{day.end}}</label>
+                                    <div class="ngx-timepicker-field-example">
+                                        <ngx-timepicker-field [controlOnly]="true" [format]="24"
+                                            [attr.id]="'end_time_' + day.id" [attr.name]="'end_time_' + day.id"
+                                            [(ngModel)]="day.endTime"></ngx-timepicker-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 50px;">
+                        <div class="col-12" style="text-align: center;">
+                            <button class="btn" (click)="submitData()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

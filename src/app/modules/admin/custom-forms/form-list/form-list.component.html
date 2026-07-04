@@ -1,0 +1,39 @@
+<div class="absolute inset-0 flex flex-col overflow-hidden main-body-watermark w-100">
+    <div class="p-6 rounded-2xl overflow-auto common-admin-customer-contractor">
+        <div class="users-page">
+            <div class="user-main">
+                <div class="user-nav rounded-2xl">
+                    <h4>{{ isTemplates ? 'Templates' : 'My Forms' }}</h4>
+                    <button class="btn btn-border-3" type="button" [routerLink]="['/myforms/form-types']">Create
+                        Form</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-list rounded-2xl mt-3" [@stagger]="FormList.length">
+            <ng-container *ngFor="let form of FormList; let i = index; trackBy: trackById">
+                <div class="form-item" [@fadeIn]="" [@stagger]="i">
+                    <div class="form-info">
+                        <div class="form-details">
+                            <div class="form-name flex" role="button" (click)="submissionDetail(form)">
+                                {{ form.title }}
+                            </div>
+                            <div class="form-updated">
+                                <span class="badge badge-dark">{{ form.submitted_count_count }}</span>
+                                <span class="sr-only">unread messages</span>
+                                Submissions. Updated on {{ form.updated_at | date: 'mediumDate' }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <mat-icon [disabled]="form.submitted_count_count != 0" svgIcon="heroicons_solid:pencil-alt"
+                            style="cursor: pointer;" (click)="editForm(form)"></mat-icon>
+                        <mat-icon svgIcon="heroicons_outline:trash" style="cursor: pointer;"
+                            (click)="deleteForm(form.id)"></mat-icon>
+                        <mat-icon svgIcon="heroicons_outline:share" style="cursor: pointer;"
+                            (click)="shareForm(form)"></mat-icon>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

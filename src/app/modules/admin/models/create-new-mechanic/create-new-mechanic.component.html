@@ -1,0 +1,54 @@
+<div class="modal-header">
+    <h4 class="modal-title">Add New Mechanic Detail</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+</div>
+
+<form [formGroup]="CreateMechanicDetail">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-6">
+                <mat-form-field appearance="outline" class="selection" style="width: 100%;">
+                    <mat-label>Mechanic Business Name</mat-label>
+                    <input matInput id="numberInput" formControlName="mech_busi_name">
+                </mat-form-field>
+            </div>
+    
+            <div class="col-6">
+                <mat-form-field appearance="outline" class="selection" style="width: 100%;">
+                    <mat-label>Mechanic Contact Name</mat-label>
+                    <input matInput id="numberInput" formControlName="name">
+                </mat-form-field>
+            </div>
+        </div>
+    
+        <div class="row">
+            <mat-form-field appearance="outline" class="selection">
+                <mat-label>Address</mat-label>
+                <input matInput ngx-google-places-autocomplete [options]='options' #placesRef="ngx-places"
+                (onAddressChange)="handleAddressChange($event)" formControlName="address"
+                id="address"/>
+            </mat-form-field>
+        </div>
+    
+        <div class="row mt-2">
+            <div class="col-6">
+                <mat-form-field appearance="outline" class="selection" style="width: 100%;">
+                    <mat-label>Phone Number</mat-label>
+                    <input matInput id="numberInput" formControlName="phone">
+                </mat-form-field>
+            </div>
+    
+            <div class="col-6">
+                <mat-form-field appearance="outline" class="selection" style="width: 100%;">
+                    <mat-label>Email Address</mat-label>
+                    <input matInput id="numberInput" formControlName="email">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+        <button type="button" class="btn btn-secondary" (click)="addNew()">Add</button> 
+    </div>
+</form>

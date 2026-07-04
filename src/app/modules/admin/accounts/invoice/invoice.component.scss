@@ -1,0 +1,310 @@
+/* Variables */
+$primary-color: var(--primary_color, #01A37E);
+$color-secondary: var(--color-secondary, #1e293c);
+$color-light-button: var(--color-light-button, #01a37e2e);
+:root {
+    --bs-gray-100: #F9F9F9;
+    --bs-gray-700: #5E6278;
+    --bs-gray-300: #E1E3EA;
+    --bs-text-gray-800: #3F4254;
+}
+
+.grade {
+    background-image: linear-gradient(to left, $color-light-button, $primary-color, $color-light-button);
+    position: absolute;
+    /* Set the background div to be positioned absolutely relative to the main div */
+    z-index: 0;
+    /* Set the stacking order for the background div to be behind the main div */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.real-content {
+    position: relative;
+    top: 10%;
+
+    .content {
+        z-index: 1;
+        width: 70%;
+        height: 100%;
+    }
+
+    .side-div {
+        position: sticky;
+        width: 30%;
+        top: 0;
+        z-index: 1;
+        height: fit-content;
+
+        .dotted-border {
+            border-bottom: 1px dotted rgb(211, 211, 211);
+            width: 100%;
+            height: 20px;
+        }
+    }
+}
+
+.bill_from,
+.bill_to,
+.main_inner {
+
+    input,
+    textarea {
+        padding: 10px;
+    }
+
+    .text-gray-800 {
+        color: var(--bs-text-gray-800) !important;
+    }
+
+    .fw-bold {
+        font-weight: 600 !important;
+    }
+
+    .fs-2x {
+        font-size: calc(1.325rem + 0.9vw) !important;
+    }
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.775rem 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--bs-gray-700);
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: 1px solid var(--bs-gray-300);
+    appearance: none;
+    border-radius: 0.475rem;
+    box-shadow: false;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    padding: 5px;
+    margin: 5px;
+    background-color: var(--bs-gray-100);
+    border-color: var(--bs-gray-100);
+    color: var(--bs-gray-700);
+    transition: color 0.2s ease;
+}
+
+table {
+    td {
+        padding: 1.25rem;
+    }
+
+    .pe-7 {
+        padding-right: 1.75rem !important;
+    }
+
+    .ps-0 {
+        padding-left: 0 !important;
+    }
+
+    .pt-8 {
+        padding-top: 2rem !important;
+    }
+
+    .pt-5 {
+        padding-top: 1.25rem !important;
+    }
+
+
+}
+
+.hidden {
+    display: none;
+  }
+
+  .action_buttons{
+    display: flex;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    right: 0%;
+    bottom: 31%;
+    flex-direction: column;
+  }
+
+  .custome_width{
+    width: 70% !important;
+  }
+
+  .add_btn_row{
+    margin-bottom: 3px;
+    width: 9%;
+    position: absolute;
+    right: 34%;
+    bottom: 4%;
+
+  }
+
+  td{
+    padding: 10px !important;
+  }
+
+  .add_btn{
+    color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  }
+
+  .payment-details {
+    margin-top: 10px;
+  }
+  
+  .payment-method {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  
+  .label {
+    margin-right: 10px;
+  }
+  
+  .value {
+    flex-grow: 1;
+    text-align: right;
+  }
+  
+  .payments{
+    margin-top: -50px; 
+    margin-bottom: 10px;
+
+  }
+
+  .toggle-heading{
+    font-weight: bold; color:#64748B ;
+  }
+
+  .custom_mb{
+    margin-bottom: 10px;
+  }
+
+  .radio_buttons{
+    margin-top: 13px;
+  }
+
+
+
+ 
+
+
+input[type='radio']:after {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  top: -4px;
+  left: -2px;
+  position: relative;
+  background-color: #d1d3d1;
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  border: 2px solid white;
+}
+
+input[type='radio']:checked:after {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  top: -4px;
+  left: -2px;
+  position: relative;
+  background-color:$primary-color;
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  border: 2px solid d1d3d1;
+}
+
+.radio_label{
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+.custom-radio-button {
+  ::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color:#01a37e !important;
+  }
+  ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color:#25cfa7!important;   /*inner circle color change*/
+  }
+  ::ng-deep.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+   border-color:#01a37e!important; /*outer ring color change*/
+  }
+}
+
+.custom_description{
+  display: flex;
+  flex-direction: column;
+}
+
+
+.table-container {
+  max-height: 700px; 
+  overflow-y: auto;
+
+  .table {
+    
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #25cfa7;
+    color: white;
+    z-index: 1;
+    text-align: left;
+    padding: 10px; 
+  }
+
+  .table tbody {
+    
+    td {
+    padding: 8px; 
+    border-bottom: 1px solid #ddd; 
+  }}
+
+  
+}
+
+.error-border {
+  border: 1px solid red;
+}
+
+
+
+
+
+.datePickerContainer {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+
+.datePicker {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%; /* Adjust width as needed */
+}
+
+/* Optional: Add styles for hover and focus */
+.datePicker:hover,
+.datePicker:focus {
+  border-color: #888;
+}
+
+.Datetime{
+  margin-top: 10px;
+}

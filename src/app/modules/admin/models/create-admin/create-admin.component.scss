@@ -1,0 +1,179 @@
+::ng-deep {
+    height: 100%;
+}
+
+.header {
+    position: relative;
+    text-align: center;
+
+    .image {
+        width: 150px;
+        height: 130px;
+        position: relative;
+        bottom: 10px;
+        margin: auto;
+
+        img {
+            width: 120px;
+            height: 120px;
+            margin: auto;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            border-radius: 7px;
+        }
+    }
+
+
+    .close-icons {
+        bottom: 24%;
+        right: 26%;
+        background-color: var(--color-primary);
+        
+    }
+
+    .edit-icons {
+        background-color: var(--background-primary);
+        top: 10%;
+        right: 25%;
+    }
+    .close-icons,.edit-icons{
+        position: absolute;
+        color: #ffffff;
+        padding: 12px;
+        border-radius: 50%;
+        font-size: 15px;
+    }
+}
+
+
+.example-radio-button {
+    margin: 5px;
+}
+
+
+.close-icons+.tooltip.top>.tooltip-arrow {
+    background-color: #f00 !important;
+}
+
+.edit-icons .tooltip>.tooltip-inner {
+    background: yellow !important;
+    color: #000;
+}
+
+:host ::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle,
+.mat-radio-outer-circle {
+    border-color: #074678 !important;
+    /* Sets outer circle & click effect color */
+}
+
+:host ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #074678 !important;
+    /* Sets inner circle color */
+}
+
+.mat-select {
+    z-index: 999 !important;
+}
+
+.mat-select-panel {
+    z-index: 999 !important;
+}
+
+
+
+.personal-infor-admin {
+    display: flex;
+
+    .header {
+        text-align: center;
+        width: 40%;
+        padding: 0;
+    }
+
+    .first-last-name {
+        display: flex;
+        flex-direction: column;
+        width: 60%;
+        margin: auto;
+
+        mat-form-field {
+            width: 100%;
+            height: 60px;
+            margin: 5px 0;
+        }
+    }
+}
+
+.admin-state-site {
+    mat-form-field {
+        width: 100%;
+
+    }
+}
+
+.tabs {
+    ul {
+        padding: 0;
+        display: flex;
+
+        li {
+            margin: 0 15px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #1e163c;
+            transition: transform .3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            list-style: none;
+        }
+    }
+}
+
+.active {
+    border-bottom: 2px solid;
+    border-color: #1319cb;
+    color: #1319cb !important;
+}
+
+.tabs {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1;
+    right: 0;
+    left: 0;
+}
+
+.modal-body {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.scrollable {
+    scroll-behavior: smooth;
+    flex: auto;
+    height: 100%;
+    overflow: auto;
+
+    form {
+        width: 94%;
+    }
+}
+
+.px-3 {
+    margin-top: 20px;
+}
+
+.custom-error {
+    width: 100%;
+    font-size: .875em;
+    color: #dc3545;
+}
+
+.body {
+    width: 100%;
+    margin: 16px auto 0;
+    overflow-y: auto;
+    overflow: auto;
+    height: 50vh;
+    background-color: #fff;
+    overflow-x: hidden;
+}
