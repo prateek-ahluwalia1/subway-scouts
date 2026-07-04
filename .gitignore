@@ -1,0 +1,11 @@
+# /vendor
+/.idea
+Homestead.json
+Homestead.yaml
+.env
+.phpunit.result.cache
+app/storage/logs/*
+/app/storage/logs/*
+vendor/
+/vendor
+/public/uploads

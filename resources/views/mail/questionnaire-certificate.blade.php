@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AMG Security</title>
+</head>
+<body>
+    <p>Certificate</p>
+     
+    <p>Thank you</p>
+</body>
+</html>

@@ -1,0 +1,3 @@
+[02-Dec-2020 12:40:53 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/cl5s812w82iv/public_html/247staffing/apis/app/Http/Middleware/CorsMiddleware.php on line 3
+[02-Dec-2020 12:41:43 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/cl5s812w82iv/public_html/247staffing/apis/app/Http/Middleware/CorsMiddleware.php on line 3
+[03-Dec-2020 12:20:26 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/cl5s812w82iv/public_html/247staffing/apis/app/Http/Controllers/Api/JobController.php on line 5
