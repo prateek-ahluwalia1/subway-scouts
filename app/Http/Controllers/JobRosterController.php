@@ -5808,14 +5808,17 @@ public function addNewShift(Request $request){
     $payrate = Payrate::where('id', 1)->first();
     $site = Site::where('id', $request->site_id)->select('customer_id', 'site_budget')->first();
     // Parse the date from request
-    $date = Carbon::parse($request->start);
+    $date = Carbon::createFromFormat('m-d-Y H:i', $request->start);
 
     // Get week start and end (Monday to Sunday)
     $start = $date->copy()->startOfWeek();
     $end = $date->copy()->endOfWeek();
+    
+    $startFormatted = $start->format('Y-m-d H:i');
+    $endFormatted = $end->format('Y-m-d H:i');
 
      $shifts = JobRoster::where('site_id', $request->site_id)->where('roster_id', $request->roster_id)->whereNotNull('guard_id')
-                    ->whereBetween('start', [$start, $end])
+                    ->whereBetween('start', [$startFormatted, $endFormatted])
                     ->get();
                 
                 $hours = [
