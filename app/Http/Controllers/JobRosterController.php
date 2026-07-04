@@ -5804,6 +5804,56 @@ public function addNewShift(Request $request){
     $jobNewRoster = JobNewRoster::where('id', $request->roster_id)->first();
 
     if(isset($request->guard_id) && $request->guard_id > 0){
+
+    $payrate = Payrate::where('id', 1)->first();
+    $site = Site::where('id', $request->site_id)->select('customer_id', 'site_budget')->first();
+    // Parse the date from request
+    $date = Carbon::parse($request->start);
+
+    // Get week start and end (Monday to Sunday)
+    $start = $date->copy()->startOfWeek();
+    $end = $date->copy()->endOfWeek();
+
+     $shifts = JobRoster::where('site_id', $request->site_id)->where('roster_id', $request->roster_id)->whereNotNull('guard_id')
+                    ->whereBetween('start', [$start, $end])
+                    ->get();
+                
+                $hours = [
+                    'morning' => 0,
+                    'night' => 0,
+                    'saturday_morning' => 0,
+                    'saturday_night' => 0,
+                    'sunday_morning' => 0,
+                    'sunday_night' => 0,
+                    'ph_morning' => 0,
+                    'ph_night' => 0
+                ];
+                
+                foreach ($shifts as $shift) {
+                    $hours['morning'] += $shift->morning_hours ?? 0;
+                    $hours['night'] += $shift->night_hours ?? 0;
+                    $hours['saturday_morning'] += $shift->saturday_morning_hours ?? 0;
+                    $hours['saturday_night'] += $shift->saturday_night_hours ?? 0;
+                    $hours['sunday_morning'] += $shift->sunday_morning_hours ?? 0;
+                    $hours['sunday_night'] += $shift->sunday_night_hours ?? 0;
+                    $hours['ph_morning'] += $shift->ph_morning_hours ?? 0;
+                    $hours['ph_night'] += $shift->ph_night_hours ?? 0;
+                }
+                
+                $jobAmount = ($payrate->def_metro_mon_to_fri_day_rate * $hours['morning']) +
+                            ($payrate->def_metro_mon_to_fri_night_rate * $hours['night']) +
+                            ($payrate->def_metro_sat_day_rate * ($hours['saturday_morning'] + $hours['saturday_night'])) +
+                            ($payrate->def_metro_sun_day_rate * ($hours['sunday_morning'] + $hours['sunday_night'])) +
+                            ($payrate->def_metro_pub_holi_day_rate * ($hours['ph_morning'] + $hours['ph_night']));
+
+                           if($jobAmount >= $site->site_budget) {
+                                return response()->json([
+                                    'success' => false, 
+                                    'message' => 'Your branch budget has been exceeded. Budget: $' . number_format($site->site_budget, 2) . ', Current Amount: $' . number_format($jobAmount, 2)
+                                ]);
+                            }
+
+
         # CHECK GUARD IS FULL TIMMER OR PART TIMMER
         $guard = Guard::find($request->guard_id);
         if($guard->staff_type == 'part_time' && !isset($request->shift_confirm)){

@@ -1153,7 +1153,7 @@ $results = DB::table('job_rosters AS jr')
         // Default rate logic when neither custom_rate nor custom_payrate is true
 
         $site = Site::where('id', $roster['site_id'])->first();
-        $payrate = Payrate::where('id', $site->site_payrate)->where('status', 'active')->first();
+        $payrate = Payrate::where('id', 1)->where('status', 'active')->first();
         // if(!empty($payrate)){
         //     if($roster['payrate_affective_from']){
         //         $payrate_effective_date = Carbon::createFromFormat('Y-m-d', $roster['payrate_affective_from']);
@@ -1191,97 +1191,11 @@ $results = DB::table('job_rosters AS jr')
             
         // }
         if (!empty($payrate)) {
-            if ($site->type == 'metro') {
-                if ($roster['payrol'] == 'award') {
-                    $roster['day_rate'] = $payrate->award_metro_mon_to_fri_day_rate;
-                    $roster['night_rate'] = $payrate->award_metro_mon_to_fri_night_rate;
-                    $roster['public_holiday_rate'] = $payrate->award_metro_pub_holi_day_rate;
-                    $roster['saturday_rate'] = $payrate->award_metro_sat_day_rate;
-                    $roster['sunday_rate'] = $payrate->award_metro_sun_day_rate;
-                } elseif ($roster['payrol'] == 'eba') {
-                    $roster['day_rate'] = $payrate->eba_metro_mon_to_fri_day_rate;
-                    $roster['night_rate'] = $payrate->eba_metro_mon_to_fri_night_rate;
-                    $roster['public_holiday_rate'] = $payrate->eba_metro_pub_holi_day_rate;
-                    $roster['saturday_rate'] = $payrate->eba_metro_sat_day_rate;
-                    $roster['sunday_rate'] = $payrate->eba_metro_sun_day_rate;
-                } else {
                     $roster['day_rate'] = $payrate->def_metro_mon_to_fri_day_rate;
                     $roster['night_rate'] = $payrate->def_metro_mon_to_fri_night_rate;
                     $roster['public_holiday_rate'] = $payrate->def_metro_pub_holi_day_rate;
                     $roster['saturday_rate'] = $payrate->def_metro_sat_day_rate;
                     $roster['sunday_rate'] = $payrate->def_metro_sun_day_rate;
-                }
-            } else {
-                if ($roster['payrol'] == 'award') {
-                    $roster['day_rate'] = $payrate->award_reg_mon_to_fri_day_rate;
-                    $roster['night_rate'] = $payrate->award_reg_mon_to_fri_night_rate;
-                    $roster['public_holiday_rate'] = $payrate->award_reg_pub_holi_day_rate;
-                    $roster['saturday_rate'] = $payrate->award_reg_sat_day_rate;
-                    $roster['sunday_rate'] = $payrate->award_reg_sun_day_rate;
-                } elseif ($roster['payrol'] == 'eba') {
-                    $roster['day_rate'] = $payrate->eba_reg_mon_to_fri_day_rate;
-                    $roster['night_rate'] = $payrate->eba_reg_mon_to_fri_night_rate;
-                    $roster['public_holiday_rate'] = $payrate->eba_reg_pub_holi_day_rate;
-                    $roster['saturday_rate'] = $payrate->eba_reg_sat_day_rate;
-                    $roster['sunday_rate'] = $payrate->eba_reg_sun_day_rate;
-                } else {
-                    $roster['day_rate'] = $payrate->def_reg_mon_to_fri_day_rate;
-                    $roster['night_rate'] = $payrate->def_reg_mon_to_fri_night_rate;
-                    $roster['public_holiday_rate'] = $payrate->def_reg_pub_holi_day_rate;
-                    $roster['saturday_rate'] = $payrate->def_reg_sat_day_rate;
-                    $roster['sunday_rate'] = $payrate->def_reg_sun_day_rate;
-                }
-            }
-        }else {
-            // Default rate logic for guard rate
-            $guard_payrate = GuardWorkDetail::where('guard_id', $roster['guard_id'])->value('payrate');
-            if (!empty($guard_payrate)) {
-                $payrate = Payrate::where('id', $guard_payrate)->where('status', 'active')->first();
-                // if(!empty($payrate)){
-                    // $payrate_effective_date = Carbon::createFromFormat('Y-m-d', $payrate->effective_from);
-                    // $shift_date = Carbon::createFromFormat('Y-m-d H:i', $roster['start']);
-                    // if ($payrate_effective_date->gt($shift_date)) {
-                    //     // actual payrate
-                    // } elseif ($shift_date->lt($payrate_effective_date)) {
-                    //     // history payrate
-                    //     $payrate = Payrate::where('customer_id', $roster['customer_id'])
-                    //     ->where('level', $roster['level'])
-                    //     ->whereDate('effective_from', '<=', $roster['start'])
-                    //     ->orderBy('effective_from', 'desc')
-                    //     ->first();
-                    // }
-                // }else{
-                //     $old_payrate = DB::table('site_payrate_history')->where('site_id', $roster['site_id'])
-                //     ->whereDate('apply_date', '<=', $roster['start'])
-                //     ->orderBy('apply_date', 'desc')
-                //     ->first();
-                //     if (!empty($old_payrate)) {
-                //         $payrate = Payrate::where('id', $old_payrate->payrate_id)->first();
-                //     }
-                    
-                // }
-                if ($payrate) {
-                    if ($roster['payrol'] == 'award') {
-                        $roster['day_rate'] = $payrate->award_metro_mon_to_fri_day_rate;
-                        $roster['night_rate'] = $payrate->award_metro_mon_to_fri_night_rate;
-                        $roster['public_holiday_rate'] = $payrate->award_metro_pub_holi_day_rate;
-                        $roster['saturday_rate'] = $payrate->award_metro_sat_day_rate;
-                        $roster['sunday_rate'] = $payrate->award_metro_sun_day_rate;
-                    } elseif ($roster['payrol'] == 'eba') {
-                        $roster['day_rate'] = $payrate->eba_metro_mon_to_fri_day_rate;
-                        $roster['night_rate'] = $payrate->eba_metro_mon_to_fri_night_rate;
-                        $roster['public_holiday_rate'] = $payrate->eba_metro_pub_holi_day_rate;
-                        $roster['saturday_rate'] = $payrate->eba_metro_sat_day_rate;
-                        $roster['sunday_rate'] = $payrate->eba_metro_sun_day_rate;
-                    } else {
-                        $roster['day_rate'] = $payrate->def_metro_mon_to_fri_day_rate;
-                        $roster['night_rate'] = $payrate->def_metro_mon_to_fri_night_rate;
-                        $roster['public_holiday_rate'] = $payrate->def_metro_pub_holi_day_rate;
-                        $roster['saturday_rate'] = $payrate->def_metro_sat_day_rate;
-                        $roster['sunday_rate'] = $payrate->def_metro_sun_day_rate;
-                    }
-                }
-            }
         }
     }
 
