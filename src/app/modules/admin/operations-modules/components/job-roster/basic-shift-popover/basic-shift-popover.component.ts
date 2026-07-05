@@ -156,7 +156,7 @@ export class BasicShiftPopoverComponent implements OnInit {
     layoutType = res.message !== 'Sorry Staff On Leave!' ? DialogLayoutDisplay.SUCCESS : DialogLayoutDisplay.DANGER;
 
     let buttons: ButtonMaker[] = [];
-    if (res.hide || res.message === 'Sorry Staff On Leave!' || res.type === 'document') {
+    if (res.hide || res.message === 'Sorry Staff On Leave!' || res.type === 'document' || (res.success === false && res.message.includes('budget has been exceeded'))) {
       newConfirmBox.setTitle('Access Denied!');
       newConfirmBox.setMessage(res.message);
       layoutType = DialogLayoutDisplay.DANGER;

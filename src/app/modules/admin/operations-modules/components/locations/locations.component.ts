@@ -119,6 +119,7 @@ export class LocationsComponent implements OnInit {
     this.cus.getCust().subscribe(({ success, data }) => {
       if (success) {
         this.customers = data
+        this.globals.selectedCustomers = data
       }
     })
 
