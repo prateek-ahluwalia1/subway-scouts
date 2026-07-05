@@ -9804,82 +9804,82 @@ public function rolloverWeek($request)
             }
             array_push($dates_periods, $fortnight_end_date->format("Y-m-d"));
                 
-            if($guardOnLimitations->guard_document_type == 'student_visa'){
-                if($guardOnLimitations->limit_exceed == 1)
-                {
-                    $guardStart = new DateTime($guardOnLimitations->start_time);
-                    $guardEnd = new DateTime($guardOnLimitations->end_time);
-                    $interval = new DateInterval('P1D');
-                    $dateRange = new DatePeriod($guardStart, $interval, $guardEnd->modify('+1 day'));
+            // if($guardOnLimitations->guard_document_type == 'student_visa'){
+            //     if($guardOnLimitations->limit_exceed == 1)
+            //     {
+            //         $guardStart = new DateTime($guardOnLimitations->start_time);
+            //         $guardEnd = new DateTime($guardOnLimitations->end_time);
+            //         $interval = new DateInterval('P1D');
+            //         $dateRange = new DatePeriod($guardStart, $interval, $guardEnd->modify('+1 day'));
 
-                    $guardDates = [];
-                    foreach ($dateRange as $date) {
-                        $guardDates[] = $date->format('Y-m-d');
-                    }
-                    $hasCompleteFortnight = false;
+            //         $guardDates = [];
+            //         foreach ($dateRange as $date) {
+            //             $guardDates[] = $date->format('Y-m-d');
+            //         }
+            //         $hasCompleteFortnight = false;
 
-                    $guardDateCount = count($guardDates);
+            //         $guardDateCount = count($guardDates);
 
-                    for ($i = 0; $i <= $guardDateCount - 14; $i++) {
-                        $fourteenDays = array_slice($guardDates, $i, 14);
+            //         for ($i = 0; $i <= $guardDateCount - 14; $i++) {
+            //             $fourteenDays = array_slice($guardDates, $i, 14);
                         
-                        $allExist = true;
-                        foreach ($fourteenDays as $day) {
-                            if (!in_array($day, $dates_periods)) {
-                                $allExist = false;
-                                break;
-                            }
-                        }
+            //             $allExist = true;
+            //             foreach ($fourteenDays as $day) {
+            //                 if (!in_array($day, $dates_periods)) {
+            //                     $allExist = false;
+            //                     break;
+            //                 }
+            //             }
                         
-                        if ($allExist) {
-                            $hasCompleteFortnight = true;
-                            break;
-                        }
-                    }
+            //             if ($allExist) {
+            //                 $hasCompleteFortnight = true;
+            //                 break;
+            //             }
+            //         }
 
-                    if ($hasCompleteFortnight) {
-                    $totalWorkingHours = 72;    
-                    } else {
-                    $totalWorkingHours = 48;
-                    }
-                }else{
-                    $totalWorkingHours = 48;
-                }
-            }else{
-                $totalWorkingHours = 72;
-                if ($guardOnLimitations && $guardOnLimitations->work_hours_limitation_status == 1) {
-                    $totalWorkingHours = $guardOnLimitations->weekly_work_hours_limitation ?? 72;
-                }  
-            }
+            //         if ($hasCompleteFortnight) {
+            //         $totalWorkingHours = 72;    
+            //         } else {
+            //         $totalWorkingHours = 48;
+            //         }
+            //     }else{
+            //         $totalWorkingHours = 48;
+            //     }
+            // }else{
+            //     $totalWorkingHours = 72;
+            //     if ($guardOnLimitations && $guardOnLimitations->work_hours_limitation_status == 1) {
+            //         $totalWorkingHours = $guardOnLimitations->weekly_work_hours_limitation ?? 72;
+            //     }  
+            // }
                                 
-            if ($addedHours * 2 > $totalWorkingHours) {
-                $workLimitationViolations[] = [
-                    'guard_id' => $roster->guard_id,
-                    'guard_name' => $guardName,
-                    'shift_date' => date('Y-m-d', strtotime($newStart)),
-                    'message' => "{$guardName} exceeds fortnight work limitation",
-                    'details' => [
-                        'fortnight_limit' => $totalWorkingHours,
-                        'total_hours' => round($addedHours * 2, 2),
-                        'exceed_hours' => round($addedHours * 2 - $totalWorkingHours, 2),
-                        'fortnight_period' => $week_array['week_start'] . ' to ' . $week_array['week_end'],
-                        'existing_hours_in_period' => round($addedHours, 2),
-                    ]
-                ];
-            }      
+            // if ($addedHours * 2 > $totalWorkingHours) {
+            //     $workLimitationViolations[] = [
+            //         'guard_id' => $roster->guard_id,
+            //         'guard_name' => $guardName,
+            //         'shift_date' => date('Y-m-d', strtotime($newStart)),
+            //         'message' => "{$guardName} exceeds fortnight work limitation",
+            //         'details' => [
+            //             'fortnight_limit' => $totalWorkingHours,
+            //             'total_hours' => round($addedHours * 2, 2),
+            //             'exceed_hours' => round($addedHours * 2 - $totalWorkingHours, 2),
+            //             'fortnight_period' => $week_array['week_start'] . ' to ' . $week_array['week_end'],
+            //             'existing_hours_in_period' => round($addedHours, 2),
+            //         ]
+            //     ];
+            // }      
             
         }
     }
     
-    if (!empty($workLimitationViolations)) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Work limitation violations detected',
-            'violations' => $workLimitationViolations,
-            'total_violations' => count($workLimitationViolations),
-            'suggestion' => 'Please reassign shifts or adjust guard work hours to proceed.',
-        ]);
-    }
+    // if (!empty($workLimitationViolations)) {
+    //     return response()->json([
+    //         'success' => false,
+    //         'message' => 'Work limitation violations detected',
+    //         'violations' => $workLimitationViolations,
+    //         'total_violations' => count($workLimitationViolations),
+    //         'suggestion' => 'Please reassign shifts or adjust guard work hours to proceed.',
+    //     ]);
+    // }
 
     $days = ['mon' => 'monday', 'tue' => 'tuesday', 'wed' => 'wednesday', 'thu' => 'thursday', 'fri' => 'friday', 'sat' => 'saturday' , 'sun' => 'sunday'];
 
