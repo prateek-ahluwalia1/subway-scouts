@@ -85,7 +85,7 @@
                     <tr>
                         @foreach ($images as $key => $value)
                                   @php
-                                $imageUrl = 'https://app-apis.amgsystem.com.au/uploads/' . $value['imgPath'];
+                                $imageUrl = 'https://appapi.subway.thescouts.com.au/public/uploads/' . $value['imgPath'];
 
                                 $ch = curl_init();
                                 curl_setopt($ch, CURLOPT_URL, $imageUrl);
@@ -104,7 +104,7 @@
                 </table>
             @else
                 <div style="height: 200px; overflow: hidden;" class="rounded border">
-                    <img src="https://app-apis.amgsystem.com.au/uploads/{{$report->image}}" alt="" style="width: 98%; height: 100%; object-fit: cover;">
+                    <img src="https://appapi.subway.thescouts.com.au/public/uploads/{{$report->image}}" alt="" style="width: 98%; height: 100%; object-fit: cover;">
                 </div>
             @endif
         @endif
@@ -118,7 +118,7 @@
                 <p style="font-weight: bold;">Signature</p>
                 @if(!empty($report->signature))
                         @php
-                            $signatureUrl = 'https://app-apis.amgsystem.com.au/uploads/' . $report->signature;
+                            $signatureUrl = 'https://appapi.subway.thescouts.com.au/public/uploads/' . $report->signature;
 
                             $ch = curl_init();
                             curl_setopt($ch, CURLOPT_URL, $signatureUrl);

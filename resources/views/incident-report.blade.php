@@ -175,7 +175,7 @@ $images = json_decode($report->photo , true);
                         <tr>
                         @foreach ($images as $image)
                             @php
-                                $imageUrl = 'https://app-apis.amgsystem.com.au/uploads/' . $image['imgPath'];
+                                $imageUrl = 'https://appapi.subway.thescouts.com.au/public/uploads/' . $image['imgPath'];
 
                                 $ch = curl_init();
                                 curl_setopt($ch, CURLOPT_URL, $imageUrl);
@@ -207,7 +207,7 @@ $images = json_decode($report->photo , true);
                         <p class="" style="font-weight: bold;">Signature</p>
                         @if($report->signature != '')
                         @php
-                            $signatureUrl = 'https://app-apis.amgsystem.com.au/uploads/' . $report->signature;
+                            $signatureUrl = 'https://appapi.subway.thescouts.com.au/public/uploads/' . $report->signature;
 
                             $ch = curl_init();
                             curl_setopt($ch, CURLOPT_URL, $signatureUrl);

@@ -114,7 +114,7 @@ function returnImgPath($type, $image)
 }
 
 function returnImgPathCheck($folder, $filename) {
-    $baseUrl = 'https://app-apis.amgsystem.com.au/';
+    $baseUrl = 'https://appapi.subway.thescouts.com.au/public';
     return $baseUrl . $folder . '/' . $filename;
 }
 

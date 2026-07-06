@@ -432,7 +432,7 @@
                             @foreach($images as $key => $value)
                             <div class="image-item">
                                 <div class="image-box">
-                                    <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents('https://app-apis.amgsystem.com.au/uploads/' . $value['imgPath'])) }}" 
+                                    <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents('https://appapi.subway.thescouts.com.au/public/uploads/' . $value['imgPath'])) }}" 
                                          class="report-image" 
                                          alt="Image {{ $key + 1 }}">
                                 </div>
