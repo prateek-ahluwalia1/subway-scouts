@@ -8,7 +8,7 @@
   <tr>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">State</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Site Name</th>
-   <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Site Level</th>
+   <!-- <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Site Level</th> -->
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Staff</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Staff Phone</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Staff Type</th>
@@ -29,12 +29,12 @@
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Sunday Rates</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Public Holiday Hours</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Public Holiday Rates</th>
-   <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Travel Time</th>
-   <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Travel Time Total</th>
-   <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Reimbursement Text</th>
-   <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Reimbursement</th>
+   <!-- <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Travel Time</th> -->
+   <!-- <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Travel Time Total</th> -->
+   <!-- <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Reimbursement Text</th> -->
+   <!-- <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Reimbursement</th> -->
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Gross Amount</th>
-   <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Tax</th>
+   <!-- <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Tax</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Super</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Net Payable</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Payroll</th>
@@ -44,7 +44,7 @@
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Bank Account Number</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Site P.O/W.O</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Training</th>
-   <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Operation Notes</th>
+   <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Operation Notes</th> -->
  </tr>
  
 </thead>
@@ -210,7 +210,7 @@ $base_rate = 0;
 <tr>
   <td style="text-align:center;border:1px solid #000000;">{{$val['state']}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{$val['site_name']}} ({{$val['site_description']}})</td>
-  <td style="text-align:center;border:1px solid #000000;">{{$val['level']}}</td>
+  <!-- <td style="text-align:center;border:1px solid #000000;">{{$val['level']}}</td> -->
   <td style="text-align:center;border:1px solid #000000;">{{$full_name != '' ? $full_name : 'N/A'}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{$val['phone']}}</td>
   <td style="text-align:center;border:1px solid #000000;text-transform: capitalize">{{$val['staff_type']}}</td>
@@ -230,13 +230,13 @@ $base_rate = 0;
   <td style="text-align:center;border:1px solid #000000;">{{(number_format($val['sunday_morning_hours'] + $val['sunday_night_hours'], 2))}}</td>
   <td style="text-align:center;border:1px solid #000000;">${{$val['sunday_rate']}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{(number_format($val['ph_morning_hours'] + $val['ph_night_hours'], 2))}}</td>
-  <td style="text-align:center;border:1px solid #000000;">${{$val['public_holiday_rate']}}</td>
-  <td style="text-align:center;border:1px solid #000000;">{{$val['travel_time_value']}}</td>
-  <td style="text-align:center;border:1px solid #000000;">${{number_format($travel_rate, 2)}}</td>
-  <td style="text-align:center;border:1px solid #000000;">{{$val['reimbursement_text']}}</td>
-  <td style="text-align:center;border:1px solid #000000;">${{$val['reimbursement_value']}}</td>
+  <!-- <td style="text-align:center;border:1px solid #000000;">${{$val['public_holiday_rate']}}</td> -->
+  <!-- <td style="text-align:center;border:1px solid #000000;">{{$val['travel_time_value']}}</td> -->
+  <!-- <td style="text-align:center;border:1px solid #000000;">${{number_format($travel_rate, 2)}}</td> -->
+  <!-- <td style="text-align:center;border:1px solid #000000;">{{$val['reimbursement_text']}}</td> -->
+  <!-- <td style="text-align:center;border:1px solid #000000;">${{$val['reimbursement_value']}}</td> -->
   <td style="text-align:center;border:1px solid #000000;background-color: #A9D08E; border:1px solid #000000;">${{$val['total_amount'] + $travel_rate}}</td>
-  <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7"></td>
+  <!-- <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7"></td>
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7"></td>
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7"></td>
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{($val['payrol'] ? $val['payrol'] : 'N/A')}}</td>
@@ -246,7 +246,7 @@ $base_rate = 0;
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{$val['payroll_bank_account_number']}}</td>
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{$val['po_wo'] ?: ($val['site_po_wo'] ?: 'N/A') }}</td>  
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{($val['training'] == 0 ? 'no' : 'yes' )}}</td>
-  <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{(!empty($val['operation_notes']) ? $val['operation_notes'] : 'N/A' )}}</td>
+  <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{(!empty($val['operation_notes']) ? $val['operation_notes'] : 'N/A' )}}</td> -->
 </tr>
 <?php
 
@@ -315,7 +315,7 @@ $base_rate = 0;
  <tr>
   <td style="text-align:center;border:1px solid #000000;">{{$val['state']}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{$val['site_name']}} ({{$val['site_description']}})</td>
-  <td style="text-align:center;border:1px solid #000000;">{{$val['level']}}</td>
+  <!-- <td style="text-align:center;border:1px solid #000000;">{{$val['level']}}</td> -->
   <td style="text-align:center;border:1px solid #000000;">{{$full_name != '' ? $full_name : 'N/A'}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{$val['phone']}}</td>
   <td style="text-align:center;border:1px solid #000000;text-transform: capitalize">{{$val['staff_type']}}</td>
@@ -336,12 +336,12 @@ $base_rate = 0;
   <td style="text-align:center;border:1px solid #000000;">${{$val['sunday_rate']}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{(number_format($val['ph_morning_hours'] + $val['ph_night_hours'], 2))}}</td>
   <td style="text-align:center;border:1px solid #000000;">${{$val['public_holiday_rate']}}</td>
-  <td style="text-align:center;border:1px solid #000000;">{{$val['travel_time_value']}}</td>
-  <td style="text-align:center;border:1px solid #000000;">${{number_format($val['travel_time_value'] * $val['day_rate'], 2)}}</td>
-  <td style="text-align:center;border:1px solid #000000;">{{$val['reimbursement_text']}}</td>
-  <td style="text-align:center;border:1px solid #000000;">${{number_format($val['reimbursement_value'], 2)}}</td>
+  <!-- <td style="text-align:center;border:1px solid #000000;">{{$val['travel_time_value']}}</td> -->
+  <!-- <td style="text-align:center;border:1px solid #000000;">${{number_format($val['travel_time_value'] * $val['day_rate'], 2)}}</td> -->
+  <!-- <td style="text-align:center;border:1px solid #000000;">{{$val['reimbursement_text']}}</td> -->
+  <!-- <td style="text-align:center;border:1px solid #000000;">${{number_format($val['reimbursement_value'], 2)}}</td> -->
   <td style="text-align:center;border:1px solid #000000;background-color: #A9D08E; border:1px solid #000000;">${{$val['total_amount'] + $travel_rate}}</td>
-  <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7"></td>
+  <!-- <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7"></td>
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7"></td>
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7"></td>
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{($val['payrol'] ? $val['payrol'] : 'N/A')}}</td>
@@ -351,13 +351,13 @@ $base_rate = 0;
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{$val['payroll_bank_account_number']}}</td>
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{$val['po_wo'] ?: ($val['site_po_wo'] ?: 'N/A') }}</td>  
   <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{($val['training'] == 0 ? 'no' : 'yes' )}}</td>
-  <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{(!empty($val['operation_notes']) ? $val['operation_notes'] : 'N/A' )}}</td>
+  <td style="text-align:center;border:1px solid #000000;background-color: #B4C6E7">{{(!empty($val['operation_notes']) ? $val['operation_notes'] : 'N/A' )}}</td> -->
 </tr>
  @endif
 <tr>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
-  <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
+  <!-- <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td> -->
   <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
@@ -378,10 +378,10 @@ $base_rate = 0;
   <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;"></td>
   <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">{{ $total_ph_hours }}</td>
   <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;"></td>
-  <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">{{ $total_travel_time }}</td>
-  <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">${{$total_travel_rate}}</td>
-  <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;"></td>
-  <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">${{$total_reimbursement}}</td>
+  <!-- <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">{{ $total_travel_time }}</td> -->
+  <!-- <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">${{$total_travel_rate}}</td> -->
+  <!-- <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;"></td> -->
+  <!-- <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">${{$total_reimbursement}}</td> -->
   @php
   $gross_total = $total_rate + $total_travel_rate;
   $annual_income = $gross_total * 26;
@@ -404,16 +404,16 @@ $base_rate = 0;
   $grand_net_payable += $total_rate + $total_travel_rate - $tax;
   @endphp
   <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">$ {{ $total_rate + $total_travel_rate}}</td>
-  <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">$ {{ round($tax, 2) }}</td>
+  <!-- <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">$ {{ round($tax, 2) }}</td>
   <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">$ {{ round($eleven_percent, 2) }}</td>
-  <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">$ {{ round($total_rate + $total_travel_rate + $total_reimbursement - $tax,2) }}</td>
+  <td style="text-align:center; background-color: #BFBFBF; border:1px solid #000000; font-weight: bold;">$ {{ round($total_rate + $total_travel_rate + $total_reimbursement - $tax,2) }}</td> -->
   
 </tr>
 @if($key+1 == count($data))
 <tr>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;">Grand Total</td> 
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td> 
-  <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
+  <!-- <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td> -->
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
@@ -434,18 +434,18 @@ $base_rate = 0;
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;">{{ $main_total_ph_hours }}</td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
-  <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;">{{ $main_total_travel_time }}</td>
-  <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;">$ {{ $gross }}</td>
-  <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;"></td>
-  <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;">${{ $main_total_reimbursement }}</td>
+  <!-- <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;">{{ $main_total_travel_time }}</td> -->
+  <!-- <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;">$ {{ $gross }}</td> -->
+  <!-- <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;"></td> -->
+  <!-- <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;">${{ $main_total_reimbursement }}</td> -->
   <td style="text-align:center; background-color: #D3D3D3; border:1px solid #000000;font-size:16px; font-weight:600;">$ {{$mainTotal + $gross}}</td>
-  <td style="text-align:center; background-color: #D3D3D3; border:1px solid #000000;font-size:16px; font-weight:600;">${{round($grand_tax, 2)}}</td>
+  <!-- <td style="text-align:center; background-color: #D3D3D3; border:1px solid #000000;font-size:16px; font-weight:600;">${{round($grand_tax, 2)}}</td>
   <td style="text-align:center; background-color: #D3D3D3; border:1px solid #000000;font-size:16px; font-weight:600;">${{round($grand_super, 2)}}</td>
   <td style="text-align:center; background-color: #D3D3D3; border:1px solid #000000;font-size:16px; font-weight:600;">${{round($grand_net_payable + $main_total_reimbursement, 2)}}</td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
-  <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
+  <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td> -->
   
 
 </tr>
