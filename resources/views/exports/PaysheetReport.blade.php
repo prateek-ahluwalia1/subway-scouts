@@ -8,7 +8,7 @@
   <tr>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">State</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Site Name</th>
-   <!-- <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Site Level</th> -->
+   <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Site Level</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Staff</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Staff Phone</th>
    <th style="text-align:center; background-color: #d1e6c8; font-weight:bold; border:1px solid #000000; font-size: 14px;width: 100px;">Staff Type</th>
@@ -210,7 +210,7 @@ $base_rate = 0;
 <tr>
   <td style="text-align:center;border:1px solid #000000;">{{$val['state']}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{$val['site_name']}} ({{$val['site_description']}})</td>
-  <!-- <td style="text-align:center;border:1px solid #000000;">{{$val['level']}}</td> -->
+  <td style="text-align:center;border:1px solid #000000;">{{$val['level']}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{$full_name != '' ? $full_name : 'N/A'}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{$val['phone']}}</td>
   <td style="text-align:center;border:1px solid #000000;text-transform: capitalize">{{$val['staff_type']}}</td>
@@ -315,7 +315,7 @@ $base_rate = 0;
  <tr>
   <td style="text-align:center;border:1px solid #000000;">{{$val['state']}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{$val['site_name']}} ({{$val['site_description']}})</td>
-  <!-- <td style="text-align:center;border:1px solid #000000;">{{$val['level']}}</td> -->
+  <td style="text-align:center;border:1px solid #000000;">{{$val['level']}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{$full_name != '' ? $full_name : 'N/A'}}</td>
   <td style="text-align:center;border:1px solid #000000;">{{$val['phone']}}</td>
   <td style="text-align:center;border:1px solid #000000;text-transform: capitalize">{{$val['staff_type']}}</td>
@@ -357,7 +357,7 @@ $base_rate = 0;
 <tr>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
-  <!-- <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td> -->
+  <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000; font-weight: bold;"></td>
@@ -413,7 +413,7 @@ $base_rate = 0;
 <tr>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;font-size:16px; font-weight:600;">Grand Total</td> 
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td> 
-  <!-- <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td> -->
+  <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
   <td style="text-align:center; background-color: #808080; border:1px solid #000000;"></td>
