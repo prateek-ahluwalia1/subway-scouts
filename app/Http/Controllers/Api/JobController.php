@@ -188,17 +188,17 @@ public function confirmJob($id) {
 
         // if(count($admins) > 0){
         //     foreach ($admins as $key => $value) {
-                // $notification = array(
-                //     'roster' => !empty($main_roster->id) ? $main_roster->id : null,
-                //     'guard_id' => $roster->guard_id, 
-                //     'record_id' => $id,
-                //     'message' => $guard->first_name.' '.$guard->last_name.' confirm their job at '. $job->site_name,
-                //     'type' => 'job_confirm',
-                //     'send_time' => time(),
-                //     'title' => 'Job Confirmation',
-                //     // 'send_to' => $value->id,
-                // );
-                // DB::table('portal_notifications')->insert($notification);
+                $notification = array(
+                    'roster' => !empty($main_roster->id) ? $main_roster->id : null,
+                    'guard_id' => $roster->guard_id, 
+                    'record_id' => $id,
+                    'message' => $guard->first_name.' '.$guard->last_name.' confirm their job at '. $job->site_name,
+                    'type' => 'job_confirm',
+                    'send_time' => time(),
+                    'title' => 'Job Confirmation',
+                    // 'send_to' => $value->id,
+                );
+                DB::table('portal_notifications')->insert($notification);
         //     }
         // }
 
@@ -457,17 +457,17 @@ if (empty($green_call_30)) {
         $admins = DB::table('users')->where('status', 'active')->get();
         // if(count($admins) > 0){
         //     foreach ($admins as $key => $value) {
-                // $notification = array(
-                //     'roster' => !empty($main_roster->id) ? $main_roster->id : null,
-                //     'guard_id' => $this->currentUser->id, 
-                //     'record_id' => $id,
-                //     'message' =>  $guard->first_name.' '.$guard->last_name.' missed their 30 mints green call job at '. $job->site_name,
-                //     'type' => 'greencall_missed',
-                //     'send_time' => time(),
-                //     'title' => 'Green Call Missed',
-                //     // 'send_to' => $value->id,
-                // );
-                // DB::table('portal_notifications')->insert($notification);
+                $notification = array(
+                    'roster' => !empty($main_roster->id) ? $main_roster->id : null,
+                    'guard_id' => $this->currentUser->id, 
+                    'record_id' => $id,
+                    'message' =>  $guard->first_name.' '.$guard->last_name.' missed their 30 mints green call job at '. $job->site_name,
+                    'type' => 'greencall_missed',
+                    'send_time' => time(),
+                    'title' => 'Green Call Missed',
+                    // 'send_to' => $value->id,
+                );
+                DB::table('portal_notifications')->insert($notification);
         //     }
         // }
 
@@ -492,19 +492,19 @@ if ($model) {
     $admins = DB::table('users')->where('status', 'active')->get();
     // if(count($admins) > 0){
     //     foreach ($admins as $key => $value) {
-            // $notification = array(
-            //     'roster' => !empty($main_roster->id) ? $main_roster->id : null,
-            //     'guard_id' => $this->currentUser->id, 
-            //     'record_id' => $id,
-            //     'message' =>  $guard->first_name.' '.$guard->last_name.' signin in their job at '. $job->site_name,
-            //     'type' => 'job_signin',
-            //     'send_time' => time(),
-            //     'title' => 'Job Signin',
-            //     // 'send_to' => $value->id,
-            // );
+            $notification = array(
+                'roster' => !empty($main_roster->id) ? $main_roster->id : null,
+                'guard_id' => $this->currentUser->id, 
+                'record_id' => $id,
+                'message' =>  $guard->first_name.' '.$guard->last_name.' signin in their job at '. $job->site_name,
+                'type' => 'job_signin',
+                'send_time' => time(),
+                'title' => 'Job Signin',
+                // 'send_to' => $value->id,
+            );
     //     }
     // }
-    // DB::table('portal_notifications')->insert($notification);
+    DB::table('portal_notifications')->insert($notification);
 
 
             DB::table('roster_complete_activity')->insert([
