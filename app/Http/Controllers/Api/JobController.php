@@ -188,17 +188,17 @@ public function confirmJob($id) {
 
         // if(count($admins) > 0){
         //     foreach ($admins as $key => $value) {
-                $notification = array(
-                    'roster' => !empty($main_roster->id) ? $main_roster->id : null,
-                    'guard_id' => $roster->guard_id, 
-                    'record_id' => $id,
-                    'message' => $guard->first_name.' '.$guard->last_name.' confirm their job at '. $job->site_name,
-                    'type' => 'job_confirm',
-                    'send_time' => time(),
-                    'title' => 'Job Confirmation',
-                    // 'send_to' => $value->id,
-                );
-                DB::table('portal_notifications')->insert($notification);
+                // $notification = array(
+                //     'roster' => !empty($main_roster->id) ? $main_roster->id : null,
+                //     'guard_id' => $roster->guard_id, 
+                //     'record_id' => $id,
+                //     'message' => $guard->first_name.' '.$guard->last_name.' confirm their job at '. $job->site_name,
+                //     'type' => 'job_confirm',
+                //     'send_time' => time(),
+                //     'title' => 'Job Confirmation',
+                //     // 'send_to' => $value->id,
+                // );
+                // DB::table('portal_notifications')->insert($notification);
         //     }
         // }
 
