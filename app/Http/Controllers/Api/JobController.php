@@ -348,7 +348,7 @@ public function rejectJob($id) {
 
 public function jobSignin(Request $request, $id) {
     $this->request = $request;
-    $this->setValidationRules(['time' => 'required', 'selfie' => 'required', 'location' => 'required']);
+    $this->setValidationRules(['time' => 'required', 'location' => 'required']);
     if ($this->isValidRequest()) {
         $this->response = ['success' => false, 'error' => $this->getErrors()];
         $this->statusCode = self::STATUS_CODE_200;
@@ -356,7 +356,7 @@ public function jobSignin(Request $request, $id) {
     }
         // $job_roaster = JobNewRoster::where('roster_id', $id)->first();
         // $job = new JobResource($this->repo->getJobById($job_roaster->site_id));
-    $job = new JobResource($this->repo->getJobById($request->jobId, $this->currentUser->id));
+    $job = new JobResource($this->repo->getJobById($request->jobId, $request->guard_id));
 
     $roster_data = DB::table('job_rosters')->where('id',$id)->first();
     $job_start_time = $roster_data->start;
@@ -429,11 +429,11 @@ public function jobSignin(Request $request, $id) {
             // $media = $this->uploader($files);
    $media = $this->uploader_base64($this->request->input($field));
         // }
-   $this->jobRosterActivityRepo->setStatusInactive($this->currentUser->id, $id);
+   $this->jobRosterActivityRepo->setStatusInactive($request->guard_id, $id);
    $dateTime = DateTime::createFromFormat('d-m-Y H:i', $this->request->input('time'));
    $usFormat = $dateTime->format('m/d/Y h:i A');
    $model =  $this->jobRosterActivityRepo->insert([
-    'guard_id' => $this->currentUser->id,
+    'guard_id' => $request->guard_id,
     'job_roster_id' => $id,
     'job_incident_report_id' => null,
     'signin_time' => $usFormat,

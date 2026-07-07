@@ -86,9 +86,9 @@ $router->group(['prefix' => 'api/v1/'], function () use ($router) {
             $router->post('/jobDetails/{id}', 'Api\JobController@jobSpecificDetail');
             $router->put('/confirm/{id}', 'Api\JobController@confirmJob');
             $router->put('/reject/{id}', 'Api\JobController@rejectJob');
-            $router->post('/signin/{id}', 'Api\JobController@jobSignin'); //
+            // $router->post('/signin/{id}', 'Api\JobController@jobSignin'); //
             $router->post('/guard_location_at_job/{id}', 'Api\JobController@saveGuardLocation');
-            $router->post('/signout/{id}', 'Api\JobController@jobSignout'); //
+            // $router->post('/signout/{id}', 'Api\JobController@jobSignout'); //
             $router->post('/report_incident_old/{id}', 'Api\JobController@report_incident');
             $router->post('/report_new_incident/{id}', 'Api\JobController@report_new_incident');
             $router->post('/foot-patrol-report/{id}', 'Api\JobController@footPatrolReport');
