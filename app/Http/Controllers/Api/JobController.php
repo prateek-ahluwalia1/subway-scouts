@@ -494,7 +494,7 @@ if ($model) {
     //     foreach ($admins as $key => $value) {
             $notification = array(
                 'roster' => !empty($main_roster->id) ? $main_roster->id : null,
-                'guard_id' => $this->currentUser->id, 
+                'guard_id' => $request->guard_id, 
                 'record_id' => $id,
                 'message' =>  $guard->first_name.' '.$guard->last_name.' signin in their job at '. $job->site_name,
                 'type' => 'job_signin',
@@ -631,7 +631,7 @@ public function jobSignout(Request $request, $id) {
         //     foreach ($admins as $key => $value) {
                 $notification = array(
                     'roster' => !empty($main_roster->id) ? $main_roster->id : null,
-                    'guard_id' => $this->currentUser->id, 
+                    'guard_id' => $request->guard_id, 
                     'record_id' => $id,
                     'message' => $guard->first_name.' '.$guard->last_name.' signout from their job.',
                     'type' => 'job_signout',
@@ -651,7 +651,7 @@ public function jobSignout(Request $request, $id) {
             'type' => 'job_signout',
             'record_id' => $id,
             'activity_time' => time(),
-            'activity_by' => $this->currentUser->id
+            'activity_by' => $request->guard_id
             ]);
 
 
