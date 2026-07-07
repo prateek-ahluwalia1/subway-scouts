@@ -3037,7 +3037,7 @@ public function gmt_to_date($gmt)
 
         $activeBranches = DB::table('sites')
         ->where('site_status', 'active')
-        ->select('id', 'name')
+        ->select('id', 'site_name')
         ->get();
 
         if($activeBranches){
