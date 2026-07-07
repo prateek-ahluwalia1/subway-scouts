@@ -613,7 +613,6 @@ public function jobSignout(Request $request, $id) {
     //             $activity->save();
     //         }
 
-
     if ($model) {
         DB::table('job_rosters')->where('id', $id)->update(['job_status' => 'completed', 'update_status' => 1, 'signin_status' => 0, 'last_update' => time()]);
         $guard = DB::table('guards')->where('id',$request->guard_id)->first();
