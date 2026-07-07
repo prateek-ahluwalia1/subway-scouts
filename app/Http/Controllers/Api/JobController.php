@@ -443,48 +443,48 @@ public function jobSignin(Request $request, $id) {
     'signin_notes' => (!empty($this->request->input('notes')) && $this->request->input('notes')!= null && $this->request->input('notes')!= '') && $request->has('notes')   ? $this->request->input('notes') : null
 ]);
 DB::table('job_rosters')->where(['id' => $id])->update(['update_status' => 1, 'signin_status' => 1, 'last_update' => time()]);
-$green_call_30 = DB::table('green_call')->where(['job_id' => $id, 'guard_id' =>  $this->currentUser->id])->first();
-$guard = DB::table('guards')->where('id',$this->currentUser->id)->first();
+// $green_call_30 = DB::table('green_call')->where(['job_id' => $id, 'guard_id' =>  $this->currentUser->id])->first();
+$guard = DB::table('guards')->where('id',$request->guard_id)->first();
 $inputTime = DateTime::createFromFormat('d-m-Y H:i', $this->request->input('time'));
 $inputTimeFormatted = $inputTime->format('Y-m-d H:i');
 if($inputTimeFormatted <= $roster_data->start){
     DB::table('job_rosters')->where(['id' => $id])->update(['in_paysheet' => 1]);
 }
-if (empty($green_call_30)) {
+// if (empty($green_call_30)) {
     
-    $roster = DB::table('job_rosters')->where('id', $id)->first();
-        $main_roster = DB::table('job_new_roster')->where('id', $roster->roster_id)->first();
-        $admins = DB::table('users')->where('status', 'active')->get();
-        // if(count($admins) > 0){
-        //     foreach ($admins as $key => $value) {
-                $notification = array(
-                    'roster' => !empty($main_roster->id) ? $main_roster->id : null,
-                    'guard_id' => $this->currentUser->id, 
-                    'record_id' => $id,
-                    'message' =>  $guard->first_name.' '.$guard->last_name.' missed their 30 mints green call job at '. $job->site_name,
-                    'type' => 'greencall_missed',
-                    'send_time' => time(),
-                    'title' => 'Green Call Missed',
-                    // 'send_to' => $value->id,
-                );
-                DB::table('portal_notifications')->insert($notification);
-        //     }
-        // }
+//     $roster = DB::table('job_rosters')->where('id', $id)->first();
+//         $main_roster = DB::table('job_new_roster')->where('id', $roster->roster_id)->first();
+//         $admins = DB::table('users')->where('status', 'active')->get();
+//         // if(count($admins) > 0){
+//         //     foreach ($admins as $key => $value) {
+//                 $notification = array(
+//                     'roster' => !empty($main_roster->id) ? $main_roster->id : null,
+//                     'guard_id' => $this->currentUser->id, 
+//                     'record_id' => $id,
+//                     'message' =>  $guard->first_name.' '.$guard->last_name.' missed their 30 mints green call job at '. $job->site_name,
+//                     'type' => 'greencall_missed',
+//                     'send_time' => time(),
+//                     'title' => 'Green Call Missed',
+//                     // 'send_to' => $value->id,
+//                 );
+//                 DB::table('portal_notifications')->insert($notification);
+//         //     }
+//         // }
 
-            //  $administrators = DB::table('portal_settings')
-            // ->where('permission_name', 'green_call_miss')
-            // ->where('permission', 1)
-            // ->first();
-            // if (!empty($administrators)) {
-            // $admins = explode(',', $administrators->users_emails);
-            // foreach ($admins as $key => $admin) {
-            // $email_data['name'] = '';
-            // $email_data['email'] = $admin;
-            // $this->notification->sendGuardMail($email_data, 'Green Call Missed', $guard->name.' missed their 30 minutes green call job at '. $job->site_name);
-            // }
-            // }
+//             //  $administrators = DB::table('portal_settings')
+//             // ->where('permission_name', 'green_call_miss')
+//             // ->where('permission', 1)
+//             // ->first();
+//             // if (!empty($administrators)) {
+//             // $admins = explode(',', $administrators->users_emails);
+//             // foreach ($admins as $key => $admin) {
+//             // $email_data['name'] = '';
+//             // $email_data['email'] = $admin;
+//             // $this->notification->sendGuardMail($email_data, 'Green Call Missed', $guard->name.' missed their 30 minutes green call job at '. $job->site_name);
+//             // }
+//             // }
 
-}
+// }
 if ($model) {
 
     $roster = DB::table('job_rosters')->where('id', $id)->first();
@@ -572,7 +572,7 @@ public function check_welfare_call(Request $request, $id) {
 
 public function jobSignout(Request $request, $id) {
     $this->request = $request;
-    $this->setValidationRules(['time' => 'required', 'selfie' => 'required']);
+    $this->setValidationRules(['time' => 'required']);
     if ($this->isValidRequest()) {
         $this->response = ['success' => false, 'error' => $this->getErrors()];
         $this->statusCode = self::STATUS_CODE_200;
@@ -596,7 +596,7 @@ public function jobSignout(Request $request, $id) {
     $dateTime = DateTime::createFromFormat('d-m-Y H:i', $this->request->input('time'));
     $usFormat = $dateTime->format('m/d/Y h:i A');
 
-    $model = $this->jobRosterActivityRepo->setStatusInactive($this->currentUser->id, $id, [
+    $model = $this->jobRosterActivityRepo->setStatusInactive($request->guard_id, $id, [
         'signout_time' => $usFormat,
         'signout_selfie' => $media,
         'status' => 0,
@@ -616,7 +616,7 @@ public function jobSignout(Request $request, $id) {
 
     if ($model) {
         DB::table('job_rosters')->where('id', $id)->update(['job_status' => 'completed', 'update_status' => 1, 'signin_status' => 0, 'last_update' => time()]);
-        $guard = DB::table('guards')->where('id',$this->currentUser->id)->first();
+        $guard = DB::table('guards')->where('id',$request->guard_id)->first();
         $roster = DB::table('job_rosters')->where('id', $id)->first();
         # CALCULATE TIME DIFFERENCE SO THAT UPDATE THE VARIABLE USE IN COMPLETE PATSHEET
         $inputTime = DateTime::createFromFormat('d-m-Y H:i', $this->request->input('time'));

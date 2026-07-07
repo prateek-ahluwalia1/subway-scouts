@@ -24,6 +24,9 @@ $router->group(['prefix' => 'api/v1/'], function () use ($router) {
     $router->post('get-today-shifts', 'Api\JobController@getTodayShifts');
     $router->get('get-branches', 'Api\JobController@getBranches');
 
+    $router->post('/signin/{id}', 'Api\JobController@jobSignin');
+    $router->post('/signout/{id}', 'Api\JobController@jobSignout');
+
 
 
     $router->post('/guest_login', 'Api\JobController@guestSignin');
