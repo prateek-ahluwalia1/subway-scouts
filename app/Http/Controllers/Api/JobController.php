@@ -3052,38 +3052,38 @@ public function gmt_to_date($gmt)
         }
     }
     
-    public function getTodayShifts(Request $request){
+    public function getTodayShifts(Request $request)
+    {
+        $siteId = $request->site_id;
+        $startOfToday = Carbon::today()->format('Y-m-d H:i');
 
-    $siteId = $request->site_id;
-    $startOfToday = Carbon::today()->format('Y-m-d H:i');
+        $todayShifts = DB::table('job_rosters')
+            ->join('guards', 'job_rosters.guard_id', '=', 'guards.id')
+            ->leftJoin('job_roster_activities', 'job_roster_activities.job_roster_id', '=', 'job_rosters.id')
+            ->where('job_rosters.site_id', $siteId)
+            ->whereNotNull('job_rosters.guard_id')
+            ->whereDate('job_rosters.start', $startOfToday)
+            ->select(
+                'job_rosters.id',
+                'job_rosters.start',
+                'job_rosters.end',
+                'job_rosters.signin_status',
+                'guards.id as guard_id',
+                'guards.first_name',
+                'guards.middle_name',
+                'guards.last_name',
+                DB::raw("CONCAT_WS(' ', guards.first_name, guards.middle_name, guards.last_name) as full_name"),
+                'job_roster_activities.id as activity_id',
+                'job_roster_activities.activity_name',
+                'job_roster_activities.activity_time',
+                'job_roster_activities.notes as activity_notes'
+            )
+            ->get();
 
-    $todayShifts = DB::table('job_rosters')
-        ->join('guards', 'job_rosters.guard_id', '=', 'guards.id')
-        ->where('job_rosters.site_id', $siteId)
-        ->where('job_rosters.guard_id', '!=', null)
-        ->whereDate('job_rosters.start', $startOfToday)
-        ->select(
-            'job_rosters.id',
-            'job_rosters.start',
-            'job_rosters.end',
-            'guards.id as guard_id',
-            'guards.first_name',
-            'guards.middle_name',
-            'guards.last_name',
-            DB::raw("CONCAT(guards.first_name, ' ', COALESCE(guards.middle_name, ''), ' ', guards.last_name) as full_name")
-        )
-        ->get();
-
-         if($todayShifts->count() > 0){
-             return response()->json([
-                'success' => true,
-                'data' => $todayShifts
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-            ]);
-        }
+        return response()->json([
+            'success' => true,
+            'data' => $todayShifts,
+            'count' => $todayShifts->count()
+        ]);
     }
 }
