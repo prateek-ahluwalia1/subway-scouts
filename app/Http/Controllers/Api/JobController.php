@@ -3033,6 +3033,58 @@ public function gmt_to_date($gmt)
         }
     }
     
-    
+     public function getBranches(){
 
+        $activeBranches = DB::table('sites')
+        ->where('site_status', 'active')
+        ->select('id', 'name')
+        ->get();
+
+        if($activeBranches){
+             return response()->json([
+                'success' => true,
+                'data' => $activeBranches
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+            ]);
+        }
+    }
+    
+    public function getTodayShifts($id){
+
+    $siteId = $id;
+    $startOfToday = Carbon::today();
+
+    $todayShifts = DB::table('job_rosters')
+        ->join('guards', 'job_rosters.guard_id', '=', 'guards.id')
+        ->where('job_rosters.site_id', $siteId)
+        ->where('job_rosters.guard_id', '!=', null)
+        ->whereDate('job_rosters.start', $startOfToday) // Start today
+        ->select(
+            'job_rosters.id',
+            'job_rosters.start',
+            'job_rosters.end',
+            'guards.id as guard_id',
+            'guards.first_name',
+            'guards.middle_name',
+            'guards.last_name',
+            DB::raw("CONCAT(guards.first_name, ' ', COALESCE(guards.middle_name, ''), ' ', guards.last_name) as full_name")
+        )
+        ->get();
+
+         if($todayShifts){
+             return response()->json([
+                'success' => true,
+                'data' => $todayShifts
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+            ]);
+        }
+    }
 }
