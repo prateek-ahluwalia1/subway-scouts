@@ -21,10 +21,10 @@
 $router->group(['prefix' => 'api/v1/'], function () use ($router) {
 
     //subway app apis
-    $router->get('get-today-shifts/{site_id}', 'Api\JobController@getTodayShifts');
+    $router->post('get-today-shifts/{site_id}', 'Api\JobController@getTodayShifts');
     $router->get('get-branches', 'Api\JobController@getBranches');
 
-    
+
 
     $router->post('/guest_login', 'Api\JobController@guestSignin');
     $router->post('/guest_logout/{id}', 'Api\JobController@guestSignout');
