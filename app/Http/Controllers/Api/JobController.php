@@ -431,11 +431,12 @@ public function jobSignin(Request $request, $id) {
         // }
    $this->jobRosterActivityRepo->setStatusInactive($request->guard_id, $id);
    $dateTime = DateTime::createFromFormat('d-m-Y H:i', $this->request->input('time'));
+   $usFormat = $dateTime->format('d/m/Y h:i A');
    $model =  $this->jobRosterActivityRepo->insert([
     'guard_id' => $request->guard_id,
     'job_roster_id' => $id,
     'job_incident_report_id' => null,
-    'signin_time' => $dateTime,
+    'signin_time' => $usFormat,
     'signin_selfie' => $media,
     'location' => $this->request->input('location'),
     'status' => 1,
@@ -593,10 +594,10 @@ public function jobSignout(Request $request, $id) {
     }
 
     $dateTime = DateTime::createFromFormat('d-m-Y H:i', $this->request->input('time'));
-    // $usFormat = $dateTime->format('m/d/Y h:i A');
+    $usFormat = $dateTime->format('d/m/Y h:i A');
 
     $model = $this->jobRosterActivityRepo->setStatusInactive($request->guard_id, $id, [
-        'signout_time' => $dateTime,
+        'signout_time' => $usFormat,
         'signout_selfie' => $media,
         'status' => 0,
         'signout_location' => $signout_location,
