@@ -3040,7 +3040,7 @@ public function gmt_to_date($gmt)
         ->select('id', 'site_name')
         ->get();
 
-        if($activeBranches){
+        if($activeBranches->count() > 0){
              return response()->json([
                 'success' => true,
                 'data' => $activeBranches
@@ -3056,13 +3056,13 @@ public function gmt_to_date($gmt)
     public function getTodayShifts(Request $request){
 
     $siteId = $request->site_id;
-    $startOfToday = Carbon::today();
+    $startOfToday = Carbon::today()->format('Y-m-d H:i');
 
     $todayShifts = DB::table('job_rosters')
         ->join('guards', 'job_rosters.guard_id', '=', 'guards.id')
         ->where('job_rosters.site_id', $siteId)
         ->where('job_rosters.guard_id', '!=', null)
-        ->whereDate('job_rosters.start', $startOfToday) // Start today
+        ->whereDate('job_rosters.start', $startOfToday)
         ->select(
             'job_rosters.id',
             'job_rosters.start',
@@ -3075,7 +3075,7 @@ public function gmt_to_date($gmt)
         )
         ->get();
 
-         if($todayShifts){
+         if($todayShifts->count() > 0){
              return response()->json([
                 'success' => true,
                 'data' => $todayShifts
