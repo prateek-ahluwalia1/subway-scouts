@@ -391,29 +391,29 @@ public function jobSignin(Request $request, $id) {
             return response()->json([ 'success' => false, 'message' => 'Please send coordinates.' , 'code' => 404 ]);
         }
 
-    $coordinates = explode(',', $request->input('location'));
+    // $coordinates = explode(',', $request->input('location'));
 
     
-    if($job->coordinates == null ||  $job->coordinates == ''){
-        return response()->json([ 'success' => false, 'message' => 'Location coordinates not set.' , 'code' => 404 ]);
-    }
+    // if($job->coordinates == null ||  $job->coordinates == ''){
+    //     return response()->json([ 'success' => false, 'message' => 'Location coordinates not set.' , 'code' => 404 ]);
+    // }
 
-    $coordinates1 = explode(',', $job->coordinates);
+    // $coordinates1 = explode(',', $job->coordinates);
 
     
 
-    $distance = $this->distance(trim($coordinates[0]), trim($coordinates[1]), trim($coordinates1[0]), trim($coordinates1[1]) );
-    if($job->signin_radius > 0){
-        $signin_radius = $job->signin_radius/1000;
-    }else{
-        $signin_radius = 0.31;
-    }
-    if($distance > $signin_radius){
-        $this->response = ['success' => false, 'error' => 'You are '.number_format($distance, 2).' km away from your job!', 'message' => 'You are '.number_format($distance, 2).' km away from your job!'];
+    // $distance = $this->distance(trim($coordinates[0]), trim($coordinates[1]), trim($coordinates1[0]), trim($coordinates1[1]) );
+    // if($job->signin_radius > 0){
+    //     $signin_radius = $job->signin_radius/1000;
+    // }else{
+    //     $signin_radius = 0.31;
+    // }
+    // if($distance > $signin_radius){
+    //     $this->response = ['success' => false, 'error' => 'You are '.number_format($distance, 2).' km away from your job!', 'message' => 'You are '.number_format($distance, 2).' km away from your job!'];
 
-        $this->statusCode = self::STATUS_CODE_200;
-        return $this->sendResponse();
-    }
+    //     $this->statusCode = self::STATUS_CODE_200;
+    //     return $this->sendResponse();
+    // }
     $is_already_signin = DB::table('job_roster_activites')->where(['job_roster_id' => $id])->first();
     if (!empty($is_already_signin)) {
        $this->response = ['success' => false, 'error' => 'You are already signin in this job!', 'message' => 'You are already signin in this job!'];
