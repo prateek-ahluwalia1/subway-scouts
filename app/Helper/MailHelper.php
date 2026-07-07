@@ -153,7 +153,7 @@ function isEmailSendSuperAdmin($msg,$email){
     Mail::send('mail.isSupAdminActiveSubAdmin', $data, function($token)use($data){
         $token->from('no-reply@thescouts.com.au', 'AMG Security')
         ->to($data['email']);
-        $token->subject("Register admin on AMG Security");
+        $token->subject("Register admin on Subway");
     });
 }
 

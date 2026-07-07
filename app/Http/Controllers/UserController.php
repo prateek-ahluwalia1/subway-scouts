@@ -206,17 +206,17 @@ class UserController extends Controller
          $admin->save();
          $super_admin_email = User::where('id', $request->admin_id)->first();
          if($is_check == 1){
-            if($request->status == 'active'){
+         if($request->status == 'active'){
                $user_name = ucwords($request->name);
                $msg = 'Welcome to AMG Security! We are thrilled to have you as a new member of our community !';
                isEmailSendSubAdmin($user_name,$msg, $request->email, $admin->status, $request->password, $qr_base64);
-               $super_admin_msg = ucwords($request->name).' '.'has registered on AMG Security as Active Admin with this Email'.' '. $request->email;
+               $super_admin_msg = ucwords($request->name).' '.'has registered on Subway Scouts as Active Admin with this Email'.' '. $request->email;
                isEmailSendSuperAdmin($super_admin_msg, $super_admin_email->email);
          }else{
             $user_name = ucwords($request->name);
             $msg = 'Welcome to AMG Security! We are thrilled to have you as a new member of our community but your account is under verification!';
             isEmailSendSubAdmin($user_name,$msg, $request->email, $admin->status, $request->password, $qr_base64);
-            $super_admin_msg = ucwords($request->name).' '.'has registered on AMG Security as Inactive Admin with this Email'.' '. $request->email;
+            $super_admin_msg = ucwords($request->name).' '.'has registered on Subway Scouts as Inactive Admin with this Email'.' '. $request->email;
             isEmailSendSuperAdmin($super_admin_msg, $super_admin_email->email);
          }
          jobRosterActions($request->admin_id, 'add_admin', $admin->id, 'users');

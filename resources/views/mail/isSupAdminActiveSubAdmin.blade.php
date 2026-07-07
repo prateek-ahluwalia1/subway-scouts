@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AMG Security</title>
+    <title>Subway Scouts</title>
 </head>
 <body>
     <table style="padding: 0; border:0; width:100%; background-color:#f2f8f9;">
@@ -14,9 +14,7 @@
                             <td style="height:80px;">&nbsp;</td>
                         </tr>
                         <tr>
-                            <td style="text-align:-webkit-center;">
-                                <img style="width: 8rem; height: 6rem;" src="https://app.247staffingsolutions.com.au/assets/images/logo/scouts.png" alt="AMG Security">
-                            </td>
+                            
                         </tr>
                         <tr>
                             <td>
@@ -43,7 +41,7 @@
                         </tr>
                         <tr>
                             <td style="text-align:center;">
-                                <p style="font-size:14px; color:#455056bd; line-height:18px; margin:0 0 0;">We're delighted to welcome you to a new era of staff management innovation with<strong> AMG Security </strong>.</p>
+                                <p style="font-size:14px; color:#455056bd; line-height:18px; margin:0 0 0;">We're delighted to welcome you to a new era of staff management innovation with<strong> Subway Scouts </strong>.</p>
                             </td>
                         </tr>
                         <tr>
