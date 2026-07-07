@@ -496,7 +496,7 @@ if ($model) {
                 'roster' => !empty($main_roster->id) ? $main_roster->id : null,
                 'guard_id' => $request->guard_id, 
                 'record_id' => $id,
-                'message' =>  $guard->first_name.' '.$guard->last_name.' signin in their job at '. $job->site_name,
+                'message' =>  $guard->first_name.' '.$guard->last_name.' signin in their job.',
                 'type' => 'job_signin',
                 'send_time' => time(),
                 'title' => 'Job Signin',
@@ -513,7 +513,7 @@ if ($model) {
             'type' => 'job_signin',
             'record_id' => $id,
             'activity_time' => time(),
-            'activity_by' => $this->currentUser->id
+            'activity_by' => $request->guard_id
             ]);
 
 
