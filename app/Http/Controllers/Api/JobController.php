@@ -3053,9 +3053,9 @@ public function gmt_to_date($gmt)
         }
     }
     
-    public function getTodayShifts($site_id){
+    public function getTodayShifts(Request $request){
 
-    $siteId = $site_id;
+    $siteId = $request->site_id;
     $startOfToday = Carbon::today();
 
     $todayShifts = DB::table('job_rosters')

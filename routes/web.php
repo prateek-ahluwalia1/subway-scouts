@@ -21,7 +21,7 @@
 $router->group(['prefix' => 'api/v1/'], function () use ($router) {
 
     //subway app apis
-    $router->post('get-today-shifts/{site_id}', 'Api\JobController@getTodayShifts');
+    $router->post('get-today-shifts', 'Api\JobController@getTodayShifts');
     $router->get('get-branches', 'Api\JobController@getBranches');
 
 
