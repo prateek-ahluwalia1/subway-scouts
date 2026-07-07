@@ -3059,7 +3059,7 @@ public function gmt_to_date($gmt)
 
         $todayShifts = DB::table('job_rosters')
             ->join('guards', 'job_rosters.guard_id', '=', 'guards.id')
-            ->leftJoin('job_roster_activities', 'job_roster_activities.job_roster_id', '=', 'job_rosters.id')
+            ->leftJoin('job_roster_activites', 'job_roster_activites.job_roster_id', '=', 'job_rosters.id')
             ->where('job_rosters.site_id', $siteId)
             ->whereNotNull('job_rosters.guard_id')
             ->whereDate('job_rosters.start', $startOfToday)
@@ -3073,10 +3073,7 @@ public function gmt_to_date($gmt)
                 'guards.middle_name',
                 'guards.last_name',
                 DB::raw("CONCAT_WS(' ', guards.first_name, guards.middle_name, guards.last_name) as full_name"),
-                'job_roster_activities.id as activity_id',
-                'job_roster_activities.activity_name',
-                'job_roster_activities.activity_time',
-                'job_roster_activities.notes as activity_notes'
+                'job_roster_activites.*',
             )
             ->get();
 
