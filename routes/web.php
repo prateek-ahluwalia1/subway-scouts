@@ -70,7 +70,7 @@ $router->group(['prefix' => 'api/v1/'], function () use ($router) {
         $router->group(['prefix' => 'job'], function () use ($router) {
             $router->post('scan-QRCode/{id}', 'Api\JobController@scanQR');
             $router->get('get-today-shifts/{site_id}', 'Api\JobController@getTodayShifts');
-            $router->get('get-brnaches', 'Api\JobController@getBranches');
+            $router->get('get-branches', 'Api\JobController@getBranches');
 
             $router->post('/guard_sos_call/{id}', 'Api\JobController@guard_sos_call');
             $router->post('/guard/jobs/{type}/{duration}', 'Api\JobController@getGuardJobs');
