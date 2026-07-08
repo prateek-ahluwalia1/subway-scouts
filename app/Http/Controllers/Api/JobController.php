@@ -3051,36 +3051,56 @@ public function gmt_to_date($gmt)
             ]);
         }
     }
-    
+
     public function getTodayShifts(Request $request)
     {
         $siteId = $request->site_id;
-        $startOfToday = Carbon::today()->format('Y-m-d H:i');
 
-        $todayShifts = DB::table('job_rosters')
-            ->join('guards', 'job_rosters.guard_id', '=', 'guards.id')
-            ->leftJoin('job_roster_activites', 'job_roster_activites.job_roster_id', '=', 'job_rosters.id')
-            ->where('job_rosters.site_id', $siteId)
-            ->whereNotNull('job_rosters.guard_id')
-            ->whereDate('job_rosters.start', $startOfToday)
+        $todayShifts = JobNewRoster::with([
+                'guards:id,first_name,middle_name,last_name',
+                'rosterActivity'
+            ])
+            ->where('site_id', $siteId)
+            ->whereNotNull('guard_id')
+            ->whereDate('start', Carbon::today())
             ->select(
-                'job_rosters.id',
-                'job_rosters.start',
-                'job_rosters.end',
-                'job_rosters.signin_status',
-                'guards.id as guard_id',
-                'guards.first_name',
-                'guards.middle_name',
-                'guards.last_name',
-                DB::raw("CONCAT_WS(' ', guards.first_name, guards.middle_name, guards.last_name) as full_name"),
-                'job_roster_activites.*',
+                'id',
+                'site_id',
+                'guard_id',
+                'start',
+                'end',
+                'signin_status'
             )
-            ->get();
+            ->get()
+            ->map(function ($shift) {
+
+                $guard = $shift->guards;
+
+                return [
+                    'id' => $shift->id,
+                    'start' => $shift->start,
+                    'end' => $shift->end,
+                    'signin_status' => $shift->signin_status,
+
+                    'guard' => [
+                        'guard_id' => optional($guard)->id,
+                        'first_name' => optional($guard)->first_name,
+                        'middle_name' => optional($guard)->middle_name,
+                        'last_name' => optional($guard)->last_name,
+                        'full_name' => trim(
+                            optional($guard)->first_name.' '.
+                            optional($guard)->middle_name.' '.
+                            optional($guard)->last_name
+                        ),
+                    ],
+
+                    'activity' => $shift->rosterActivity,
+                ];
+            });
 
         return response()->json([
-            'success' => true,
+            'success' => $todayShifts->isNotEmpty(),
             'data' => $todayShifts,
-            'count' => $todayShifts->count()
         ]);
     }
 }
