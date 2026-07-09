@@ -2320,120 +2320,52 @@ public function getRefrence(Request $request)
 
 public function update_guard_avability(Request $request)
 {
-  foreach ($request->submittedAvailability as $key => $s) {
-   $day = strtolower($s['day']);
-   $data[$day] = $s['toggleValue'] == true ? 1 : 0;
-   $data[$day.'_type'] = $s['data'];
-   if ($s['data'] == 'others') {
-      $data[$day.'_from'] = $s['startTime'];
-      $data[$day.'_to'] = $s['endTime'];
-   }
-   
-}
+    $availability = collect($request->submittedAvailability)->map(function ($s) {
+        $entry = [
+            'date'        => $s['date'],
+            'day'         => $s['day'],
+            'toggleValue' => (bool) $s['toggleValue'],
+        ];
 
-$guard = DB::table('guard_availability')->where('guard_id', $request->guard_id)->first();
-if(!empty($guard))
-{
-   $data['updated_at'] = date('Y-m-d H:i:s');
-   $added = DB::table('guard_availability')->where('guard_id', $request->guard_id)->update($data);
-}else{
-   $data['created_at'] = date('Y-m-d H:i:s');
-   $data['guard_id'] = $request->guard_id;
-   $added = DB::table('guard_availability')->insert($data);
+        if (!empty($s['startTime']) || !empty($s['endTime'])) {
+            $entry['startTime'] = $s['startTime'] ?? '';
+            $entry['endTime']   = $s['endTime'] ?? '';
+        }
 
-}
-if ($added) {
- return response()->json(array('success' => true, 'message' => 'Staff availability added successfully.'));
-} else {
- return response()->json(array('success' => true, 'message' => 'Fail to add Staff availability!'));
-}
+        return $entry;
+    })->values();
+
+    $guard = DB::table('guard_availability')->where('guard_id', $request->guard_id)->first();
+
+    $payload = [
+        'availability' => $availability->toJson(),
+        'updated_at'   => now(),
+    ];
+
+    if (!empty($guard)) {
+        $added = DB::table('guard_availability')->where('guard_id', $request->guard_id)->update($payload);
+    } else {
+        $payload['guard_id']   = $request->guard_id;
+        $payload['created_at'] = now();
+        $added = DB::table('guard_availability')->insert($payload);
+    }
+
+    return response()->json([
+        'success' => (bool) $added,
+        'message' => $added ? 'Staff availability added successfully.' : 'Fail to add Staff availability!',
+    ]);
 }
 
 public function get_guard_avability(Request $request)
 {
-  $guard = DB::table('guard_availability')->where('guard_id', $request->guard_id)->first();
-  if (!empty($guard)) {
-   $data[0]['day'] = 'Monday';
-   $data[0]['toggleValue'] = $guard->monday == 1 ? true : false;
-   $data[0]['data'] = $guard->monday_type;
-   if ($guard->monday_type == 'others') {
-   $data[0]['startTime'] = $guard->monday_from;
-   $data[0]['endTime'] = $guard->monday_to;
-   }else{
-   $data[0]['startTime'] = '';
-   $data[0]['endTime'] = '';
-}
-// 
-   $data[1]['day'] = 'Tuesday';
-   $data[1]['toggleValue'] = $guard->tuesday == 1 ? true : false;
-   $data[1]['data'] = $guard->tuesday_type;
-   if ($guard->tuesday_type == 'others') {
-   $data[1]['startTime'] = $guard->tuesday_from;
-   $data[1]['endTime'] = $guard->tuesday_to;
-   }else{
-   $data[1]['startTime'] = '';
-   $data[1]['endTime'] = '';
-}
-   // 
-   $data[2]['day'] = 'Wednesday';
-   $data[2]['toggleValue'] = $guard->wednesday == 1 ? true : false;
-   $data[2]['data'] = $guard->wednesday_type;
-   if ($guard->wednesday_type == 'others') {
-   $data[2]['startTime'] = $guard->wednesday_from;
-   $data[2]['endTime'] = $guard->wednesday_to;
-   }else{
-   $data[2]['startTime'] = '';
-   $data[2]['endTime'] = '';
-}
-   // 
-   $data[3]['day'] = 'Thursday';
-   $data[3]['toggleValue'] = $guard->thursday == 1 ? true : false;
-   $data[3]['data'] = $guard->thursday_type;
-   if ($guard->thursday_type == 'others') {
-   $data[3]['startTime'] = $guard->thursday_from;
-   $data[3]['endTime'] = $guard->thursday_to;
-}else{
-   $data[3]['startTime'] = '';
-   $data[3]['endTime'] = '';
-}
-   // 
-   $data[4]['day'] = 'Friday';
-   $data[4]['toggleValue'] = $guard->friday == 1 ? true : false;
-   $data[4]['data'] = $guard->friday_type;
-   if ($guard->friday_type == 'others') {
-   $data[4]['startTime'] = $guard->friday_from;
-   $data[4]['endTime'] = $guard->friday_to;
-   }else{
-   $data[4]['startTime'] = '';
-   $data[4]['endTime'] = '';
-}
-   // 
-   $data[5]['day'] = 'Saturday';
-   $data[5]['toggleValue'] = $guard->saturday == 1 ? true : false;
-   $data[5]['data'] = $guard->saturday_type;
-   if ($guard->saturday_type == 'others') {
-   $data[5]['startTime'] = $guard->saturday_from;
-   $data[5]['endTime'] = $guard->saturday_to;
-   }else{
-   $data[5]['startTime'] = '';
-   $data[5]['endTime'] = '';
-}
-   // 
-   $data[6]['day'] = 'Sunday';
-   $data[6]['toggleValue'] = $guard->sunday == 1 ? true : false;
-   $data[6]['data'] = $guard->sunday_type;
-   if ($guard->sunday_type == 'others') {
-   $data[6]['startTime'] = $guard->sunday_from;
-   $data[6]['endTime'] = $guard->sunday_to;
-}else{
-   $data[6]['startTime'] = '';
-   $data[6]['endTime'] = '';
-}
+    $guard = DB::table('guard_availability')->where('guard_id', $request->guard_id)->first();
 
-   return response()->json(['success' => true, 'message' => 'Staff availability found.', 'data' => $data]);
-}else{
-   return response()->json(['success' => false, 'message' => 'No staff availability found.', 'data' => null]);
-}
+    if (!empty($guard)) {
+        $data = json_decode($guard->availability, true) ?? [];
+        return response()->json(['success' => true, 'message' => 'Staff availability found.', 'data' => $data]);
+    }
+
+    return response()->json(['success' => false, 'message' => 'No staff availability found.', 'data' => null]);
 }
 
 function distance($lat1, $lon1, $lat2, $lon2)
