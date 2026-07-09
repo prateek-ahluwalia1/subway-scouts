@@ -2349,7 +2349,6 @@ if ($added) {
 }
 }
 
-
 public function get_guard_avability(Request $request)
 {
   $guard = DB::table('guard_availability')->where('guard_id', $request->guard_id)->first();

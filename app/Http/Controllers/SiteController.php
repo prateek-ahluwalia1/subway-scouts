@@ -356,5 +356,4 @@ class SiteController extends Controller
         $total = $query->count();
         return response()->json(['success' => true, 'data' => $sitess, 'count' => $count, 'length' => $total, 'pageIndex' => $request->pageIndex, 'pageSize' => $request->pageSize]);
     }
-
 }
