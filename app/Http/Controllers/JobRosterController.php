@@ -310,8 +310,12 @@ public function fetchCustomerSites(Request $request)
             return response()->json(['success' => false, 'data' => null, 'code' => 404]); 
         }
         // Get the charge rate
-        $guardWorkDetails = GuardWorkDetail::where('guard_id', $request->guard_id)->first();
-        $payrate = Payrate::where('id', $guardWorkDetails->payrate)->first();
+        if(isset($request->guard_id)){
+            $guardWorkDetails = GuardWorkDetail::where('guard_id', $request->guard_id)->first();
+            $payrate = Payrate::where('id', $guardWorkDetails->payrate)->first();
+        }else{
+            $payrate = Payrate::where('id', 1)->first();    
+        }
 
         $siteAmounts = [];
 
