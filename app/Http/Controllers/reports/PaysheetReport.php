@@ -1153,7 +1153,9 @@ $results = DB::table('job_rosters AS jr')
         // Default rate logic when neither custom_rate nor custom_payrate is true
 
         $site = Site::where('id', $roster['site_id'])->first();
-        $payrate = Payrate::where('id', 1)->where('status', 'active')->first();
+        $guardWorkDetails = GuardWorkDetail::where('guard_id', $roster['site_id'])->first();
+        $payrate = Payrate::where('id', $guardWorkDetails->payrate)->first();
+        // $payrate = Payrate::where('id', 1)->where('status', 'active')->first();
         // if(!empty($payrate)){
         //     if($roster['payrate_affective_from']){
         //         $payrate_effective_date = Carbon::createFromFormat('Y-m-d', $roster['payrate_affective_from']);
