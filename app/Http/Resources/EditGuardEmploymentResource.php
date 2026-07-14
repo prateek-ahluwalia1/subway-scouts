@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 
 use App\Models\GuardDocument;
 use App\Models\GuardInduction;
+use App\Models\Payrate;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EditGuardEmploymentResource extends JsonResource
