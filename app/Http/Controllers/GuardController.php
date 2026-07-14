@@ -754,16 +754,16 @@ public function updateEmploymentDetail(Request $request)
    $updateEmpDetails->tfn_file = str_replace(url('')."/"."guard_employment_details/","",$request->tfn_file);
    $updateEmpDetails->tfn_file_no = $request->tfn_file_no;
    $updateEmpDetails->superannutation_file = str_replace(url('')."/"."guard_employment_details/","",$request->superannutation_file);
-   $updateEmpDetails->superannutation_no = $request->superannutation_no;
-   $updateEmpDetails->account_holder = $request->account_holder;
-   $updateEmpDetails->superannutation_name = $request->superannutation_name;
-   $updateEmpDetails->abn_name = $request->abn_name;
-   $updateEmpDetails->abn_no = $request->abn_no;
-   $updateEmpDetails->superannuation_fund = $request->superannuation_fund;
-   $updateEmpDetails->superannuation_fund_usi = $request->superannuation_fund_usi;
-   $updateEmpDetails->member_number = $request->member_number;
+   // $updateEmpDetails->superannutation_no = $request->superannutation_no;
+   // $updateEmpDetails->account_holder = $request->account_holder;
+   // $updateEmpDetails->superannutation_name = $request->superannutation_name;
+   // $updateEmpDetails->abn_name = $request->abn_name;
+   // $updateEmpDetails->abn_no = $request->abn_no;
+   // $updateEmpDetails->superannuation_fund = $request->superannuation_fund;
+   // $updateEmpDetails->superannuation_fund_usi = $request->superannuation_fund_usi;
+   // $updateEmpDetails->member_number = $request->member_number;
 
-   $updateEmpDetails->bank_name = $request->bank_name;
+   // $updateEmpDetails->bank_name = $request->bank_name;
    $updateEmpDetails->bsb = $request->bsb;
    $updateEmpDetails->bank_account_no = $request->bank_account_no;
    $updateEmpDetails->work_hours_limitation_status = 1;
