@@ -27,7 +27,7 @@ class EditGuardEmploymentResource extends JsonResource
             'induction'=> GuardInductionResource::collection($this->inductions),
             'payrate_state' => $this->payrate_state,
             'payrate' => $this->payrate,
-            'payrate_name' => Payrate::where('id', $this->payrate)->select('name')->first()->title ?? 'N/A',
+            'payrate_name' => Payrate::where('id', $this->payrate)->select('title')->first()->title ?? 'N/A',
             'job_level' => $this->job_level,
             'tfn_file' => returnImgPath('guard_employment_details',$this->tfn_file),
             'tfn_file_no' => $this->tfn_file_no,
