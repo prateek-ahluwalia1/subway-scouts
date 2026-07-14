@@ -1007,7 +1007,7 @@ public function updateEmploymentDetail(Request $request)
 public function editEmploymentDetail(Request $request)
 {
 
-   $employmentDetail = GuardWorkDetail::where('guard_id', $request->id)->with(['inductions','guardz'])->first();
+   $employmentDetail = GuardWorkDetail::where('guard_id', $request->id)->with(['inductions','guardz', 'payrate'])->first();
    if($employmentDetail){  
       $grd = (new EditGuardEmploymentResource($employmentDetail));
       return response()->json([ 'success' => true, 'data' => $grd , 'code' => 200 ]);
