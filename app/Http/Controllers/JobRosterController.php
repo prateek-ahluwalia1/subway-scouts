@@ -310,7 +310,8 @@ public function fetchCustomerSites(Request $request)
             return response()->json(['success' => false, 'data' => null, 'code' => 404]); 
         }
         // Get the charge rate
-        $payrate = Payrate::where('id', 1)->first();
+        $guardWorkDetails = GuardWorkDetail::where('guard_id', $request->guard_id)->first();
+        $payrate = Payrate::where('id', $guardWorkDetails->payrate)->first();
 
         $siteAmounts = [];
 
@@ -5805,7 +5806,8 @@ public function addNewShift(Request $request){
 
     if(isset($request->guard_id) && $request->guard_id > 0){
 
-    $payrate = Payrate::where('id', 1)->first();
+    $guardWorkDetails = GuardWorkDetail::where('guard_id', $request->guard_id)->first();
+    $payrate = Payrate::where('id', $guardWorkDetails->payrate)->first();
     $site = Site::where('id', $request->site_id)->select('customer_id', 'site_budget')->first();
     // Parse the date from request
     $date = Carbon::createFromFormat('m-d-Y H:i', $request->start);
