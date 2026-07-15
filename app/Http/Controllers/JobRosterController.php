@@ -310,12 +310,12 @@ public function fetchCustomerSites(Request $request)
             return response()->json(['success' => false, 'data' => null, 'code' => 404]); 
         }
         // Get the charge rate
-        if(isset($request->guard_id)){
-            $guardWorkDetails = GuardWorkDetail::where('guard_id', $request->guard_id)->first();
-            $payrate = Payrate::where('id', $guardWorkDetails->payrate)->first();
-        }else{
-            $payrate = Payrate::where('id', 1)->first();    
-        }
+        // if(isset($request->guard_id)){
+        //     $guardWorkDetails = GuardWorkDetail::where('guard_id', $request->guard_id)->first();
+        //     $payrate = Payrate::where('id', $guardWorkDetails->payrate)->first();
+        // }else{
+        //     $payrate = Payrate::where('id', 1)->first();    
+        // }
 
         $siteAmounts = [];
 
@@ -355,6 +355,15 @@ public function fetchCustomerSites(Request $request)
                     $hours['sunday_night'] += $shift->sunday_night_hours ?? 0;
                     $hours['ph_morning'] += $shift->ph_morning_hours ?? 0;
                     $hours['ph_night'] += $shift->ph_night_hours ?? 0;
+                }
+                if(isset($request->guard_id)){
+                    $guardWorkDetails = GuardWorkDetail::where('guard_id', $request->guard_id)->first();
+                    $payrate = Payrate::where('id', $guardWorkDetails->payrate)->first();
+                    if(!$payrate){
+                        $payrate = Payrate::where('id', 1)->first();
+                    }
+                }else{
+                    $payrate = Payrate::where('id', 1)->first();    
                 }
                 
                 $jobAmount = ($payrate->def_metro_mon_to_fri_day_rate * $hours['morning']) +
