@@ -223,7 +223,89 @@ public function getSitesByCustomes(Request $request)
     $sites = Site::whereIn('customer_id', $request->customer_id)->select('id', 'site_name')->get();
     return response()->json(['success' => true, 'data' => $sites, 'code' => 200]);
 }
+public function fetchDailyWages(Request $request)
+{
+    if (!$request->has('customer_id') || empty($request->customer_id)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Customer is required.'
+        ], 422);
+    }
 
+    $start = dbFormate($request->start) . ' 00:00';
+    $end   = dbFormate($request->end) . ' 23:59';
+
+    $dates = getDatesFromRange(
+        dbFormate($request->start),
+        dbFormate($request->end)
+    );
+
+    $response = [];
+
+    foreach ($dates as $date) {
+
+        $query = JobRoster::query()
+            ->join('sites', 'sites.id', '=', 'job_rosters.site_id')
+            ->whereDate('job_rosters.start', $date)
+            ->where('job_rosters.roster_id', $request->roster_id)
+            ->whereNotNull('job_rosters.guard_id')
+            ->whereNull('job_rosters.deleted_at');
+
+        // customer filter
+        if ($request->has('customer_id')) {
+            $query->whereIn('sites.customer_id', $request->customer_id);
+        }
+
+        // state filter
+        if ($request->filled('state')) {
+            $query->where('sites.state', $request->state);
+        }
+
+        // site filter
+        if ($request->filled('site_id')) {
+            $query->whereIn('sites.id', $request->site_id);
+        }
+
+        $shifts = $query->get();
+
+        $staffCount = $shifts->pluck('guard_id')->unique()->count();
+
+        $totalWages = 0;
+
+        foreach ($shifts as $shift) {
+
+            $guardWorkDetail = GuardWorkDetail::where('guard_id', $shift->guard_id)->first();
+
+            $payrate = null;
+
+            if ($guardWorkDetail) {
+                $payrate = Payrate::find($guardWorkDetail->payrate);
+            }
+
+            if (!$payrate) {
+                $payrate = Payrate::find(1);
+            }
+
+            $totalWages +=
+                ($shift->morning_hours ?? 0) * $payrate->def_metro_mon_to_fri_day_rate +
+                ($shift->night_hours ?? 0) * $payrate->def_metro_mon_to_fri_night_rate +
+                (($shift->saturday_morning_hours ?? 0) + ($shift->saturday_night_hours ?? 0)) * $payrate->def_metro_sat_day_rate +
+                (($shift->sunday_morning_hours ?? 0) + ($shift->sunday_night_hours ?? 0)) * $payrate->def_metro_sun_day_rate +
+                (($shift->ph_morning_hours ?? 0) + ($shift->ph_night_hours ?? 0)) * $payrate->def_metro_pub_holi_day_rate;
+        }
+
+        $response[dateFormat($date)] = [
+            'staff_count' => $staffCount,
+            'wages'       => round($totalWages, 2)
+        ];
+    }
+
+    return response()->json([
+        'success' => true,
+        'data' => $response,
+        'code' => 200
+    ]);
+}
 public function fetchCustomerSites(Request $request)
 {
 

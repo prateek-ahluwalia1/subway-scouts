@@ -399,6 +399,7 @@ Route::group(['middleware' => ['check.db']], function ($router) {
   Route::any('download-invoice-form', [JobRosterController::class, 'downloadInvoiceForm']);
   Route::any('download-shift-activity', [JobRosterController::class, 'downloadShiftActivity']);
   Route::any('fetch-customer-sites', [JobRosterController::class, 'fetchCustomerSites'])->name('fetch.customer.sites');
+  Route::any('fetch-daily-wages', [JobRosterController::class, 'fetchDailyWages'])->name('fetch.daily.wages');
   Route::any('fetch-customer-unpublish-sites', [JobRosterController::class, 'fetchCustomerUnpublishSites'])->name('fetch.customer.unpublish.sites');
   Route::any('fetch-customer-updated-sites', [JobRosterController::class, 'fetchCustomerUpdatedSites'])->name('fetch.customer.sites_updated');
   Route::any('publish-shifts', [JobRosterController::class, 'publishShifts'])->name('publish.shifts');
