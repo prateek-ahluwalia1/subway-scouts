@@ -318,6 +318,7 @@ public function fetchCustomerSites(Request $request)
         // }
 
         $siteAmounts = [];
+        $totalEstimate = 0;
 
         if($site_type == 'inactive')
         {
@@ -375,6 +376,7 @@ public function fetchCustomerSites(Request $request)
                 // Store in the site object
                 $s->total_hours = $hours;
                 $s->total_amount = $jobAmount;
+                $totalEstimate += $jobAmount;
             }
 
             $sts = FetchCustomerSitesResource::collection($sites);
@@ -470,11 +472,27 @@ public function fetchCustomerSites(Request $request)
                 ];
             }
         }
+        // Distinct staff (guards) rostered this week
+        $staffQuery = JobRoster::whereNotNull('job_rosters.guard_id')
+            ->where('job_rosters.start', '>=', $start)
+            ->where('job_rosters.start', '<=', $end)
+            ->where('job_rosters.roster_id', $roster_id)
+            ->whereNull('job_rosters.deleted_at');
 
+        if ($request->has('site_id') && !empty($request->site_id)) {
+            $staffQuery->whereIn('job_rosters.site_id', $request->site_id);
+        } elseif ($request->has('customer_id') && !empty($request->customer_id)) {
+            $staffQuery->join('sites', 'job_rosters.site_id', '=', 'sites.id')
+                ->whereIn('sites.customer_id', $request->customer_id);
+        }
+
+        $staffCount = $staffQuery->distinct('job_rosters.guard_id')->count('job_rosters.guard_id');
+
+        $avgEstimate = $staffCount > 0 ? round($totalEstimate / $staffCount, 2) : 0;
         //dd($data_arry);
         return response()->json(['success' => true, 'data' => $sts, 'unpublish_shift_count' => $queryCount,
-            'days_hours' => $data_arry, 'public_holiday' => $holidays, 'total_hours' => $total_count,
-            'code' => 200]);
+            'days_hours' => $data_arry, 'public_holiday' => $holidays, 'total_hours' => $total_count,'staff_count' => $staffCount,        // ADD THIS
+            'avg_estimate' => $avgEstimate,'code' => 200]);
     }
     // Guard type
     else{
@@ -543,6 +561,9 @@ public function fetchCustomerSites(Request $request)
         if(empty($sites)){
             return response()->json(['success' => false, 'data' => null, 'code' => 404]); 
         }
+        $totalEstimate = 0; // ADD THIS
+        $staffCount = 0;    // ADD THIS
+
         if($guard_type == 'inactive')
         {
             $inactive_sites = [];
@@ -552,8 +573,51 @@ public function fetchCustomerSites(Request $request)
                 }
             }
             $sts = FetchCustomerSitesWithGuardResource::collection($inactive_sites);
+            $staffCount = count($inactive_sites); // ADD THIS
         }else{
+
+            foreach ($sites as $key => $s) {
+                $hours = [
+                    'morning' => 0,
+                    'night' => 0,
+                    'saturday_morning' => 0,
+                    'saturday_night' => 0,
+                    'sunday_morning' => 0,
+                    'sunday_night' => 0,
+                    'ph_morning' => 0,
+                    'ph_night' => 0
+                ];
+
+                foreach ($s->guardJobRoster as $shift) {
+                    $hours['morning'] += $shift->morning_hours ?? 0;
+                    $hours['night'] += $shift->night_hours ?? 0;
+                    $hours['saturday_morning'] += $shift->saturday_morning_hours ?? 0;
+                    $hours['saturday_night'] += $shift->saturday_night_hours ?? 0;
+                    $hours['sunday_morning'] += $shift->sunday_morning_hours ?? 0;
+                    $hours['sunday_night'] += $shift->sunday_night_hours ?? 0;
+                    $hours['ph_morning'] += $shift->ph_morning_hours ?? 0;
+                    $hours['ph_night'] += $shift->ph_night_hours ?? 0;
+                }
+
+                $guardWorkDetails = GuardWorkDetail::where('guard_id', $s->id)->first();
+                $payrate = $guardWorkDetails ? Payrate::where('id', $guardWorkDetails->payrate)->first() : null;
+                if (!$payrate) {
+                    $payrate = Payrate::where('id', 1)->first();
+                }
+
+                $jobAmount = ($payrate->def_metro_mon_to_fri_day_rate * $hours['morning']) +
+                            ($payrate->def_metro_mon_to_fri_night_rate * $hours['night']) +
+                            ($payrate->def_metro_sat_day_rate * ($hours['saturday_morning'] + $hours['saturday_night'])) +
+                            ($payrate->def_metro_sun_day_rate * ($hours['sunday_morning'] + $hours['sunday_night'])) +
+                            ($payrate->def_metro_pub_holi_day_rate * ($hours['ph_morning'] + $hours['ph_night']));
+
+                $s->total_hours = $hours;
+                $s->total_amount = $jobAmount;
+                $totalEstimate += $jobAmount; // ADD THIS
+            }
+
             $sts = FetchCustomerSitesWithGuardResource::collection($sites);
+            $staffCount = count($sites); // ADD THIS
         }
         
         $dateRange = getDatesFromRange(dbFormate($request->start),dbFormate($request->end));
@@ -604,9 +668,19 @@ public function fetchCustomerSites(Request $request)
                 ];
             }
         }
-
+        $avgEstimate = $staffCount > 0 ? round($totalEstimate / $staffCount, 2) : 0;
         //$total_count = number_format( $total_count, 2, '.', '' );
-        return response()->json(['success' => true, 'data' => $sts, 'public_holiday' => $holidays, 'days_hours' => $data_arry, 'total_hours' => $total_count, 'unpublish_shift_count' => $queryCount, 'code' => 200]); 
+        return response()->json([
+            'success' => true,
+            'data' => $sts,
+            'public_holiday' => $holidays,
+            'days_hours' => $data_arry,
+            'total_hours' => $total_count,
+            'staff_count' => $staffCount,      // ADD THIS
+            'avg_estimate' => $avgEstimate,    // ADD THIS
+            'unpublish_shift_count' => $queryCount,
+            'code' => 200
+        ]);
     }
  }
     return response()->json(['success' => false, 'data' => null, 'code' => 404]); 
