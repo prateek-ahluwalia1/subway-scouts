@@ -7,9 +7,7 @@ config/custom.php
 public/excel/*
 
 /vendor
-.env
 .env.backup
-.env.production
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -18,5 +16,5 @@ npm-debug.log
 yarn-error.log
 /.fleet
 /.idea
-/.vscode
 app/Exports/ChargableDailyReportExport.php
+config.bat
