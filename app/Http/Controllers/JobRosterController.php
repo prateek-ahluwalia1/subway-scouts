@@ -251,17 +251,14 @@ public function fetchDailyWages(Request $request)
             ->whereNotNull('job_rosters.guard_id')
             ->whereNull('job_rosters.deleted_at');
 
-        // customer filter
         if ($request->has('customer_id')) {
             $query->whereIn('sites.customer_id', $request->customer_id);
         }
 
-        // state filter
         if ($request->filled('state')) {
             $query->where('sites.state', $request->state);
         }
 
-        // site filter
         if ($request->filled('site_id')) {
             $query->whereIn('sites.id', $request->site_id);
         }
@@ -270,9 +267,12 @@ public function fetchDailyWages(Request $request)
 
         $staffCount = $shifts->pluck('guard_id')->unique()->count();
 
+        $totalHours = 0;
         $totalWages = 0;
 
         foreach ($shifts as $shift) {
+
+            $totalHours += $shift->hours ?? 0;
 
             $guardWorkDetail = GuardWorkDetail::where('guard_id', $shift->guard_id)->first();
 
@@ -296,7 +296,8 @@ public function fetchDailyWages(Request $request)
 
         $response[dateFormat($date)] = [
             'staff_count' => $staffCount,
-            'wages'       => round($totalWages, 2)
+            'hours'       => round($totalHours, 2),
+            'wages'       => round($totalWages, 2),
         ];
     }
 
